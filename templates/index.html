@@ -1,0 +1,260 @@
+{% extends "base.html" %}
+{% block title %}
+Shopping Manager - Simplify Your Shopping Experience
+{% endblock %}
+{% block content %}
+ <div class="container mt-4">
+    <section class="hero bg-gradient rounded-3 mb-5 p-4 p-md-5">
+        <div class="row align-items-center">
+            <div class="col-lg-6 text-center text-lg-start mb-4 mb-lg-0">
+                <h1 class="display-4 fw-bold mb-3">Simplify Your Shopping Experience</h1>
+                <p class="lead mb-4">The all-in-one shopping manager that helps you track prices, manage shopping lists, and find the best deals - all in one place.</p>
+                <div class="d-flex flex-wrap gap-2 justify-content-center justify-content-lg-start">
+                    <a href="{{ url_for('auth.auth') + '#register' }}" class="btn btn-primary btn-lg">Get Started</a>
+                    <a href="{{ url_for('auth.auth') + '#login' }}" class="btn btn-primary btn-lg">Log Back In</a>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <img src="{{ url_for('static', filename='images/dashboard-preview.png') }}" alt="ShopSmart Dashboard" class="img-fluid rounded shadow-lg" onerror="this.src='https://placehold.co/800x450?text=Dashboard+Preview'">
+            </div>
+        </div>
+    </section>
+    
+    <section class="features mb-5">
+        <div class="text-center mb-4">
+            <h2 class="display-5 fw-bold">Smart Features for Smart Shoppers</h2>
+            <p class="lead">Our powerful shopping management tools help you save time and money with every purchase.</p>
+        </div>
+
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            <div class="col">
+                <div class="card h-100 border-0 shadow-sm hover-card">
+                    <div class="card-body text-center">
+                    <div class="feature-icon bg-primary bg-opacity-10 text-primary rounded-circle p-3 mx-auto mb-3" style="width: 70px; height: 70px;">
+                        <i class="bi bi-list-check fs-2"></i>
+                    </div>
+                    <h3 class="card-title">Smart Shopping Lists</h3>
+                    <p class="card-text">Create, organize, and share shopping lists that sync across all your devices.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100 border-0 shadow-sm hover-card">
+                    <div class="card-body text-center">
+                    <div class="feature-icon bg-primary bg-opacity-10 text-primary rounded-circle p-3 mx-auto mb-3" style="width: 70px; height: 70px;">
+                        <i class="bi bi-arrow-repeat fs-2"></i>
+                    </div>
+                    <h3 class="card-title">Real-time Sync</h3>
+                    <p class="card-text">All your lists are automatically synced across all your devices and are available for anyone in your household.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100 border-0 shadow-sm hover-card">
+                    <div class="card-body text-center">
+                        <div class="feature-icon bg-primary bg-opacity-10 text-primary rounded-circle p-3 mx-auto mb-3" style="width: 70px; height: 70px;">
+                            <i class="bi bi-people fs-2"></i>
+                        </div>
+                        <h3 class="card-title">Collaboration</h3>
+                        <p class="card-text">Work together with others in your household to create lists, mark items as purchased and more.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="how-it-works bg-light rounded-3 mb-5 p-4 p-md-5">
+        <div class="text-center mb-4">
+            <h2 class="display-5 fw-bold">How Shopping Manager Works</h2>
+            <p class="lead">Getting started is easy as 1-2-3. Follow these simple steps to transform your shopping experience.</p>
+        </div>
+        <div class="row mb-5">
+            <div class="col-lg-6 order-lg-2 mb-4 mb-lg-0">
+                <img src="{{ url_for('static', filename='images/create-account.png') }}" alt="Create Account" class="img-fluid rounded shadow" onerror="this.src='https://placehold.co/600x400?text=Create+Account'">
+            </div>
+            <div class="col-lg-6 order-lg-1 d-flex align-items-center">
+                <div>
+                    <div class="step-number bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 40px; height: 40px;">1</div>
+                    <h3>Create Your Account</h3>
+                    <p class="lead">Sign up in less than a minute. Pick a username, create a password, and you're ready to go. No credit card required.</p>
+                </div>
+            </div>
+        </div>
+        <div class="row mb-5">
+            <div class="col-lg-6 mb-4 mb-lg-0">
+                <img src="{{ url_for('static', filename='images/create-lists.png') }}" alt="Create Lists" class="img-fluid rounded shadow" onerror="this.src='https://placehold.co/600x400?text=Create+Lists'">
+            </div>
+            <div class="col-lg-6 d-flex align-items-center">
+                <div>
+                    <div class="step-number bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 40px; height: 40px;">2</div>
+                    <h3>Create Shopping Lists</h3>
+                    <p class="lead">Start adding items to your shopping lists. Organize by category, or create custom lists. Add quantities and units of measurement as needed.</p>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 order-lg-2 mb-4 mb-lg-0">
+                <img src="{{ url_for('static', filename='images/shop-smarter.png') }}" alt="Shop Smarter" class="img-fluid rounded shadow" onerror="this.src='https://placehold.co/600x400?text=Shop+Smarter'">
+            </div>
+            <div class="col-lg-6 order-lg-1 d-flex align-items-center">
+                <div>
+                    <div class="step-number bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 40px; height: 40px;">3</div>
+                    <h3>Shop Smarter</h3>
+                    <p class="lead">Add-as-you-go! Add items to your list as soon as you need to, no more scribbling lists on paper.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="testimonials mb-5">
+        <div class="text-center mb-4">
+            <h2 class="display-5 fw-bold">What Our Users Say</h2>
+            <p class="lead">Join thousands of satisfied users who have transformed their shopping experience with Shopping Manager.</p>
+        </div>
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            <div class="col">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body position-relative">
+                        <i class="bi bi-quote fs-1 text-primary opacity-25 position-absolute top-0 end-0 me-3 mt-2"></i>
+                        <p class="card-text mb-4">Shopping Manager has helped me cut my grocery bill by 20% each month. The price tracking feature is amazing - I never miss a deal now!</p>
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0">
+                                <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                    <span>SJ</span>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h5 class="mb-0">Sarah J.</h5>
+                                <small class="text-muted">Busy Mom of Three</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body position-relative">
+                        <i class="bi bi-quote fs-1 text-primary opacity-25 position-absolute top-0 end-0 me-3 mt-2"></i>
+                        <p class="card-text mb-4">As someone who shops for multiple households, this app is a lifesaver. I can manage different lists and share them with family members in real-time.</p>
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0">
+                                <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                    <span>MT</span>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h5 class="mb-0">Michael T.</h5>
+                                <small class="text-muted">Family Caregiver</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100 border-0 shadow-sm">
+                    <div class="card-body position-relative">
+                        <i class="bi bi-quote fs-1 text-primary opacity-25 position-absolute top-0 end-0 me-3 mt-2"></i>
+                        <p class="card-text mb-4">The price comparison tool has saved me hundreds of dollars. I can quickly see which store has the best deals before I even leave home.</p>
+                        <div class="d-flex align-items-center">
+                            <div class="flex-shrink-0">
+                                <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                    <span>AR</span>
+                                </div>
+                            </div>
+                            <div class="flex-grow-1 ms-3">
+                                <h5 class="mb-0">Alexis R.</h5>
+                                <small class="text-muted">Budget Conscious Shopper</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+    </section>
+
+    <section class="pricing bg-light rounded-3 mb-5 p-4 p-md-5">
+        <div class="text-center mb-4">
+            <h2 class="display-5 fw-bold">Pricing? What Pricing?</h2>
+            <p class="lead">There's no better price than Freeee!</p>
+        </div>
+        <div class="row row-cols-12 row-cols-md-12 g-4">
+            <div class="card h-100 border-0 shadow-sm hover-card">
+                <div class="card-body text-center p-4">
+                    <div class="pricing-price my-4">
+                        <span class="display-5 fw-bold">Free</span>
+                        <span class="text-muted">/forever</span>
+                    </div>
+                    <p class="card-text mb-4">For shoppers of all shapes and sizes.</p>
+                    <ul class="list-unstyled mb-4 text-start">
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Unlimited Shopping Lists</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Real-time sync</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Shared shopping lists</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> No ads(yes, really!)</li>
+                        <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i> Budgeting Tools</li>
+                    </ul>
+                </div>
+                <a href="{{ url_for('auth.auth') + '#register' }}" class="btn btn-primary mb-4">Get Started</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta text-center bg-primary text-white rounded-3 mb-5 p-5">
+        <h2 class="display-5 fw-bold mb-3">Ready to Transform Your Shopping Experience?</h2>
+        <p class="lead mb-4">Join thousands of happy users who save time and hassle with Shopping Manager. Start today, at no cost.</p>
+        <a href="{{ url_for('auth.auth') + '#register' }}" class="btn btn-light btn-lg">Get Started Now</a>
+    </section>
+
+    <section class="faq mb-5">
+        <div class="text-center mb-4">
+            <h2 class="display-5 fw-bold">Frequently Asked Questions</h2>
+            <p class="lead">Find answers to common questions about our shopping management platform.</p>
+        </div>
+        <div class="accordion" id="faqAccordion">
+            <div class="accordion-item border-0 shadow-sm mb-3">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                    How do I get started with Shopping Manager?
+                    </button>
+                </h2>
+                <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                    Getting started is simple! Just click on "Register" in the navigation menu, create an account with a username and password, and you'll be ready to go!
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item border-0 shadow-sm mb-3">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                    Can I share my shopping lists with family members?
+                    </button>
+                </h2>
+                <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                    Yes! Shared Shopping lists are the default on Shopping Manager. Everyone can add items, check things off, and update in real-time. It's perfect for coordinating shopping tasks across your household.
+                    </div>  
+                </div>
+            </div>
+
+            <div class="accordion-item border-0 shadow-sm mb-3">
+                <h2 class="accordion-header">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                    Is my information secure?
+                    </button>
+                </h2>
+                <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                    <div class="accordion-body">
+                    Absolutely. We use industry-standard encryption for all your data. Your privacy and security are our top priorities.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+ </div>
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('static', filename='index.js')}}"></script>
+{% endblock %}

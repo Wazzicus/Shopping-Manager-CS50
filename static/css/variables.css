@@ -1,0 +1,220 @@
+/* static/variables.css */
+
+/* :root defines variables for the default (light) mode */
+:root {
+    --color-primary: #3D717A;          
+    --color-primary-darker: #315a61;   
+    --color-primary-darkest: #254247; 
+    --color-text-primary: #111827;     
+    --color-text-secondary: #374151;   
+    --color-bg-main: #ffffff;          
+    --color-bg-secondary: #f8f9fa;     
+    --color-border-color: #dee2e6;     
+    --color-success: #10b981;
+    --color-success-hover: #0b6144;          
+    --color-danger: #ef4444;           
+    --color-danger-hover: #dc2626;      
+    --color-info: #0dcaf0;             
+    --color-warning: #ffc107;
+    --progress-bar-dot-size: 0.75rem; /* Example: Bar height will be 0.75rem, dot will be based on this */
+    --your-progress-track-bg-color: #e9ecef; /* Example track color */
+    --your-primary-color: #0d6efd;        
+}
+    
+  
+  /* Dark Mode Overrides */
+  .dark-mode {
+    --color-primary: #5ba1aa;          
+    --color-primary-darker: #6eb1bb;   
+    --color-primary-darkest: #82c1cc;  
+    --color-text-primary: #f8f9fa;     
+    --color-text-secondary: #adb5bd;   
+    --color-bg-main: #212529;          
+    --color-bg-secondary: #343a40;     
+    --color-border-color: #495057;     
+    --color-success: #34d399;   
+    --color-success-hover: #10b981;       
+    --color-danger: #f87171;           
+    --color-danger-hover: #ef4444;      
+    --color-info: #67e8f9;             
+    --color-warning: #fdba74;
+    --progress-track-height: 0.75rem; /* e.g., 12px */
+    --progress-track-bg-color: #4A5568; /* Dark greyish-blue from image */
+    --progress-bar-fill-color: #7FDBFF; /* Light blue from image */
+    --progress-dot-color: #E2E8F0;    /* Light grey/white dot from image */
+    --progress-dot-size: calc(var(--progress-track-height) * 0.66); /* Dot smaller than track height */   
+  
+   
+    background-color: var(--bs-body-bg);
+    color: var(--bs-body-color);
+    /* Font family will be set later */
+  }
+  
+  
+  .card {
+      background-color: var(--bs-secondary-bg);
+      border-color: var(--bs-border-color);
+  }
+  .card-header {
+      background-color: rgba(var(--bs-secondary-rgb), 0.5); 
+      border-bottom-color: var(--bs-border-color);
+  }
+  
+  
+  .navbar-dark .navbar-nav .nav-link.active {
+    font-weight: 600;
+    color: var(--color-primary); 
+  }
+
+  .navbar-light .navbar-nav .nav-link.active {
+    font-weight: 600;
+    color: var(--color-primary);
+  }
+  
+ 
+  .item-purchased .item-name {
+    text-decoration: line-through;
+    opacity: 0.6;
+  }
+/* Example CSS Variables (add to your :root and dark theme definitions)
+:root {
+  // ... other card variables
+  --your-accordion-item-bg-color: var(--your-card-bg-color); // Or transparent
+  --your-accordion-button-bg-color: transparent;
+  --your-accordion-button-text-color: var(--your-card-text-color);
+  --your-accordion-button-active-bg-color: rgba(0,0,0,0.03); // Very subtle for light theme
+  --your-accordion-button-active-text-color: var(--your-primary-color);
+  --your-accordion-body-bg-color: transparent; // Or slightly different shade than item-bg
+}
+
+[data-bs-theme="dark"] {
+  // ... other card variables
+  --your-accordion-item-bg-color: var(--your-card-bg-color); // Or transparent
+  --your-accordion-button-bg-color: transparent;
+  --your-accordion-button-text-color: var(--your-card-text-color);
+  --your-accordion-button-active-bg-color: rgba(255,255,255,0.05); // Very subtle for dark theme
+  --your-accordion-button-active-text-color: var(--your-primary-color);
+  --your-accordion-body-bg-color: transparent;
+}
+*/
+/*
+:root {
+  // ... your other variables
+  --your-progress-track-bg-color: #e9ecef; // A light neutral
+  --your-progress-track-shadow: none; // Or perhaps an inset shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+}
+
+[data-bs-theme="dark"] {
+  // ... your other variables
+  --your-progress-track-bg-color: #495057; // A darker neutral for dark theme
+  --your-progress-track-shadow: none;
+}
+*/
+/* Ensure you define the dot size variable, can be same as progress height */
+/*
+:root {
+  
+  --your-progress-track-bg-color: #e9ecef;
+  --progress-bar-dot-size: 0.75rem; 
+}
+
+[data-bs-theme="dark"] {
+  
+  --your-progress-track-bg-color: #495057;
+}
+  /* Example CSS Variables (add to your :root and dark theme definitions) */
+/*
+:root {
+  // ... your other variables
+  --your-page-loader-bg: rgba(255, 255, 255, 0.85); // Light theme loader background
+  --your-spinner-track-color: #e9ecef;
+}
+
+[data-bs-theme="dark"] {
+  // ... your other variables
+  --your-page-loader-bg: rgba(33, 37, 41, 0.85); // Dark theme loader background (using a dark color from bs-dark-rgb or similar)
+  --your-spinner-track-color: #495057;
+}
+*/
+/* --- Remember your CSS variables --- */
+/*
+:root {
+  // ... other variables
+  --your-page-loader-bg: rgba(255, 255, 255, 0.85);
+  --your-primary-color: #007bff;
+}
+
+[data-bs-theme="dark"] {
+  // ... other variables
+  --your-page-loader-bg: rgba(33, 37, 41, 0.85);
+  --your-primary-color: #0dcaf0; // Example dark theme primary
+}
+*/
+/* Example CSS Variables (add to your :root and dark theme definitions) */
+/*
+:root {
+  // ... your other variables
+  --your-input-bg-color: #f8f9fa;
+  --your-input-text-color: #212529;
+  --your-input-border-color: #ced4da;
+  --your-input-focus-bg-color: #fff;
+  --your-primary-focus-shadow-color: rgba(0,123,255,.25); // Or your primary color with alpha
+}
+
+[data-bs-theme="dark"] {
+  // ... your other variables
+  --your-input-bg-color: #343a40; // Darker background for inputs
+  --your-input-text-color: #f8f9fa;
+  --your-input-border-color: #6c757d;
+  --your-input-focus-bg-color: #495057;
+  --your-primary-focus-shadow-color: rgba(var(--bs-primary-rgb), 0.5); // Brighter shadow for dark
+}
+*/
+/* --- Define your CSS variables --- */
+/* Make sure you have variables like these defined in your :root / dark theme */
+/*
+:root {
+  --your-search-input-bg: #212529;
+  --your-search-input-text: #f8f9fa;
+  --your-search-placeholder-text: #6c757d;
+  --your-search-button-bg: #f0c419; // Example gold
+  --your-search-button-text: #343a40;
+  --your-search-button-hover-bg: #dcae15;
+  --your-search-button-active-bg: #c89b13;
+  --your-search-button-focus-shadow: rgba(240, 196, 25, 0.5);
+}
+
+[data-bs-theme="dark"] {
+  // Adjust variables if needed for dark theme, though these might work okay
+  // Maybe the button text needs to be lighter in dark mode?
+  // --your-search-button-text: #212529;
+}
+*/
+/* Example using your primary/accent colors (you'll have more of these) */
+  /* Make sure these are defined in your :root or theme-specific selectors */
+  /*
+  :root {
+    --your-primary-color: #007bff; // Example
+    --your-accent-color: #ffc107; // Example
+    --your-card-bg-color: #fff;
+    --your-card-text-color: #212529;
+    --your-card-border-color: #dee2e6;
+    --your-card-shadow-color: rgba(0,0,0,0.08);
+    --your-card-header-bg-color: transparent;
+    --your-card-header-text-color: var(--your-primary-color);
+    --your-icon-color: var(--your-primary-color);
+  }
+  
+  [data-bs-theme="dark"] {
+    --your-primary-color: #0dcaf0; // Example for dark
+    --your-accent-color: #fd7e14; // Example for dark
+    --your-card-bg-color: #2B3035; // Darker background for cards
+    --your-card-text-color: #f8f9fa;
+    --your-card-border-color: #495057;
+    --your-card-shadow-color: rgba(0,0,0,0.25); // Shadows might need to be more subtle or different on dark
+    --your-card-header-bg-color: transparent;
+    --your-card-header-text-color: var(--your-primary-color);
+    --your-icon-color: var(--your-primary-color);
+  }
+    
+  

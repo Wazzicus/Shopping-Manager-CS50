@@ -1,0 +1,170 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ shopping_list.name }} - Shopping List
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="list-header mb-3 border-bottom pb-2">
+        <div class="d-flex flex-wrap justify-content-between align-items-center mb-2">
+            <h1 class="h3 mb-0 text-truncate me-3" style="max-width: 60%;">{{ shopping_list.name }}</h1>
+            <div class="list-actions flex-shrink-0">
+                 <a href="{{ url_for('shoppinglist_bp.edit_list', list_id=shopping_list.id) }}" class="btn btn-sm btn-outline-secondary me-1"><i class="bi bi-pencil-square"></i> Edit</a>
+                 <button type="button" class="btn btn-sm btn-outline-danger delete-list-btn"
+                         data-bs-toggle="modal" data-bs-target="#confirmModal"
+                         data-modal-title="Confirm List Deletion"
+                         data-modal-body="Are you sure you want to delete the list '{{ shopping_list.name | escape }}' and all its items? This cannot be undone."
+                         data-modal-confirm-text="Delete List" data-modal-confirm-class="btn-danger"
+                         data-action-url="{{ url_for('shoppinglist_bp.delete_list', list_id=shopping_list.id) }}"
+                         data-redirect-url="{{ url_for('main.dashboard') }}">
+                     <i class="bi bi-trash"></i> Delete
+                 </button>
+            </div>
+        </div>
+        {% set percentage = completion_percentage | default(0) %}
+        <div class="progress-section mt-2">
+             <div class="d-flex justify-content-between align-items-center mb-1">
+                 <span class="text-muted small">Completion</span>
+                 <span class="text-muted small" id="progressPercentageLabel">{{ percentage | round | int }}%</span>
+             </div>
+             {% set gap_width_px = 4 %}
+             <div class="custom-progress-track"
+                  role="progressbar"
+                  aria-label="List completion progress"
+                  aria-valuenow="{{ percentage | round | int }}"
+                  aria-valuemin="0"
+                  aria-valuemax="100">
+                 <div class="custom-progress-filled" style="width: {{ percentage }}%;"></div>
+                 {% if percentage > 0 and percentage < 100 %}
+                     <div class="custom-progress-gap" style="width: {{ gap_width_px }}px;"></div>
+                 {% else %}
+                     <div class="custom-progress-gap" style="display: none; width: {{ gap_width_px }}px;"></div>
+                 {% endif %}
+                 {% set unfilled_width_expression = "100% - " ~ percentage ~ "%" %}
+                 {% if percentage > 0 and percentage < 100 %}
+                     {% set unfilled_width_expression = unfilled_width_expression ~ " - " ~ gap_width_px ~ "px" %}
+                 {% endif %}
+                 <div class="custom-progress-unfilled" style="width: calc({{ unfilled_width_expression }}); flex-basis: calc({{ unfilled_width_expression }});"></div>
+             </div>
+        </div>
+    </div>
+    
+    <div class="card sm-card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Add New Item</h5>
+            <form method="post" id="addItemForm" class="ajax-form" data-list-id="{{ shopping_list.id }}" novalidate>
+                {{ item_form.hidden_tag() }}
+                <div class="row g-2 mb-2">
+                    <div class="col-md-6">
+                        {{ item_form.name.label(class="form-label visually-hidden") }}
+                        {{ item_form.name(class_="form-control" + (" is-invalid" if item_form.name.errors else ""),
+                                           placeholder="Item name", id="newItemNameInput", autocomplete="off") }}
+                        {% if item_form.name.errors %} <div class="invalid-feedback d-block"> {% for error in item_form.name.errors %} <span>{{ error }}</span><br> {% endfor %} </div> {% endif %}
+                    </div>
+                    <div class="col-md-3 col-6">
+                         {{ item_form.quantity.label(class="form-label visually-hidden") }}
+                         {{ item_form.quantity(class_="form-control" + (" is-invalid" if item_form.quantity.errors else ""),
+                                             placeholder="Qty", id="newItemQuantityInput", type="number", min="0.01", step="0.01") }}
+                        {% if item_form.quantity.errors %} <div class="invalid-feedback d-block"> {% for error in item_form.quantity.errors %}<span>{{ error }}</span><br>{% endfor %} </div> {% endif %}
+                    </div>
+                    <div class="col-md-3 col-6">
+                        {{ item_form.measure.label(class="form-label visually-hidden") }}
+                        {{ item_form.measure(class_="form-control" + (" is-invalid" if item_form.measure.errors else ""),
+                                            placeholder="Unit (e.g., kg, pcs)", id="newItemMeasureInput") }}
+                        {% if item_form.measure.errors %} <div class="invalid-feedback d-block"> {% for error in item_form.measure.errors %}<span>{{ error }}</span><br>{% endfor %} </div> {% endif %}
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-outline-primary w-100" id="button-add-item">
+                    <i class="bi bi-plus-circle"></i> Add Item
+                </button>
+            </form>
+        </div>
+    </div>
+    {# --- End Add Item Form --- #}
+
+    {# --- Item List --- #}
+    <div id="listItemsContainer">
+        <h2 class="h5 mb-3">Items</h2>
+        <ul class="list-group" id="itemList">
+           
+            <li class="list-group-item d-none d-md-flex fw-bold">
+                <div class="col-md-5">Item Name</div>
+                <div class="col-md-3 text-left">Quantity</div>
+                <div class="col-md-4 text-end">Actions</div>
+            </li>
+
+            {% for item in items %}
+            <li class="list-group-item item-row {% if item.purchased %}item-purchased{% endif %}" data-item-id="{{ item.id }}">
+                <div class="row w-100 align-items-center gy-2">
+                    <div class="col-md-5 col-12 item-name-column">
+                        <div class="item-name-line">
+                            <span class="item-name editable {% if item.purchased %}text-decoration-line-through{% endif %}" style="cursor: pointer;">
+                                {{ item.name }}
+                            </span>
+                             {% if item.quantity or item.measure %}
+                                <span class="item-quantity-measure d-md-none">
+                                    ({{ item.quantity if item.quantity is not none else '1' }} {{ item.measure }})
+                                </span>
+                            {% endif %}
+                        </div>
+                        <input type="text" class="form-control item-edit-input d-none" value="{{ item.name | escape }}">
+                        <small class="item-details-text d-block mt-1">
+                            Added by:
+                            <span class="added-by-pill bg-secondary">
+                                <img src="{{ item.added_by.profile_pic_url or url_for('static', filename='images/default_avatar.png') }}"
+                                     class="profile-pic-thumb"
+                                     alt="{{ item.added_by.name | default('User') }}'s profile picture"
+                                     onerror="this.style.display='none'; this.nextElementSibling.style.marginLeft='0';">
+                                <span class="added-by-name">{{ item.added_by.name | default('N/A') }}</span>
+                            </span>
+                        </small>
+                        <div class="edit-error text-danger mt-1 w-100" style="display: none;"></div>
+                    </div>
+                    <div class="col-md-3 col-6 item-quantity-column d-none d-md-block">
+                        {% if item.quantity or item.measure %}
+                            <span class="item-quantity-measure">
+                                {{ item.quantity if item.quantity is not none else '1' }} {{ item.measure }}
+                            </span>
+                        {% else %}
+                            <span class="item-quantity-measure text-muted">-</span>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-4 col-12 item-actions-column"> {# Takes full width below name/qty on small screens #}
+                        <a href="{{ url_for('shoppinglist_bp.edit_item', item_id=item.id) }}" class="btn btn-sm btn-outline-secondary">
+                            <i class="bi bi-pencil-square"></i><span class="button-text"> Edit</span>
+                        </a>
+                        <form method="post" action="{{ url_for('shoppinglist_bp.toggle_purchase', item_id=item.id) }}" style="display: inline-block;" class="toggle-purchase-form ajax-form">
+                            {{ item_form.csrf_token() }}
+                            <button type="submit" class="btn btn-sm {% if item.purchased %} btn-outline-secondary {% else %} btn-success {% endif %} toggle-purchase-btn" data-item-id="{{ item.id }}">
+                                {% if item.purchased %}<i class="bi bi-arrow-counterclockwise"></i><span class="button-text"> Undo</span> {% else %} <i class="bi bi-check-circle"></i><span class="button-text"> Mark Purchased</span> {% endif %}
+                            </button>
+                        </form>
+                        <button type="button" class="btn btn-sm btn-outline-danger delete-item-btn"
+                                data-bs-toggle="modal" data-bs-target="#confirmModal"
+                                data-modal-title="Confirm Item Deletion"
+                                data-modal-body="Are you sure you want to delete the item '{{ item.name | escape }}'?"
+                                data-modal-confirm-text="Delete Item" data-modal-confirm-class="btn-danger"
+                                data-action-url="{{ url_for('shoppinglist_bp.delete_item', item_id=item.id) }}"
+                                data-target-element-selector="li[data-item-id='{{ item.id }}']">
+                            <i class="bi bi-trash"></i><span class="button-text"> Delete</span>
+                        </button>
+                    </div>
+                </div>
+            </li>
+            {% else %}
+             <li class="list-group-item text-center text-muted" id="emptyListPlaceholder">
+                 This list is empty. Add some items using the form above!
+             </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {# --- End Item List --- #}
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script src="{{ url_for('static', filename='js/view_list.js') }}"></script>
+{% endblock %}

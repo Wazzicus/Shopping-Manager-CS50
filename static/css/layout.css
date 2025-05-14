@@ -1,0 +1,140 @@
+/* css/layout.css */
+
+
+/* ==========================================================================
+   ITEM LIST STYLES (e.g., for Shopping List Items)
+   ========================================================================== */
+/* Comment: These styles are highly specific to a list item component.
+            They would be ideal for a 'shopping-list.css', 'list-item.css',
+            or a general 'components.css' under a list item section. */
+
+/* --- General Text Styles within Items --- */
+.item-details-text {
+    font-size: 0.85em;
+    color: #6c757d; /* Consider var(--bs-secondary-color) or similar variable */
+}
+[data-bs-theme="dark"] .item-details-text { /* Dark mode specific */
+    color: #adb5bd; /* Consider var(--bs-body-color-dark) with opacity or specific dark mode variable */
+}
+
+.item-quantity-measure {
+    font-size: 0.9em;
+    color: #495057; /* Consider var(--bs-body-color) or similar */
+    display: block; /* Ensures it takes its column space if used in flex/grid */
+}
+[data-bs-theme="dark"] .item-quantity-measure { /* Dark mode specific */
+    color: #ced4da;
+}
+
+/* --- Item Row Structure & Columns --- */
+/* Assuming .item-row is applied to a .list-group-item or similar */
+.list-group-item.item-row {
+    padding-top: 0.75rem;
+    padding-bottom: 0.75rem;
+    /* Comment: This modifies Bootstrap's .list-group-item.
+                Ensure this is the intended scope. */
+}
+
+.item-name-column .item-name-line { /* Container for item name and potentially quantity on same line */
+    display: flex;
+    align-items: baseline;
+}
+
+.item-name-column .item-name { /* Styling for the item name itself */
+    font-weight: 500; /* Make item name slightly bolder */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block; /* Or block, depending on layout needs with other elements */
+    max-width: 90%; /* Adjust as needed, leaves space for quantity if on same line */
+}
+
+.item-name-column .item-edit-input { /* Input field when editing item name */
+    display: block; /* Or width: 100% if it's not already */
+    width: 100%;
+}
+
+/* --- Item Actions Column & Buttons --- */
+.item-actions-column {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start; /* Default for small screens: left align */
+    flex-wrap: nowrap;           /* Prevent wrapping by default */
+}
+
+.item-actions-column .btn,
+.item-actions-column .toggle-purchase-form { /* Assuming .toggle-purchase-form might wrap a button or be styled like one */
+    margin-left: 0.25rem; /* Space between buttons */
+    flex-shrink: 0;       /* Prevent buttons from shrinking too much initially */
+    display: inline-flex; /* For better icon centering within buttons */
+    align-items: center;
+    justify-content: center;
+    transition: width 0.2s ease-out, padding 0.2s ease-out; /* For responsive button text hiding */
+    /* Comment: This transition could be in 'animations.css' if it's a common pattern. */
+}
+
+.item-actions-column .btn:first-child,
+.item-actions-column .toggle-purchase-form:first-child {
+    margin-left: 0; /* No margin for the first button in the group */
+}
+
+
+/* ==========================================================================
+   RESPONSIVE STYLES for Item List
+   ========================================================================== */
+/* Comment: These media queries are specific to the item list component.
+            Keeping them grouped with the component's base styles is good practice. */
+
+/* Styles for when action buttons become icon-only on small screens */
+@media (max-width: 767.98px) { /* Bootstrap's 'md' breakpoint (below medium) */
+    .item-actions-column {
+        justify-content: flex-start; /* Or space-between if preferred and space allows */
+    }
+
+    .item-actions-column .btn,
+    .item-actions-column .toggle-purchase-form .btn { /* Target button inside form too */
+        width: 34px;    /* Fixed width for a square/round shape */
+        height: 34px;   /* Fixed height */
+        padding: 0;     /* Remove padding to center icon */
+        font-size: 0.9rem; /* Adjust icon size if needed */
+        border-radius: 50px; /* Make it very round / pill-like */
+    }
+
+    .item-actions-column .btn .button-text, /* Span containing text, if you add one */
+    .item-actions-column .toggle-purchase-form .btn .button-text {
+        display: none; /* Hide text on small screens */
+    }
+
+    .item-actions-column .btn i, /* Assuming icons are direct children or within a span */
+    .item-actions-column .toggle-purchase-form .btn i {
+        margin-right: 0 !important; /* Remove margin from icon when text is hidden */
+    }
+
+    .item-quantity-column { /* This specific column for quantity */
+        /* display: none; */ /* Original had this, but below stacks it under name. Re-evaluate if it should be hidden or stacked. */
+        text-align: left;
+        margin-top: 0.25rem; /* Spacing if stacked under name */
+    }
+
+    .item-name-column .item-name-line { /* Container for name and quantity */
+        flex-direction: column; /* Stack name and quantity */
+        align-items: flex-start;
+    }
+
+    .item-name-column .item-quantity-measure { /* Quantity shown under name on small screens */
+        margin-left: 0; /* Reset margin if it had one */
+        margin-top: 0.15rem; /* Space below the item name */
+    }
+}
+
+/* Styles for medium screens and up */
+@media (min-width: 768px) { /* Bootstrap's 'md' breakpoint and up */
+    .item-actions-column {
+        justify-content: flex-end; /* Align buttons to the right on larger screens */
+    }
+
+    .item-quantity-column {
+        text-align: left; /* Or 'center' if you prefer quantity centered in its column */
+    }
+    /* Text for buttons would be visible by default here, as .button-text is not 'display: none' */
+}

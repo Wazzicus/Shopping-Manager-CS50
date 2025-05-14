@@ -1,0 +1,138 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ title }}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Account Settings</h2>
+    <div class="card sm-card">
+        <div class="card-header">
+            <h3>Profile Information</h3>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('settings_bp.account_settings') }}" enctype="multipart/form-data">
+                {{ profile_form.hidden_tag() if profile_form else '' }}
+                <div class="form-group profile-picture-container">
+                    <img src="{{ current_user.profile_picture_url or 'https://placehold.co/128x128/e2e8f0/94a3b8?text=Avatar' }}"
+                            alt="Current Profile Picture"
+                            class="profile-picture"
+                            onerror="this.onerror=null;this.src='https://placehold.co/128x128/e2e8f0/94a3b8?text=Avatar';">
+                    <div class="profile-picture-upload">
+                        <label for="profile_picture" class="mb-1">Change Profile Picture</label>
+                        <input type="file" name="profile_picture" id="profile_picture" class="form-input">
+                        <p class="mt-1 text-xs text-gray-500">PNG, JPG, GIF up to 2MB.</p>
+                    </div>
+                </div>
+                <div class="form-group mb-3">
+                    {{ profile_picture_form.new_name.label(class="form-label") }}
+                    {{ profile_picture_form.new_name(class=['form-select', 'is-invalid' if profile_picture_form.new_name.errors else '']) }}
+                    {% if profile_picture_form.new_name.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in profile_picture_form.new_name.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                <div class="form-group mb-3">
+                    <button type="submit" name="action" value="update_profile" class="button button-primary">Save Profile Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+        
+
+    <div class="card sm-card">
+        <div class="card-header">
+            <h3>Change Display Name</h3>
+        </div>
+        <div class="card-body">
+            <form method="post" autocomplete="off" action="{{ url_for('settings_bp.account_settings') }}">
+                <div class="form-group mb-3">
+                    {{ name_change_form.hidden_tag() }}
+                    {{ name_change_form.new_name.label(class="form-label") }}
+                    {{ name_change_form.new_name(class=['form-control', 'is-invalid' if name_change_form.new_name.errors else ''], placeholder="Enter New name") }}                    
+                    {% if name_change_form.new_name.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in name_change_form.new_name.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                    {{ name_change_form.submit(class="btn btn-primary")}}
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <div class="card sm-card">
+        <div class="card-header">
+            <h3>Change Password</h3>
+        </div>
+        <div class="card-body">
+            <form method="POST" action="{{ url_for('settings_bp.account_settings') }}">
+                {{ password_form.hidden_tag() if password_form else '' }}
+                <div class="form-group mb-3">
+                    {{ password_change_form.current_password.label(class="form-label") }}
+                    {{ password_change_form.current_password(class=['form-control', 'is-invalid' if password_change_form.current_password.errors else ''], placeholder="Enter Old Password") }}
+                    {% if password_change_form.current_password.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in password_change_form.current_password.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group  mb-3">
+                {{ password_change_form.new_password.label(class="form-label") }}
+                {{ password_change_form.new_password(class=['form-control', 'is-invalid' if password_change_form.new_password.errors else ''], placeholder="Enter New password") }}
+                {% if password_change_form.new_password.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in password_change_form.new_password.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+
+                <div class="form-group mb-3">
+                    {{ password_change_form.confirm_new_password.label(class="form-label") }}
+                    {{ password_change_form.confirm_new_password(class=['form-control', 'is-invalid' if password_change_form.new_password.errors else ''], placeholder="Confirm New password") }}
+                    {% if password_change_form.confirm_new_password.errors %}
+                    <div class="invalid-feedback">
+                        {% for error in password_change_form.confirm_new_password.errors %}
+                        <span>{{ error }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div class="form-group mb-3">
+                    <button type="submit" 
+                            name="action" 
+                            value="change_password" 
+                            class="button button-secondary">
+                            Update Password
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="card sm-card">
+        <button type="button" class="btn btn-warning"
+            data-bs-toggle="modal"
+            data-bs-target="#confirmModal"
+            data-modal-title="Confirm Leave Household"
+            data-modal-body="Are you sure you want to leave this household? If you are the admin and other members exist, admin rights will be transferred."
+            data-modal-confirm-text="Yes, Leave"
+            data-modal-confirm-class="btn-warning"
+            data-action-url="{{ url_for('household_bp.leave') }}"
+            data-redirect-url="{{ url_for('household_bp.setup') }}"> 
+            Leave Household
+        </button>
+    </div>
+</div>       
+{% endblock %}                

@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+
+{% block title %}
+{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="mb-4">Manage Household</h1>
+            <div class="card sm-card">
+                <div class="card-header">
+                    <h2>Household Information</h2>
+                </div>
+                <div class="card-body">
+                    <p><strong>Household Name:</strong> <span class="household-name">{{ household.name }}</span></p>
+                    <p><strong>Join Code:</strong> <span id="householdJoinCode">{{ household.join_code }}</span></p>
+                    <button id="regenerateJoinCodeBtn" class="btn btn-sm btn-warning" data-url="{{ url_for('household_bp.regenerate_code')}}">Regenerate Join Code</button>
+                </div>
+            </div>
+        </div>
+    </div>
+            
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card sm-card">
+                <div class="card-header">
+                    <h3>Rename Household</h3>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{{ url_for('household_bp.rename') }}" class="mb-8" id="renameHouseholdForm" onsubmit="event.preventDefault(); renameHousehold();">
+                        <input type="text" 
+                                name="household_name" 
+                                id="newHouseholdName"
+                                class="form-input mb-3"
+                                placeholder="New household name"
+                                required>
+                        <button type="submit"
+                                id="newHouseholdNameBtn"
+                                class="btn btn-sm btn-outline-danger delete-item-btn">
+                                Rename Household
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card sm-card">
+                <div class="card-header">
+                    <h4 class="mb-2" style="font-size: 1.1em; font-weight: 600;">Delete Household</h4>
+                </div>
+                <div class="card-body">
+                    <p class="text-sm text-gray-600 mb-3">This action is irreversible and will delete all associated data, including lists and items for all members.</p>                    
+                    <form method="POST" action="{{ url_for('household_bp.delete') }}">
+                        <button type="button" 
+                                class="btn btn-danger"
+                                id="DeleteHouseholdBtn" 
+                                data-bs-toggle="modal"
+                                data-bs-target="#confirmModal"
+                                data-modal-title="Confirm Household Deletion"
+                                data-modal-body="Are you absolutely sure you want to delete this household? This will remove all members and all associated data. This action cannot be undone."
+                                data-modal-confirm-text="Yes, Delete Permanently"
+                                data-modal-confirm-class="btn-danger"
+                                data-action-url="{{ url_for('household_bp.delete') }}" 
+                                data-redirect-url="{{ url_for('household_bp.setup') }}">
+                                Delete Household Permanently
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-8">
+            <div class="card sm-card">
+                <div class="card-header">
+                    <h3>Manage Household Members</h3>
+                </div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Role</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if members %}
+                                {% for member in members %}
+                                <tr>
+                                    <td>
+                                        <div class="user-details-in-table">
+                                            <img class="avatar-in-table"
+                                                src="{{ member.profile_picture_url or 'https://placehold.co/40x40/e2e8f0/94a3b8?text=U' }}"
+                                                alt="{{ member.name or 'User' }}'s avatar"
+                                                onerror="this.onerror=null;this.src='https://placehold.co/40x40/e2e8f0/94a3b8?text=U';">
+                                            <span>{{ member.name or 'User Name' }}</span>
+                                            {% if member.id == current_user.id%}
+                                            <span class="text-xs text-gray-500">(You)</span>
+                                            {% endif %}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="role-badge {{ 'role-admin' if member.role == 'admin' else 'role-member' }}">
+                                            {{ member.role | capitalize or 'Member' }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <form method="POST" action="{{ url_for('household_bp.remove_member', user_id_to_remove=member.id) }}" class="inline-form">
+                                            {% if current_user.id == household.admin_id and member.id != current_user.id %}
+                                                <button type="button" class="btn btn-sm btn-outline-danger remove-member-btn"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#confirmModal"
+                                                        data-modal-title="Confirm Member Removal"
+                                                        data-modal-body="Are you sure you want to remove {{ member.name }} from the household?"
+                                                        data-modal-confirm-text="Yes, Remove {{ member.name }}"
+                                                        data-modal-confirm-class="btn-danger"
+                                                        data-action-url="{{ url_for('household_bp.remove_member', user_id_to_remove=member.id) }}"
+                                                        data-target-element-selector="#member-row-{{ member.id }}"> 
+                                                    Remove
+                                                </button>
+                                            {% endif %}
+                                        </form>
+                                        {% if member.id == current_user.id%}
+                                        <button type="button" class="btn btn-warning"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#confirmModal"
+                                            data-modal-title="Confirm Leave Household"
+                                            data-modal-body="Are you sure you want to leave this household? If you are the admin and other members exist, admin rights will be transferred."
+                                            data-modal-confirm-text="Yes, Leave"
+                                            data-modal-confirm-class="btn-warning"
+                                            data-action-url="{{ url_for('household_bp.leave') }}"
+                                            data-redirect-url="{{ url_for('household_bp.setup') }}"> 
+                                            Leave
+                                        </button>
+                                        {% endif %}
+                                        </td>
+                                </tr>
+                                {% endfor %}
+                                {% else %}
+                                <tr>
+                                    <td colspan="4" class="text-center text-sm text-gray-500">This household has no other members.</td>
+                                </tr>
+                                {% endif %}
+                                </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts%}
+{{ super ()}}
+<script src="{{ url_for('static', filename='js/manage.js') }}"></script>
+{% endblock %}

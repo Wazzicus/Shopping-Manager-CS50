@@ -1,0 +1,60 @@
+<!--shopping/edit_item.html-->
+{% extends "base.html" %}
+
+{% block title %}
+
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-4">
+    <div class="col-md-8 col-lg-6">
+        <div class="card sm-card">
+            <div class="card-header">
+                <h1 class="h4 mb-0 ">Edit Item</h1>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <form method="post"  autocomplete="off">
+                        {{ new_list_form.hidden_tag() }}
+                        <div class="row g-2 mb-2">
+                            <div class="col-md-6">
+                                {{ form.name(class_=['form-control', 'is-invalid' if form.name.errors else ''], placeholder="New Name") }}
+                                {% if form.name.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.name.errors %}
+                                    <span> {{ error }}</span><br>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-3 col-6">
+                                {{ form.quantity(class_=['form-control', 'is-invalid' if form.quantity.errors else ''] ,placeholder="Quantity") }}
+                                {% if form.quantity.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.quantity.errors %}
+                                    <span> {{ error }}</span><br>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="col-md-3 col-6">
+                                {{ form.measure(class_=['form-control', 'is-invalid' if form.measure.errors else ''] ,placeholder="Unit (e.g kg, pcs)") }}
+                                {% if form.measure.errors %}
+                                <div class="invalid-feedback">
+                                    {% for error in form.measure.errors %}
+                                    <span> {{ error }}</span><br>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div>
+                            {{ form.submit(class="btn btn-outline-primary w-100") }}
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

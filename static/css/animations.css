@@ -1,0 +1,59 @@
+@keyframes fadeInSlideUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-slide-up {
+    animation: fadeInSlideUp 0.4s ease-out forwards;
+}
+@keyframes pulse {
+    0%, 80%, 100% {
+      transform: scale(0.8); /* Smaller size */
+      opacity: 0.7;         /* Slightly faded */
+    }
+    40% {
+      transform: scale(1.1); /* Larger size */
+      opacity: 1;           /* Fully opaque */
+    }
+  }
+  .pulse{
+  animation: pulse 1.4s infinite ease-in-out both; 
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+ 
+.tab-content .tab-pane {
+    transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+    
+}
+
+.tab-content .tab-pane.active.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Slide-in effect */
+.tab-content .tab-pane {
+    opacity: 0;
+    transform: translateX(20px); 
+}  
+
+/* Fade animation */
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}

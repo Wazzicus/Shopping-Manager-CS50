@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Welcome!</h2>
+    <ul class="nav nav-pills nav-toggle-switcher mb-3" id="toggleTab" role="tablist">
+         <span class="sliding-indicator" id="tabSlider"></span>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link {% if initial_active_tab == 'login' %}active{% endif %}" id="login-tab" data-bs-toggle="tab" data-bs-target="#login-tab-pane" type="button" role="tab" aria-controls="login-tab-pane">Login</button>
+
+
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link {% if initial_active_tab == 'register' %}active{% endif %}" id="register-tab" data-bs-toggle="tab" data-bs-target="#register-tab-pane" type="button" role="tab" aria-controls="register-tab-pane">Register</button>
+        </li>
+    </ul>
+    <div class="tab-content" id="householdTabContent">
+        <div class="tab-pane fade {% if initial_active_tab == 'login' %} show active{% endif %}" id="login-tab-pane" role="tabpanel" aria-labelledby="login-tab" tabindex="0">
+            <div class="card sm-card mb-4">
+                <div class="card-header">
+                    <h1 class="h4 mb-0 ">Login</h1>
+                </div>
+                <div class="card-body">
+                    <p>Get back to managing your lists in no time!</p>
+                    <form class="auth-form" id="login_form" method="POST" action="{{ url_for('auth.auth') }}">
+                        <div class="mb-3">
+                        {{ login_form.hidden_tag() }}
+                        {{ login_form.username.label(class="form-label") }}
+                        {{ login_form.username(class="form-control") }}
+                        {% if login_form.username.errors %}
+                            <div class="invalid-feedback">
+                            {% for error in login_form.username.errors %}
+                                <span> {{ error }}</span><br>
+                            {% endfor %}
+                            </div>
+                        {% endif %}
+                
+                        {{ login_form.password.label(class="form-label") }}
+                        {{ login_form.password(class="form-control") }}
+                        {% if login_form.password.errors %}
+                            <div class="invalid-feedback">
+                            {% for error in login_form.password.errors %}
+                                <span> {{ error }}</span><br>
+                            {% endfor %}
+                            </div>
+                        {% endif %}
+                        <input type="hidden" name="action" value="login">
+                        {{ login_form.submit(class="btn btn-primary mt-3") }}
+                    </form>
+                </div>
+            </div>
+        </div>
+        </div>
+
+        <div class="tab-pane fade{% if initial_active_tab == 'register' %} show active{% endif %} " id="register-tab-pane" role="tabpanel" aria-labelledby="register-tab" tabindex="0">
+            <div class="card sm-card">
+                <div class="card-header">
+                    <h4>Register</h4>
+                </div>
+                <div class="card-body">
+                    <p>Create an account to start managing your lists like a pro!</p>
+                    <form class="auth-form hidden" id="register_form" method="post" action="{{ url_for('auth.auth') }}">
+                        <div class="mb-3">
+                            {{ register_form.hidden_tag() }}
+                            {{ register_form.name.label(class="form-label" , autocomplete="off") }}
+                            {{ register_form.name(class="form-control") }}
+                            {% if register_form.name.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in register_form.name.errors %}
+                                <span> {{ error }}</span><br>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+
+                            {{ register_form.username.label(class="form-label" , autocomplete="off" ) }}
+                            {{ register_form.username(class="form-control") }}
+                            {% if register_form.username.errors %}
+                            <div class="invalid-feedback">
+                                {% for error in register_form.username.errors %}
+                                <span> {{ error }}</span><br>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+
+                            {{ register_form.password.label(class="form-label" , autocomplete="new-password" ) }}
+                            {{ register_form.password(class="form-control") }}
+                            {% if register_form.password.errors %}
+                            <div class="invalid-feedback">
+                            {% for error in register_form.password.errors %}
+                                <span> {{ error }}</span><br>
+                            {% endfor %}
+                            </div>
+                            {% endif %}
+
+                            {{ register_form.confirm_password.label(class="form-label" , autocomplete="new-password" ) }}
+                            {{ register_form.confirm_password(class="form-control") }}
+                            {% if register_form.confirm_password.errors %}
+                                <div class="invalid-feedback">
+                                {% for error in register_form.confirm_password.errors %}
+                                    <span> {{ error }}</span><br>
+                                {% endfor %}
+                                </div>
+                            {% endif %}
+                            <input type="hidden" name="action" value="register">
+                        </div>
+                        {{ register_form.submit(class="btn btn-primary mt-3") }}
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block scripts %}
+{{ super() }}
+        <script src="{{ url_for('static', filename='js/tabswitch.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/auth.js') }}"></script>            
+{% endblock %}
