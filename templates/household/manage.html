@@ -90,10 +90,7 @@
                                 <tr>
                                     <td>
                                         <div class="user-details-in-table">
-                                            <img class="avatar-in-table"
-                                                src="{{ member.profile_picture_url or 'https://placehold.co/40x40/e2e8f0/94a3b8?text=U' }}"
-                                                alt="{{ member.name or 'User' }}'s avatar"
-                                                onerror="this.onerror=null;this.src='https://placehold.co/40x40/e2e8f0/94a3b8?text=U';">
+                                            <img src="{{ current_user.get_avatar_url() }}" alt="{{ current_user.name }}" class="avatar-in-table">
                                             <span>{{ member.name or 'User Name' }}</span>
                                             {% if member.id == current_user.id%}
                                             <span class="text-xs text-gray-500">(You)</span>

@@ -86,10 +86,10 @@ function toggleTheme() {
     const currentTheme = document.body.getAttribute('data-bs-theme');
     if (currentTheme === 'dark') {
         document.body.setAttribute('data-bs-theme', 'light');
-        // localStorage.setItem('theme', 'light');
+        localStorage.setItem('theme', 'light');
     } else {
         document.body.setAttribute('data-bs-theme', 'dark');
-        // localStorage.setItem('theme', 'dark');
+        localStorage.setItem('theme', 'dark');
     }
 }
 

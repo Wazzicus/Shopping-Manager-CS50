@@ -1,6 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectField
-from wtforms.validators import DataRequired,Length, EqualTo
+from wtforms import FileField, SubmitField, RadioField, HiddenField, StringField
+from wtforms.validators import Optional, DataRequired, Length,EqualTo
+from flask_wtf.file import FileAllowed
 
 class PasswordChangeForm(FlaskForm):
     current_password = StringField('Current Password', validators=[DataRequired("You must enter password"), Length(min=6)])
@@ -13,14 +14,11 @@ class NameChangeForm(FlaskForm):
     new_name = StringField('New Name', validators=[DataRequired("You must enter name"), Length(min=2)])
     submit = SubmitField('Change Display Name')    
 
-class ProfilePictureForm(FlaskForm):
-    picture = SelectField('Choose a Profile Picture', choices=[
-        ('default.png', 'Default'),
-        ('1.png', '1'),
-        ('2.png', '2'),
-        ('3.png', '3'),
-        ('4.png', '4'),
-        ('5.png', '5'),
+
+class AvatarForm(FlaskForm):
+    dicebear_url = RadioField("Choose an Avatar", choices=[], validators=[Optional()])
+    avatar_upload = FileField("Upload Profile Picture", validators=[
+        FileAllowed(['jpg', 'jpeg', 'png'], 'Images only!')
     ])
-    new_name = StringField('New Name', validators=[DataRequired("You must enter name"), Length(min=2)])
-    submit = SubmitField('Change Profile Picture')    
+    revert_avatar = HiddenField()  
+    submit = SubmitField("Save Changes")

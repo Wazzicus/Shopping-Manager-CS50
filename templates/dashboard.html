@@ -10,13 +10,8 @@
         <div class="card-header"><h5 class="mb-0">Welcome, {{ current_user.name | default('User') }}!</h5></div>
         <div class="card-body">
             <div class="profile-header">
-                {% if current_user.profile_pic_url %}
-                    <img src="{{ current_user.profile_pic_url }}" alt="{{ current_user.name | default('User') }}'s profile" class="profile-pic-actual">
-                {% else %}
-                    <div class="profile-pic-placeholder">
-                        <i class="bi bi-person-fill"></i>
-                    </div>
-                {% endif %}
+                <img src="{{ current_user.avatar_url }}" alt="{{ current_user.name }}" class="profile-pic-actual">
+
                 <div class="profile-info me-auto">
                     <p class="card-text mb-1">@{{ current_user.username }}</p>
                     {% if current_user.household %}
@@ -73,94 +68,72 @@
                                     </form>
                                 </div>
                             </div>
-                            <div class="header-action-group">
-                                <div class="dashboard-search-container">
-                                    <form class="d-flex my-auto" role="search" id="dashboardListSearchForm" action="{{ url_for('main.search_lists') }}" method="GET">
-                                        <div class="shopping-search-pill-container">
-                                            <input id="dashboardSearchInput" name="q" type="search" class="form-control"
-                                                placeholder="Search your lists..." aria-label="Search Lists"
-                                                value="{{ search_query | default(request.args.get('q', '')) }}">
-
-                                            <button class="btn btn-clear-custom" type="button" id="dashboardClearSearchBtn">
-                                                <i class="bi bi-x-lg"></i>
-                                            </button>
-
-                                            <button class="btn btn-search-custom expanded" type="submit" id="dashboardMainSearchBtn">
-                                                <span id="dashboardSearchSpinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                                                <i class="bi bi-search"></i>
-                                                <span class="search-text">Search</span>
-                                            </button>
-                                        </div>
-                                    </form>
-
-                                    <div id="dashboardContent">
-                                    
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="card-body">
                     {% if lists %}
-                    <table class="table align-middle" id="shoppingListsTable">
-                        <thead>
-                            <tr>
-                                <th scope="col">List Name</th>
-                                <th scope="col">Items</th>
-                                <th scope="col">Status</th>
-                                <th scope="col" class="text-end">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for list in lists %}
-                            <tr id="list-row-{{ list.id }}" class="{% if list.items_count == 0 %}table-warning{% endif %}">
-                                <td><strong>{{ list.name }}</strong></td>
-                                <td>{{ list.items_count | default(0) }}</td>
-                                <td>
-                                    {% if list.items_count == 0 %}
-                                        <span class="badge bg-secondary">Empty</span>                                            
-                                    {% else %}
-                                        <span class="badge bg-success">Active</span>
-                                    {% endif %}
-                                </td>
-                                <td class="text-end">
-                                    <a href="{{ url_for('shoppinglist_bp.edit_list', list_id=list.id) }}"
-                                    class="btn btn-sm btn-outline-secondary" title="Edit List Name">
-                                    <i class="bi bi-pencil-square"></i>
-                                    </a>
-                                    <button type="submit"
-                                            class="btn btn-sm btn-outline-danger delete-list-btn"
-                                            title="Delete List"
-                                            data-bs-toggle="modal"
-                                            data-bs-target="#confirmModal"
-                                            data-modal-title="Confirm List Deletion"
-                                            data-modal-body="Are you sure you want to delete the list '{{ list.name | escape }}' and all its items? This cannot be undone."
-                                            data-modal-confirm-text="Delete List"
-                                            data-modal-confirm-class="btn-danger"
-                                            data-action-url="{{ url_for('shoppinglist_bp.delete_list', list_id=list.id) }}"
-                                            data-target-element-selector="#list-row-{{ list.id }}"
-                                            data-redirect-url="{{ url_for('main.dashboard') }}">
-                                        <i class="bi bi-trash"></i>
-                                    </button>
-                                    <a href="{{ url_for('shoppinglist_bp.view_list', list_id=list.id) }}"
-                                    class="btn btn-sm btn-outline-primary">
-                                    <i class="bi bi-eye-fill"></i> View
-                                    </a>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
-
+                    <div class="table-responsive">
+                        <table class="table align-middle" id="shoppingListsTable">
+                            <thead>
+                                <tr>
+                                    <th scope="col">List Name</th>
+                                    <th scope="col">Items</th>
+                                    <th scope="col" class="text-end">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for list in lists %}
+                                <tr id="list-row-{{ list.id }}" class="{% if list.items_count == 0 %}table-warning{% endif %}">
+                                    <td>
+                                        <strong>{{ list.name }}</strong>
+                                        {% if list.items_count == 0 %}
+                                            <span class="badge bg-secondary ms-2 d-inline-block d-md-none">Empty</span>                                            
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        {{ list.items_count | default(0) }}
+                                    </td>
+                                    <td class="text-end">
+                                        <div class="btn-group">
+                                            <a href="{{ url_for('shoppinglist_bp.edit_list', list_id=list.id) }}"
+                                            class="btn btn-sm btn-outline-secondary" title="Edit List Name">
+                                            <i class="bi bi-pencil-square"></i>
+                                            </a>
+                                            <button type="submit"
+                                                    class="btn btn-sm btn-outline-danger delete-list-btn"
+                                                    title="Delete List"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#confirmModal"
+                                                    data-modal-title="Confirm List Deletion"
+                                                    data-modal-body="Are you sure you want to delete the list '{{ list.name | escape }}' and all its items? This cannot be undone."
+                                                    data-modal-confirm-text="Delete List"
+                                                    data-modal-confirm-class="btn-danger"
+                                                    data-action-url="{{ url_for('shoppinglist_bp.delete_list', list_id=list.id) }}"
+                                                    data-target-element-selector="#list-row-{{ list.id }}"
+                                                    data-redirect-url="{{ url_for('main.dashboard') }}">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                            <a href="{{ url_for('shoppinglist_bp.view_list', list_id=list.id) }}"
+                                            class="btn btn-sm btn-outline-primary">
+                                            <i class="bi bi-eye-fill"></i> <span class="d-none d-sm-inline">View</span>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                     {% else %}
                     <div>
                         <p class="card-text">You don't have any lists yet! Click 'New List' to get started.</p>
                     </div>
-                    {% endif%}
+                {% endif%}
                 </div>
             </div>            
         </div>
+        
 
         <div class="col-md-4">
             <div class="card sm-card mb-4">
@@ -187,142 +160,11 @@
     </div>
 </div>
 
-<div id="newListFormContainer" class="card sm-card mb-4 d-none">
-    <div class="card-header">
-        <h5 class="mb-0">Create New List</h5>
-    </div>
-    <div class="card-body">
-        <form id="newListForm" method="post" action="{{ url_for('shoppinglist_bp.create_list') }}">
-            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-            <div class="mb-3">
-                <label for="listName" class="form-label">List Name</label>
-                <input type="text" class="form-control" id="listName" name="name" required>
-            </div>
-            <div class="d-flex justify-content-end">
-                <button type="submit" class="btn btn-primary" id="submitListBtn">
-                    <span class="spinner-border spinner-border-sm d-none" id="submitListBtnSpinner" role="status" aria-hidden="true"></span>
-                    Create List
-                </button>
-                <button type="button" class="btn btn-secondary ms-2" id="cancelListBtn">
-                    Cancel
-                </button>
-            </div>
-        </form>
-    </div>
-</div>
+
 {% endblock %}
 
 {% block scripts %}
 {{ super() }}
 <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
 <script src="{{ url_for('static', filename='js/dashboard_search.js') }}"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const newListButton = document.getElementById('newListButton');
-        const newListFormContainer = document.getElementById('newListFormContainer');
-        const newListForm = document.getElementById('newListForm');
-        const submitListBtn = document.getElementById('submitListBtn');
-        const newListButtonSpinner = document.getElementById('newListButtonSpinner');
-        const cancelListBtn = document.getElementById('cancelListBtn');
-        const shoppingListsTable = document.getElementById('shoppingListsTable');
-
-
-        // Show the New List form when the "New List" button is clicked
-        newListButton.addEventListener('click', () => {
-            newListFormContainer.classList.remove('d-none');
-            newListButton.classList.add('d-none'); // Hide the button
-        });
-
-        // Handle the cancel button.
-        cancelListBtn.addEventListener('click', (event) => {
-            event.preventDefault(); // Prevent form submission
-            newListFormContainer.classList.add('d-none'); // Hide the form
-            newListButton.classList.remove('d-none'); // Show the new list button
-            newListForm.reset();
-        });
-        
-
-        // Handle form submission via AJAX
-        newListForm.addEventListener('submit', (event) => {
-            event.preventDefault(); // Prevent the default form submission
-
-            // Disable the submit button and show the spinner
-            submitListBtn.disabled = true;
-            document.getElementById('submitListBtnSpinner').classList.remove('d-none');
-
-            // Get the form data
-            const formData = new FormData(newListForm);
-
-            // Send the AJAX request
-            fetch(newListForm.action, {
-                method: 'POST',
-                body: formData,
-            })
-            .then(response => response.json())
-            .then(data => {
-                // Re-enable the submit button and hide the spinner
-                submitListBtn.disabled = false;
-                document.getElementById('submitListBtnSpinner').classList.add('d-none');
-
-                if (data.success) {
-                    // Update the UI with the new list (e.g., add a new row to the table)
-                    if (shoppingListsTable) { //check if the table exists
-                        const newListRow = document.createElement('tr');
-                        newListRow.id = `list-row-${data.list.id}`;
-                        newListRow.innerHTML = `
-                            <td><strong>${data.list.name}</strong></td>
-                            <td>${data.list.items_count}</td>
-                            <td><span class="badge bg-secondary">Empty</span></td>
-                            <td class="text-end">
-                                <a href="/shoppinglist/edit/${data.list.id}"
-                                    class="btn btn-sm btn-outline-secondary" title="Edit List Name">
-                                    <i class="bi bi-pencil-square"></i>
-                                </a>
-                                <button type="submit"
-                                        class="btn btn-sm btn-outline-danger delete-list-btn"
-                                        title="Delete List"
-                                        data-bs-toggle="modal"
-                                        data-bs-target="#confirmModal"
-                                        data-modal-title="Confirm List Deletion"
-                                        data-modal-body="Are you sure you want to delete the list '${data.list.name}' and all its items? This cannot be undone."
-                                        data-modal-confirm-text="Delete List"
-                                        data-modal-confirm-class="btn-danger"
-                                        data-action-url="/shoppinglist/delete/${data.list.id}"
-                                        data-target-element-selector="#list-row-${data.list.id}"
-                                        data-redirect-url="/dashboard">
-                                    <i class="bi bi-trash"></i>
-                                </button>
-                                <a href="/shoppinglist/view/${data.list.id}"
-                                    class="btn btn-sm btn-outline-primary">
-                                    <i class="bi bi-eye-fill"></i> View
-                                </a>
-                            </td>
-                        `;
-                        shoppingListsTable.querySelector('tbody').appendChild(newListRow);
-                    }
-
-                    // Clear the form and hide it
-                    newListForm.reset();
-                    newListFormContainer.classList.add('d-none');
-                    newListButton.classList.remove('d-none');
-
-                    // Optionally, display a success message to the user
-                    //  You can use a library like `toastr.js` for nice notifications
-                    alert(data.message);
-
-                } else {
-                    // Display an error message to the user
-                    alert(data.error);
-                }
-            })
-            .catch(error => {
-                // Re-enable the submit button and hide the spinner
-                submitListBtn.disabled = false;
-                document.getElementById('submitListBtnSpinner').classList.add('d-none');
-                console.error('Error:', error);
-                alert('An error occurred while creating the list.'); // generic error
-            });
-        });
-    });
-</script>
 {% endblock %}
