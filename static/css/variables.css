@@ -1,108 +1,127 @@
 /* static/variables.css */
 
-/* ==============================================================================
-   ROOT VARIABLES - Light Theme (Default)
-   ============================================================================== */
 :root {
-    /* Primary Color Palette */
-    --color-primary: #0dcaf0;          
-    --color-primary-darker: #315a61;   
-    --color-primary-darkest: #254247; 
-    
-    /* Text Colors */
-    --color-text-primary: #111827;     
-    --color-text-secondary: #374151;   
-    
-    /* Background Colors */
-    --color-bg-main: #ffffff;          
-    --color-bg-secondary: #f8f9fa;     
-     
-    /* Border Colors */
-    --color-border-color: #dee2e6;     
-    
-    /* State Colors */
-    --color-success: #136e22;
-    --color-success-hover: #1b942fe8;          
-    --color-danger: #d33636;           
-    --color-danger-hover: #dc2626;      
-    --color-info: #00d5ff;             
-    --color-warning: #ffc107;
-    
-    /* Progress Bar */
-    --progress-bar-dot-size: 0.75rem;
-    --your-progress-track-bg-color: #e9ecef;
-    --your-primary-color: #0d6efd;
+  /* Primary Colors */
+  --primary: #0dcaf0; /* Cyan - for interactive elements */
+  --primary-variant: #08a7c2; /* Darker shade of primary */
+
+  /* Secondary Colors */
+  --secondary: #6c757d; /* Gray - for subtle elements */
+  --secondary-variant: #5a6268; /* Darker shade of secondary */
+
+  /* Accent/Warning Color */
+  --warning: #f0c419; /* Yellow - for warnings, use sparingly */
+  --warning-variant: #d0a408;
+
+  /* Success Color */
+  --success: #136e22; /* Dark Green - for success messages */
+  --success-variant: #0e4e16;
+
+  /* Text Colors */
+  --text-primary: #212529; /* Very dark gray - for main text in light mode */
+  --text-secondary: #6c757d; /* Medium gray - for secondary text */
+  --text-light: #ffffff; /* White - for text on dark backgrounds */
+  --text-faint: #a1a1a1; /* very light grey, for placeholders */
+
+  /* Background Colors */
+  --background: #ffffff; /* White - for main background in light mode */
+  --background-variant: #f8f9fa; /* Very light gray - for cards, modals in light mode */
+  --surface: #ffffff; /* White - for surfaces like cards, dialogs in light mode */
+  --surface-variant: #e9ecef; /* Slightly darker surface, for subtle differentiation */
+
+  /* Border Colors */
+  --border: #dee2e6; /* Light gray - for borders in light mode */
+  --border-light: #eff2f5; /* Very light border, for dividers */
+
+  /* Other */
+  --shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15); /* Standard shadow */
+  --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  --transition: all 0.2s ease-in-out;
+  --rounded-md: 0.375rem; /* 6px */
+  --rounded-lg: 0.5rem;   /* 8px */
+  --spacing-sm: 0.5rem;  /* 8px */
+  --spacing-md: 1rem;    /* 16px */
+  --spacing-lg: 2rem;    /* 32px */
 }
 
-/* ==============================================================================
-   DARK MODE VARIABLES
-   ============================================================================== */
-.dark-mode {
-    /* Primary Color Palette */
-    --color-primary: #0dcaf0;          
-    --color-primary-darker: #0a8da7;   
-    --color-primary-darkest: #05414d;  
-    
-    /* Text Colors */
-    --color-text-primary: #f8f9fa;     
-    --color-text-secondary: #adb5bd;   
-    
-    /* Background Colors */
-    --color-bg-main: #2e3a46;          
-    --color-bg-secondary: #343a40;     
-    
-    /* Border Colors */
-    --color-border-color: #495057;     
-    
-    /* State Colors */
-    --color-success: #34d399;   
-    --color-success-hover: #10b981;       
-    --color-danger: #f87171;           
-    --color-danger-hover: #ef4444;      
-    --color-info: #67e8f9;             
-    --color-warning: #f0c419;
-    
-    /* Progress Bar */
-    --progress-track-height: 0.75rem;
-    --progress-track-bg-color: #4A5568;
-    --progress-bar-fill-color: #7FDBFF;
-    --progress-dot-color: #E2E8F0;
-    --progress-dot-size: calc(var(--progress-track-height) * 0.66);
-    
-    /* General */
-    background-color: var(--bs-body-bg);
-    color: var(--bs-body-color);
+/* Dark Theme Overrides */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-primary: #ffffff; /* White - for main text in dark mode */
+    --text-secondary: #adb5bd; /* Light gray - for secondary text in dark mode */
+    --text-light: #000000;
+    --background: #212529; /* Very dark gray - for main background in dark mode */
+    --background-variant: #2c3034; /* Slightly lighter dark gray */
+    --surface: #343a40; /* Dark gray for cards, dialogs in dark mode */
+    --surface-variant: #3e4448;
+    --border: #495057; /* Darker border color */
+    --border-light: #424950;
+    --shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.4); /* Stronger shadow in dark mode */
+  }
 }
 
-/* ==============================================================================
-   COMPONENT STYLES
-   ============================================================================== */
+/* Usage Suggestions (within comments in the CSS) */
 
-/* Cards */
-.card {
-    background-color: var(--bs-secondary-bg);
-    border-color: var(--bs-border-color);
-}
+/*
+  --primary:  Use for:
+    - Active states of buttons, links, navigation elements.
+    - Checkbox/radio button active states.
+    - Progress bars, sliders.
+    - Highlighting selected items.
 
-.card-header {
-    background-color: rgba(var(--bs-secondary-rgb), 0.5); 
-    border-bottom-color: var(--bs-border-color);
-}
+  --primary-variant: Use for:
+    - Slightly darker shade of primary for hover/active states.
+    - Subtle accents related to the primary color.
 
-/* Navigation */
-.navbar-dark .navbar-nav .nav-link.active {
-    font-weight: 600;
-    color: var(--color-primary); 
-}
+  --secondary: Use for:
+    - Secondary buttons, less important actions.
+    - Muted text or icons.
+    - Backgrounds for less prominent sections.
 
-.navbar-light .navbar-nav .nav-link.active {
-    font-weight: 600;
-    color: var(--color-primary);
-}
+  --secondary-variant: Use for:
+     - Hover states of secondary elements
+     - Subtle borders
 
-/* List Items */
-.item-purchased .item-name {
-    text-decoration: line-through;
-    opacity: 0.6;
-}
+  --warning: Use for:
+    - Error messages, input validation warnings.
+    - Alert icons.
+    - Destructive actions (e.g., delete button, but use sparingly).
 
+  --success: Use for:
+    - Success messages, confirmations.
+    - Success states (e.g., successful form submission).
+    - Positive feedback indicators.
+
+  --text-primary: Use for:
+    - Main body text, headings.
+    - Labels for form fields.
+    - Important information.
+
+  --text-secondary: Use for:
+    - Subtitles, captions, smaller text.
+    - Less important information.
+    - Disabled text.
+
+  --background: Use for:
+    - Main background of the application.
+    - Large areas of content.
+
+  --background-variant: Use for:
+    - Background of cards, modals, dialogs.
+    - Subtle background variations within the main layout.
+    - List item backgrounds (alternating colors).
+
+  --surface: Use for:
+    - Background of components like cards, dialogs, panels.
+    - Elements that appear "on top" of the main background.
+
+  --border: Use for:
+    - Borders around components, form fields.
+    - Dividers between sections.
+
+  --shadow:  Use for:
+    -  Depth and elevation for elements like cards, modals, and buttons.
+
+  --transition:
+    -  CSS transition property for animations
+*/

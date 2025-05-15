@@ -1,12 +1,12 @@
 from flask_wtf import FlaskForm
-from wtforms import FileField, SubmitField, RadioField, HiddenField, StringField
+from wtforms import FileField, SubmitField, RadioField, HiddenField, StringField, PasswordField
 from wtforms.validators import Optional, DataRequired, Length,EqualTo
 from flask_wtf.file import FileAllowed
 
 class PasswordChangeForm(FlaskForm):
-    current_password = StringField('Current Password', validators=[DataRequired("You must enter password"), Length(min=6)])
-    new_password = StringField('New Password', validators=[DataRequired("You must enter password"), Length(min=6)])
-    confirm_new_password = StringField('Confirm New Password', validators=[DataRequired("You must enter password"), Length(min=6), EqualTo('new_password', message='Passwords must match')])
+    current_password = PasswordField('Current Password', validators=[DataRequired("You must enter password"), Length(min=6)])
+    new_password = PasswordField('New Password', validators=[DataRequired("You must enter password"), Length(min=6)])
+    confirm_new_password = PasswordField('Confirm New Password', validators=[DataRequired("You must enter password"), Length(min=6), EqualTo('new_password', message='Passwords must match')])
     submit = SubmitField('Change Password')
 
 class NameChangeForm(FlaskForm):

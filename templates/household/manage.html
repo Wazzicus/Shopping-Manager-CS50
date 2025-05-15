@@ -4,13 +4,13 @@
 {% endblock %}
 
 {% block content %}
-<div class="container my-4">
+<div class="container mt-4">
     <div class="row">
         <div class="col-md-12">
             <h1 class="mb-4">Manage Household</h1>
             <div class="card sm-card">
                 <div class="card-header">
-                    <h2>Household Information</h2>
+                    <h3>Household Information</h3>
                 </div>
                 <div class="card-body">
                     <p><strong>Household Name:</strong> <span class="household-name">{{ household.name }}</span></p>
@@ -25,7 +25,7 @@
         <div class="col-md-4">
             <div class="card sm-card">
                 <div class="card-header">
-                    <h3>Rename Household</h3>
+                    <h4>Rename Household</h4>
                 </div>
                 <div class="card-body">
                     <form method="POST" action="{{ url_for('household_bp.rename') }}" class="mb-8" id="renameHouseholdForm" onsubmit="event.preventDefault(); renameHousehold();">
@@ -46,7 +46,7 @@
 
             <div class="card sm-card">
                 <div class="card-header">
-                    <h4 class="mb-2" style="font-size: 1.1em; font-weight: 600;">Delete Household</h4>
+                    <h4 class="mb-2">Delete Household</h4>
                 </div>
                 <div class="card-body">
                     <p class="text-sm text-gray-600 mb-3">This action is irreversible and will delete all associated data, including lists and items for all members.</p>                    
@@ -90,7 +90,17 @@
                                 <tr>
                                     <td>
                                         <div class="user-details-in-table">
-                                            <img src="{{ member.get_avatar_url() }}" alt="{{ member.name }}" class="avatar-in-table">
+                                            {% if current_user.avatar_url %}
+                                            {% if current_user.avatar_url.startswith('http') %}
+
+                                                <img src="{{ current_user.avatar_url }}" alt="{{ current_user.name }}'s avatar" class="avatar-in-table">
+                                            {% else %}
+                                                <img src="{{ current_user.avatar_url }}" alt="{{ current_user.name }}'s avatar" class="avatar-in-table">
+                                            {% endif %}
+                                            {% else %}
+                                            
+                                            <img src="{{ url_for('static', filename='images/default_avatar.png') }}" alt="Default avatar" class="avatar-in-table">
+                                            {% endif %}
                                             <span>{{ member.name or 'User Name' }}</span>
                                             {% if member.id == current_user.id%}
                                             <span class="text-xs text-gray-500">(You)</span>
@@ -131,7 +141,7 @@
                                             Leave
                                         </button>
                                         {% endif %}
-                                        </td>
+                                    </td>
                                 </tr>
                                 {% endfor %}
                                 {% else %}

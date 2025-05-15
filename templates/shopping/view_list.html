@@ -124,16 +124,23 @@
                             {% endif %}
                         </div>
                         <input type="text" class="form-control item-edit-input d-none" value="{{ item.name | escape }}">
+                        {%  if item.added_by.name %}
                         <small class="item-details-text d-block mt-1">
                             Added by:
                             <span class="added-by-pill bg-secondary">
-                                <img src="{{ item.added_by.get_avatar_url() }}" alt="{{ item.added_by.name }}"
-                                     class="profile-pic-thumb"
-                                     alt="{{ item.added_by.name | default('User') }}'s profile picture"
-                                     onerror="this.style.display='none'; this.nextElementSibling.style.marginLeft='0';">
-                                <span class="added-by-name">{{ item.added_by.name | default('N/A') }}</span>
+                                {% if item.added_by.avatar_url %}
+                                {% if item.added_by.avatar_url.startswith('http') %}
+                               <img src="{{ item.added_by.avatar_url }}" alt="{{ item.added_by.name }}'s avatar" class="profile-pic-thumb">
+                                {% else %}
+                               <img src="{{ item.added_by.avatar_url }}" alt="{{ item.added_by.name }}'s avatar" class="profile-pic-thumb">
+                                {% endif %}
+                                {% else %}
+                                <img src="https://api.dicebear.com/7.x/initials/svg?seed={{ item.added_by.name }}" alt="Default avatar" class="profile-pic-thumb">
+                                {% endif %}
+                                <span class="added-by-name">{{ item.added_by.name | default('You') }}</span>
                             </span>
                         </small>
+                        {% endif %}
                         <div class="edit-error text-danger mt-1 w-100" style="display: none;"></div>
                     </div>
                     <div class="col-md-3 col-6 item-quantity-column d-none d-md-block">
@@ -174,7 +181,6 @@
             {% endfor %}
         </ul>
     </div>
-    {# --- End Item List --- #}
 </div>
 
 {% endblock %}

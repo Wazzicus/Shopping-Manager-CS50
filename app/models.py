@@ -14,21 +14,28 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(128), nullable=False)
     role = db.Column(db.String(20), default='member')
     avatar_url = db.Column(db.String(256), nullable=True)  # Can be DiceBear URL or local path
-    def get_avatar_url(self):
-        if self.avatar_url:
-            # Assuming you're storing uploads in 'static/uploads/avatars/<filename>'
-            return url_for('static', filename=f'uploads/avatars/{self.avatar_url}')
-        else:
-            # Return a DiceBear avatar URL (you can customize this style)
-            return f"https://api.dicebear.com/7.x/initials/svg?seed={self.username}"
-
+    # Relationships
     household_id = db.Column(db.Integer, db.ForeignKey('households.id'))
     household = db.relationship('Household', back_populates='members', foreign_keys=[household_id])
-    administered_household = db.relationship('Household', back_populates='admin',foreign_keys='Household.admin_id', uselist=False)
+    administered_household = db.relationship('Household', back_populates='admin', 
+                                            foreign_keys='Household.admin_id', uselist=False)
     created_lists = db.relationship('ShoppingList', backref='creator', lazy=True)
     added_items = db.relationship('ListItem', backref='added_by', lazy=True)
     activities = db.relationship('ActivityLog', backref='user', lazy=True)
-
+    
+    def get_avatar_url(self):
+        """Return the appropriate avatar URL based on what's stored"""
+        if not self.avatar_url:
+            # Return default DiceBear avatar if no avatar set
+            return f"https://api.dicebear.com/7.x/initials/svg?seed={self.username}"
+        
+        # Check if it's an external URL (starts with http)
+        if self.avatar_url.startswith(('http://', 'https://')):
+            return self.avatar_url
+            
+        # Otherwise it's a file path, so build the URL using the files blueprint
+        return url_for('files_bp.uploaded_file', filename=self.avatar_url)
+    
     def __repr__(self):
         return f'<User {self.username}>'
 

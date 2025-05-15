@@ -10,7 +10,15 @@
         <div class="card-header"><h5 class="mb-0">Welcome, {{ current_user.name | default('User') }}!</h5></div>
         <div class="card-body">
             <div class="profile-header">
-                <img src="{{ current_user.get_avatar_url() }}" alt="{{ current_user.name }}" class="profile-pic-actual">
+                {% if current_user.avatar_url %}
+                    {% if current_user.avatar_url.startswith('http') %}
+                        <img src="{{ current_user.avatar_url }}" alt="{{ current_user.name }}'s avatar" class="profile-pic-actual">
+                    {% else %}
+                        <img src="{{ current_user.avatar_url }}" alt="{{ current_user.name }}'s avatar" class="profile-pic-actual">
+                    {% endif %}
+                {% else %}
+                    <img src="https://api.dicebear.com/7.x/initials/svg?seed={{ current_user.name }}" alt="Default avatar" class="profile-pic-actual">
+                {% endif %}
 
                 <div class="profile-info me-auto">
                     <p class="card-text mb-1">@{{ current_user.username }}</p>
@@ -73,8 +81,8 @@
                 </div>
                 <div class="card-body">
                     {% if lists %}
-                    <div class="table-responsive">
-                        <table class="table align-middle" id="shoppingListsTable">
+                    <div class="table-container">
+                        <table class="table align-middle rounded-table" id="shoppingListsTable">
                             <thead>
                                 <tr>
                                     <th scope="col">List Name</th>
@@ -84,35 +92,32 @@
                             </thead>
                             <tbody>
                                 {% for list in lists %}
-                                <tr id="list-row-{{ list.id }}" class="{% if list.items_count == 0 %}table-warning{% endif %}">
+                                <tr id="list-row-{{ list.id }}">
                                     <td>
                                         <strong>{{ list.name }}</strong>
-                                        {% if list.items_count == 0 %}
-                                            <span class="badge bg-secondary ms-2 d-inline-block d-md-none">Empty</span>                                            
-                                        {% endif %}
                                     </td>
                                     <td>
                                         {{ list.items_count | default(0) }}
                                     </td>
                                     <td class="text-end">
-                                        <div class="btn-group">
+                                        <div class="d-flex flex-wrap justify-content-end gap-2">
                                             <a href="{{ url_for('shoppinglist_bp.edit_list', list_id=list.id) }}"
-                                            class="btn btn-sm btn-outline-secondary" title="Edit List Name">
+                                            class="btn btn-sm btn-outline-secondary" title="Edit List Name" id="eeditbtn">
                                             <i class="bi bi-pencil-square"></i>
                                             </a>
                                             <button type="submit"
-                                                    class="btn btn-sm btn-outline-danger delete-list-btn"
-                                                    title="Delete List"
-                                                    data-bs-toggle="modal"
-                                                    data-bs-target="#confirmModal"
-                                                    data-modal-title="Confirm List Deletion"
-                                                    data-modal-body="Are you sure you want to delete the list '{{ list.name | escape }}' and all its items? This cannot be undone."
-                                                    data-modal-confirm-text="Delete List"
-                                                    data-modal-confirm-class="btn-danger"
-                                                    data-action-url="{{ url_for('shoppinglist_bp.delete_list', list_id=list.id) }}"
-                                                    data-target-element-selector="#list-row-{{ list.id }}"
-                                                    data-redirect-url="{{ url_for('main.dashboard') }}">
-                                                <i class="bi bi-trash"></i>
+                                                class="btn btn-sm btn-outline-danger delete-list-btn"
+                                                title="Delete List"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#confirmModal"
+                                                data-modal-title="Confirm List Deletion"
+                                                data-modal-body="Are you sure you want to delete the list '{{ list.name | escape }}' and all its items? This cannot be undone."
+                                                data-modal-confirm-text="Delete List"
+                                                data-modal-confirm-class="btn-danger"
+                                                data-action-url="{{ url_for('shoppinglist_bp.delete_list', list_id=list.id) }}"
+                                                data-target-element-selector="#list-row-{{ list.id }}"
+                                                data-redirect-url="{{ url_for('main.dashboard') }}">
+                                            <i class="bi bi-trash"></i>
                                             </button>
                                             <a href="{{ url_for('shoppinglist_bp.view_list', list_id=list.id) }}"
                                             class="btn btn-sm btn-outline-primary">
@@ -129,9 +134,9 @@
                     <div>
                         <p class="card-text">You don't have any lists yet! Click 'New List' to get started.</p>
                     </div>
-                {% endif%}
+                    {% endif%}
                 </div>
-            </div>            
+            </div>
         </div>
         
 
@@ -144,8 +149,8 @@
                         {% for activity in recent_activity %}
                         <li class="list-group-item d-flex justify-content-between align-items-start">
                             <div>
-                                <strong>{{ activity.user.name }}</strong>
-                                <small class="text-muted d-block">{{ format_action(activity.action_type) }}</small>
+                            <strong>{{ activity.user.name }}</strong>
+                            <small class="text-muted d-block">{{ format_action(activity.action_type) }}</small>
                             </div>
                             <small class="text-muted text-nowrap">{{ activity.timestamp.strftime('%b %d, %H:%M')}}</small>
                         </li>

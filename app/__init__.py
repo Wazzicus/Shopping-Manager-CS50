@@ -6,6 +6,7 @@ from .routes import main
 from .household.routes import household_bp
 from .shopping_lists.routes import shoppinglist_bp
 from .settings.routes import settings_bp
+from .files.routes import files_bp
 from app.extensions import db, bcrypt,login_manager,migrate,csrf
 
 login_manager.login_view = 'auth.auth'
@@ -17,6 +18,12 @@ def create_app():
     app = Flask(__name__, template_folder=os.path.abspath("templates"), static_folder=os.path.abspath("static"))
 
     app.config.from_object(Config)
+     # Configure upload folders
+    app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'uploads')
+    app.config['AVATAR_FOLDER'] = os.path.join(app.config['UPLOAD_FOLDER'], 'avatars')
+    
+    # Create upload directories if they don't exist
+    os.makedirs(app.config['AVATAR_FOLDER'], exist_ok=True)
 
     # Initialisation of extensions.
     db.init_app(app)
@@ -32,6 +39,7 @@ def create_app():
     app.register_blueprint(household_bp, url_prefix='/household')
     app.register_blueprint(shoppinglist_bp, url_prefix='/shopping')
     app.register_blueprint(settings_bp, url_prefix='/settings')
+    app.register_blueprint(files_bp, url_prefix='/files')
 
     # Import models from models.py
     with app.app_context():

@@ -12,7 +12,7 @@
             <h3>Avatar</h3>
         </div>
         <div class="card-body">
-            <form method="POST" enctype="multipart/form-data">
+            <form method="POST" enctype="multipart/form-data" action="{{ url_for('settings_bp.change_avatar') }}">
                 {{ form.hidden_tag() }}
                 <label class="form-label">Choose a DiceBear Avatar:</label>
                 <div class="row g-2 mb-3">

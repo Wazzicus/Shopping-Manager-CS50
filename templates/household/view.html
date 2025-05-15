@@ -5,58 +5,71 @@
 {% endblock %}
 
 {% block content %}
-<div class="container my-4">
+<div class="container mt-4">
     <div class="row">
-        <div class="card sm-card">
-            <div class="card-header">
-                <h2>Household Information</h2>
-            </div>
-            <div class="card-body">
-                <p><strong>Household Name:</strong> {{ household.name }}</p>
+        <div class="col-12">
+            <div class="card sm-card">
+                <div class="card-header">
+                    <h2>Household Information</h2>
+                </div>
+                <div class="card-body">
+                    <p><strong>Household Name:</strong> {{ household.name }}</p>
+                </div>
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="card sm-card">
-            <div class="card-header">
-                <h3>View Household Members</h3>
-            </div>
-            <div class="card-body">
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Name</th>
-                                <th>Role</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% if members %}
-                            {% for member in members %}
-                            <tr>
-                                <td>
-                                    <div class="user-details-in-table">
-                                            <img src="{{ member.get_avatar_url() }}" alt="{{ member.name }}" class="avatar-in-table">
-                                            <span>{{ member.name or 'User Name' }}</span>
-                                            {% if member.id == current_user.id%}
-                                            <span class="text-xs text-gray-500">(You)</span>
-                                            {% endif %}
-                                    </div>
-                                </td>
-                                <td>
-                                    <span class="role-badge {{ 'role-admin' if member.role == 'admin' else 'role-member' }}">
-                                        {{ member.role | capitalize or 'Member' }}
-                                    </span>
-                                </td>
-                            </tr>
-                            {% endfor %}
-                            {% else %}
-                            <tr>
-                                <td colspan="4" class="text-center text-sm text-gray-500">This household has no other members.</td>
-                            </tr>
-                            {% endif %}
-                        </tbody>
-                    </table>
+        <div class="col-12">
+            <div class="card sm-card">
+                <div class="card-header">
+                    <h3>View Household Members</h3>
+                </div>
+                <div class="card-body">
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Role</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% if members %}
+                                {% for member in members %}
+                                <tr>
+                                    <td>
+                                        <div class="user-details-in-table">
+                                                {% if current_user.avatar_url %}
+                                                {% if current_user.avatar_url.startswith('http') %}
+
+                                                    <img src="{{ member.avatar_url }}" alt="{{ member.name }}'s avatar" class="avatar-in-table">
+                                                {% else %}
+                                                    <img src="{{ member.avatar_url }}" alt="{{ member.name }}'s avatar" class="avatar-in-table">
+                                                {% endif %}
+                                                {% else %}
+                                                
+                                                <img src="{{ url_for('static', filename='images/default_avatar.png') }}" alt="Default avatar" class="avatar-in-table">
+                                                {% endif %}
+                                                {% if member.id == current_user.id%}
+                                                <span class="text-xs text-gray-500">(You)</span>
+                                                {% endif %}
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <span class="role-badge {{ 'role-admin' if member.role == 'admin' else 'role-member' }}">
+                                            {{ member.role | capitalize or 'Member' }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                                {% else %}
+                                <tr>
+                                    <td colspan="4" class="text-center text-sm text-gray-500">This household has no other members.</td>
+                                </tr>
+                                {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
