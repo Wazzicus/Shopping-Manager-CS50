@@ -129,7 +129,7 @@ def remove_member(user_id_to_remove):
         log_activity(
             user_id=admin.id,
             household_id=household_id_for_log,
-            action_type=f"Admin Removed Member '{removed_member_username}' from '{household_name_for_log}'"
+            action_type="Member Removal"
         )
     except Exception as e:
         logging.exception(f"Failed to log member removal activity: {e}")
@@ -188,7 +188,7 @@ def delete():
         logging.exception(f"Error committing household deletion for household ID {household_id_for_log}: {e}")
         return jsonify({'error': "A server error occurred while trying to delete the household."}), 500
 
-    log_action_message = f"Household '{household_name_for_log}' deleted."
+    log_action_message = f"Household: '{household_name_for_log}' deleted."
     try:
         log_activity(
             user_id=current_user.id,

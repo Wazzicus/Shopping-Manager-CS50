@@ -5,7 +5,7 @@
    ============================================================================== */
 :root {
     /* Primary Color Palette */
-    --color-primary: #3D717A;          
+    --color-primary: #0dcaf0;          
     --color-primary-darker: #315a61;   
     --color-primary-darkest: #254247; 
     
@@ -21,9 +21,9 @@
     --color-border-color: #dee2e6;     
     
     /* State Colors */
-    --color-success: #10b981;
-    --color-success-hover: #0b6144;          
-    --color-danger: #ef4444;           
+    --color-success: #136e22;
+    --color-success-hover: #1b942fe8;          
+    --color-danger: #d33636;           
     --color-danger-hover: #dc2626;      
     --color-info: #00d5ff;             
     --color-warning: #ffc107;
@@ -39,16 +39,16 @@
    ============================================================================== */
 .dark-mode {
     /* Primary Color Palette */
-    --color-primary: #5ba1aa;          
-    --color-primary-darker: #6eb1bb;   
-    --color-primary-darkest: #82c1cc;  
+    --color-primary: #0dcaf0;          
+    --color-primary-darker: #0a8da7;   
+    --color-primary-darkest: #05414d;  
     
     /* Text Colors */
     --color-text-primary: #f8f9fa;     
     --color-text-secondary: #adb5bd;   
     
     /* Background Colors */
-    --color-bg-main: #212529;          
+    --color-bg-main: #2e3a46;          
     --color-bg-secondary: #343a40;     
     
     /* Border Colors */
@@ -60,7 +60,7 @@
     --color-danger: #f87171;           
     --color-danger-hover: #ef4444;      
     --color-info: #67e8f9;             
-    --color-warning: #fdba74;
+    --color-warning: #f0c419;
     
     /* Progress Bar */
     --progress-track-height: 0.75rem;

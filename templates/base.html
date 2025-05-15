@@ -23,49 +23,55 @@
     </head>
     <body class="bg-light">
         <!--Nav Bar-->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div class="container"> 
-                <div class="logo">
-                    <a class="nav-link" href="{{ url_for('main.index' )}}">
-                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M7 18C8.10457 18 9 17.1046 9 16C9 14.8954 8.10457 14 7 14C5.89543 14 5 14.8954 5 16C5 17.1046 5.89543 18 7 18Z" fill="#4361EE"/>
-                            <path d="M17 18C18.1046 18 19 17.1046 19 16C19 14.8954 18.1046 14 17 14C15.8954 14 15 14.8954 15 16C15 17.1046 15.8954 18 17 18Z" fill="#4361EE"/>
-                            <path d="M3 4H5L5.6 7M5.6 7L7 14H17L19 7H5.6Z" stroke="#4361EE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                        <span>Shopping Manager</span>
-                    </a>
-                </div>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav ms-auto">
-                        {% if current_user.is_authenticated %}
-                        <li class="nav-item mx-2"> 
-                            
-                        </li>
-                        {% if current_user.household_id %}
-                        <li class="nav-item"><a class="nav-link {% if request.endpoint == 'main.dashboard' %} active{% endif %}" href="{{ url_for('main.dashboard') }}">Dashboard</a></li>
-                        <li class="nav-item">
-                            <a class="nav-link {% if request.endpoint == 'household_bp.view' and request.view_args and request.view_args.get('household_id')|int == current_user.household_id %} active{% endif %}"
-                            href="{{ url_for('household_bp.view', household_id=current_user.household_id) }}">Household</a>
-                        </li>
-                        <li class="nav-item"><a class="nav-link {% if request.endpoint == 'settings_bp.account_settings' %} active{% endif %}" href="{{ url_for('settings_bp.account_settings') }}">Settings</a></li>
-                        {% endif %}
-                        <li class="nav-item">
-                            <form method="POST" action="{{ url_for('auth.logout')}}" class="d-inline" id="logoutForm">
-                                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
-                                <button type="submit" class="btn btn-link nav-link">Logout</button>
-                            </form>
-                        </li>
-                        {% else %}
-                        <li class="nav-item"><a class="nav-link" href="{{url_for('auth.auth') + '#login' }}">Login</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{url_for('auth.auth') + '#register' }}">Register</a></li>
-                        {% endif %}
-                    </ul>
+        <div class="container px-0 sticky-top" style="margin: 0 auto; margin-top: 0.5rem;">
+            <div class="row">
+                <div class="col-12 px-0">
+                    <nav class="navbar navbar-expand-lg ">
+                        <div class="container">
+                            <div class="logo">
+                                <a class="nav-link" href="{{ url_for('main.index' )}}">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <path d="M7 18C8.10457 18 9 17.1046 9 16C9 14.8954 8.10457 14 7 14C5.89543 14 5 14.8954 5 16C5 17.1046 5.89543 18 7 18Z" fill="#4361EE"/>
+                                        <path d="M17 18C18.1046 18 19 17.1046 19 16C19 14.8954 18.1046 14 17 14C15.8954 14 15 14.8954 15 16C15 17.1046 15.8954 18 17 18Z" fill="#4361EE"/>
+                                        <path d="M3 4H5L5.6 7M5.6 7L7 14H17L19 7H5.6Z" stroke="#4361EE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                    </svg>
+                                    <span>Shopping Manager</span>
+                                </a>
+                            </div>
+                            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+                            <div class="collapse navbar-collapse" id="navbarNav">
+                                <ul class="navbar-nav ms-auto">
+                                    {% if current_user.is_authenticated %}
+                                    <li class="nav-item mx-2"> 
+                                        
+                                    </li>
+                                    {% if current_user.household_id %}
+                                    <li class="nav-item"><a class="nav-link {% if request.endpoint == 'main.dashboard' %} active{% endif %}" href="{{ url_for('main.dashboard') }}">Dashboard</a></li>
+                                    <li class="nav-item">
+                                        <a class="nav-link {% if request.endpoint == 'household_bp.view' and request.view_args and request.view_args.get('household_id')|int == current_user.household_id %} active{% endif %}"
+                                        href="{{ url_for('household_bp.view', household_id=current_user.household_id) }}">Household</a>
+                                    </li>
+                                    <li class="nav-item"><a class="nav-link {% if request.endpoint == 'settings_bp.account_settings' %} active{% endif %}" href="{{ url_for('settings_bp.account_settings') }}">Settings</a></li>
+                                    {% endif %}
+                                    <li class="nav-item">
+                                        <form method="POST" action="{{ url_for('auth.logout')}}" class="d-inline" id="logoutForm">
+                                            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                                            <button type="submit" class="nav-link">Logout</button>
+                                        </form>
+                                    </li>
+                                    {% else %}
+                                    <li class="nav-item"><a class="nav-link" href="{{url_for('auth.auth') + '#login' }}">Login</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="{{url_for('auth.auth') + '#register' }}">Register</a></li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        </div>
+                    </nav>
                 </div>
             </div>
-        </nav>
+        </div>
         <div class="page-loader hidden" id="pageLoader">
             <div class="dots-container">
               <div class="dot pulse"></div>
@@ -75,18 +81,20 @@
         </div>
 
         <!-- Flash Messages -->
-        <div class="container mt-3">
-        {% with messages = get_flashed_messages(with_categories=True) %}
-            {% if messages %}
-                {% for category, message in messages %}
-            <div class="alert alert-{{ category }} alert-dismissible fade show" role="alert">
-            {{ message }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+         <div class="container py-4">
+            <div class="container mt-3">
+            {% with messages = get_flashed_messages(with_categories=True) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                <div class="alert alert-{{ category }} alert-dismissible fade show " id="flashMessage" role="alert">
+                {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
             </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
         </div>
-                {% endfor %}
-            {% endif %}
-        {% endwith %}
         </div>
 
         <main class="container py-4">
@@ -95,27 +103,43 @@
             {% endblock %}
         </main>
 
-        <footer class="bg-dark text-white text-center py-3 mt-auto">
-            <div class="container">
-                <div class="text-center mt-4">
-                    <button id="darkModeToggle" class="btn btn-secondary" onclick="toggleTheme()">Change Theme</button>
+        <div class="container px-0 " style="margin: 0 auto; margin-bottom: 0.5rem;">
+            <div class="row">
+                <div class="col-12 px-0">
+                    <footer class=" text-dark py-3 mt-auto" id="foooter">
+                        <div class="container-fluid">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="footer-logo">
+                                    <a class="nav-link" href="{{ url_for('main.index' )}}">
+                                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M7 18C8.10457 18 9 17.1046 9 16C9 14.8954 8.10457 14 7 14C5.89543 14 5 14.8954 5 16C5 17.1046 5.89543 18 7 18Z" fill="#4361EE"/>
+                                            <path d="M17 18C18.1046 18 19 17.1046 19 16C19 14.8954 18.1046 14 17 14C15.8954 14 15 14.8954 15 16C15 17.1046 15.8954 18 17 18Z" fill="#4361EE"/>
+                                            <path d="M3 4H5L5.6 7M5.6 7L7 14H17L19 7H5.6Z" stroke="#4361EE" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                        </svg>
+                                        <span>Shopping Manager</span>
+                                    </a>
+                                </div>
+                                <div class="text-md-end">
+                                    <p class="mb-0">
+                                        &copy;
+                                        <span id="year"></span>
+                                        <a class="footer-text text-dark" href="{{ url_for('main.index') }}">Shopping Manager.</a> 
+                                        All rights reserved.(Not a real Product )
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </footer>
                 </div>
-                <small>
-                    &copy;
-                    <span id="year"></span>
-                    <a class="footer-text" href="{{ url_for('main.index') }}">Shopping Manager.</a> 
-                    All rights reserved.
-                </small>
-                <button  class="btn button-secondary"></button>
             </div>
-        </footer>
+        </div>
+    
 
         <div class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 1100"></div>
 
         <template id="toastTemplate">
             <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="toast-header">
-                    {# <img src="..." class="rounded me-2" alt="..."> #}
                     <strong class="me-auto toast-title">Notification</strong>
                     <small class="text-muted toast-timestamp">Just now</small>
                     <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
@@ -127,8 +151,8 @@
         </template>
 
         <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="confirmModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
+            <div class="modal-dialog" id="confirmModalDialog">
+                <div class="modal-content" id="confirmModalContent">
                     <div class="modal-header">
                         <h1 class="modal-title fs-5" id="confirmModalLabel">Confirmation</h1>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>

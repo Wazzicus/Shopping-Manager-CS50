@@ -4,7 +4,7 @@ Shopping Manager - Simplify Your Shopping Experience
 {% endblock %}
 {% block content %}
  <div class="container mt-4">
-    <section class="hero bg-gradient rounded-3 mb-5 p-4 p-md-5">
+    <div class="hero bg-gradient rounded-3 mb-5 p-4 p-md-5">
         <div class="row align-items-center">
             <div class="col-lg-6 text-center text-lg-start mb-4 mb-lg-0">
                 <h1 class="display-4 fw-bold mb-3">Simplify Your Shopping Experience</h1>
@@ -15,12 +15,12 @@ Shopping Manager - Simplify Your Shopping Experience
                 </div>
             </div>
             <div class="col-lg-6">
-                <img src="{{ url_for('static', filename='images/dashboard-preview.png') }}" alt="ShopSmart Dashboard" class="img-fluid rounded shadow-lg" onerror="this.src='https://placehold.co/800x450?text=Dashboard+Preview'">
+                <img src="{{ url_for('static', filename='images/Clipboard.jpg') }}" alt="ShopSmart Dashboard" class="img-fluid rounded shadow-lg" onerror="this.src='https://placehold.co/800x450?text=Dashboard+Preview'">
             </div>
         </div>
-    </section>
+    </div>
     
-    <section class="features mb-5">
+    <div class="features mb-5">
         <div class="text-center mb-4">
             <h2 class="display-5 fw-bold">Smart Features for Smart Shoppers</h2>
             <p class="lead">Our powerful shopping management tools help you save time and money with every purchase.</p>
@@ -63,16 +63,16 @@ Shopping Manager - Simplify Your Shopping Experience
                 </div>
             </div>
         </div>
-    </section>
+    </div>
     
-    <section class="how-it-works bg-light rounded-3 mb-5 p-4 p-md-5">
+    <div class="how-it-works bg-light rounded-3 mb-5 p-4 p-md-5">
         <div class="text-center mb-4">
             <h2 class="display-5 fw-bold">How Shopping Manager Works</h2>
             <p class="lead">Getting started is easy as 1-2-3. Follow these simple steps to transform your shopping experience.</p>
         </div>
         <div class="row mb-5">
             <div class="col-lg-6 order-lg-2 mb-4 mb-lg-0">
-                <img src="{{ url_for('static', filename='images/create-account.png') }}" alt="Create Account" class="img-fluid rounded shadow" onerror="this.src='https://placehold.co/600x400?text=Create+Account'">
+                <img src="{{ url_for('static', filename='images/Create_account.jpg') }}" alt="Create Account" class="img-fluid rounded shadow" onerror="this.src='https://placehold.co/600x400?text=Create+Account'">
             </div>
             <div class="col-lg-6 order-lg-1 d-flex align-items-center">
                 <div>
@@ -84,7 +84,7 @@ Shopping Manager - Simplify Your Shopping Experience
         </div>
         <div class="row mb-5">
             <div class="col-lg-6 mb-4 mb-lg-0">
-                <img src="{{ url_for('static', filename='images/create-lists.png') }}" alt="Create Lists" class="img-fluid rounded shadow" onerror="this.src='https://placehold.co/600x400?text=Create+Lists'">
+                <img src="{{ url_for('static', filename='images/Computer_Screen_With_ShoppingList.jpg') }}" alt="Create Lists" class="img-fluid rounded shadow" onerror="this.src='https://placehold.co/600x400?text=Create+Lists'">
             </div>
             <div class="col-lg-6 d-flex align-items-center">
                 <div>
@@ -96,7 +96,7 @@ Shopping Manager - Simplify Your Shopping Experience
         </div>
         <div class="row">
             <div class="col-lg-6 order-lg-2 mb-4 mb-lg-0">
-                <img src="{{ url_for('static', filename='images/shop-smarter.png') }}" alt="Shop Smarter" class="img-fluid rounded shadow" onerror="this.src='https://placehold.co/600x400?text=Shop+Smarter'">
+                <img src="{{ url_for('static', filename='images/Trolley_with_Groceries.jpg') }}" alt="Trolley_with_Groceries" class="img-fluid rounded shadow" onerror="this.src='https://placehold.co/600x400?text=Shop+Smarter'">
             </div>
             <div class="col-lg-6 order-lg-1 d-flex align-items-center">
                 <div>
@@ -106,9 +106,9 @@ Shopping Manager - Simplify Your Shopping Experience
                 </div>
             </div>
         </div>
-    </section>
+    </div>
     
-    <section class="testimonials mb-5">
+    <div class="testimonials mb-5">
         <div class="text-center mb-4">
             <h2 class="display-5 fw-bold">What Our Users Say</h2>
             <p class="lead">Join thousands of satisfied users who have transformed their shopping experience with Shopping Manager.</p>
@@ -173,9 +173,9 @@ Shopping Manager - Simplify Your Shopping Experience
                 </div>
                 </div>
             </div>
-    </section>
+    </div>
 
-    <section class="pricing bg-light rounded-3 mb-5 p-4 p-md-5">
+    <div class="pricing bg-light rounded-3 mb-5 p-4 p-md-5">
         <div class="text-center mb-4">
             <h2 class="display-5 fw-bold">Pricing? What Pricing?</h2>
             <p class="lead">There's no better price than Freeee!</p>
@@ -199,20 +199,20 @@ Shopping Manager - Simplify Your Shopping Experience
                 <a href="{{ url_for('auth.auth') + '#register' }}" class="btn btn-primary mb-4">Get Started</a>
             </div>
         </div>
-    </section>
+    </div>
 
-    <section class="cta text-center bg-primary text-white rounded-3 mb-5 p-5">
+    <div class="cta text-center bg-primary text-white  mb-5 p-5" id="cta-card">
         <h2 class="display-5 fw-bold mb-3">Ready to Transform Your Shopping Experience?</h2>
         <p class="lead mb-4">Join thousands of happy users who save time and hassle with Shopping Manager. Start today, at no cost.</p>
         <a href="{{ url_for('auth.auth') + '#register' }}" class="btn btn-light btn-lg">Get Started</a>
-    </section>
+    </div>
 
-    <section class="faq mb-5">
+    <div class="faq mb-5">
         <div class="text-center mb-4">
             <h2 class="display-5 fw-bold">Frequently Asked Questions</h2>
             <p class="lead">Find answers to common questions about Shopping Manager.</p>
         </div>
-        <div class="accordion" id="faqAccordion">
+        <div class="accordion custom-accordion" id="faqAccordion">
             <div class="accordion-item border-0 shadow-sm mb-3">
                 <h2 class="accordion-header">
                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
@@ -252,7 +252,7 @@ Shopping Manager - Simplify Your Shopping Experience
                 </div>
             </div>
         </div>
-    </section>
+    </div>
  </div>
 {% endblock %}
 {% block scripts %}

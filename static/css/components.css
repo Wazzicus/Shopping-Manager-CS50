@@ -53,7 +53,7 @@
 .btn-primary {
     background-color: var(--color-primary);
     border-color: var(--color-primary);
-    color: var(--color-text-light);
+    color: var(--color-text-dark);
 }
 .btn-primary:hover,
 .btn-primary:focus {
@@ -87,7 +87,7 @@
 
 /* Danger Button */
 .btn-danger {
-    background-color: var(--color-error);
+    background-color: var(--color-danger);
     border-color: var(--color-error);
     color: var(--color-text-light);
 }
@@ -857,109 +857,92 @@ th {
     padding: 0;
     cursor: pointer;
 }
-/* FAQ accordion styling */
 
+/* FAQ accordion styling */
+.custom-accordion .accordion-item {
+    border: none;
+    border-radius: 1.5rem !important;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.custom-accordion .accordion-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+
+.custom-accordion .accordion-buton {
+    border-radius: 1.5rem !important;
+    transition: background-color 0.3s ease;
+}
+.custom-accordion .accordion-button:focus{
+    box-shadow: none;
+}
+
+.custom-accordion .accordion-body {
+    border-radius: 0 0 15px 15px;
+    padding: 1.5rem;
+}
+.custom-accordion .accordion-body.collapsed {
+    border-radius: 15px !important  ;
+}
 .accordion-button:not(.collapsed) {
-  background-color: rgba(var(--bs-primary-rgb), 0.1);
-  color: var(--bs-primary);
+    background-color: rgba(var(--bs-primary-rgb), 0.1);
+    color: var(--bs-primary);
 }
 
 .accordion-button:focus {
   border-color: rgba(var(--bs-primary-rgb), 0.5);
   box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
 }
-        .list-name-display {
-            font-weight: 600;
-            margin-right: 8px;
-        }
-        .btn-icon {
-            width: 32px;
-            height: 32px;
-            padding: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .view-list-btn {
-            border-radius: 6px;
-            padding: 6px 12px;
-            font-size: 0.875rem;
-        }
 
-        /* Animation for Header Buttons */
-        .header-action-toggle {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            transition: width 0.3s ease, padding 0.3s ease;
-            overflow: hidden;
-            white-space: nowrap;
-        }
-        .header-action-toggle.compact {
-            width: 32px;
-            padding: 0.25rem;
-        }
-        .header-action-toggle .action-text {
-            transition: opacity 0.3s ease;
-        }
-        .header-action-toggle.compact .action-text {
-            opacity: 0;
-            width: 0;
-        }
-        .header-action-icon {
-            flex-shrink: 0;
-        }
-        search-results-container {
-    border: 1px solid #ddd;
-    border-radius: 0.25rem;
-    max-height: 400px;
-    overflow-y: auto;
-}
-
-
-.search-results-container {
-    border: 1px solid #dee2e6;
-    border-radius: 0.375rem;
-    margin-top: 0.5rem;
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
-}
-
-.search-results-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0.5rem 1rem;
-    background-color: #f8f9fa;
-    border-bottom: 1px solid #dee2e6;
-    border-radius: 0.375rem 0.375rem 0 0;
-}
-
-.search-results-header h6 {
-    margin: 0;
-    font-size: 0.875rem;
+.list-name-display {
     font-weight: 600;
+    margin-right: 8px;
 }
 
-.search-results-container .list-group {
-    border-radius: 0 0 0.375rem 0.375rem;
-}
-
-.search-results-container .list-group-item {
-    border-left: 0;
-    border-right: 0;
-}
-
-.search-results-container .list-group-item:last-child {
-    border-bottom: 0;
-}
-
-/* Search input container */
-.shopping-search-pill-container {
-    position: relative;
+.btn-icon {
+    width: 32px;
+    height: 32px;
+    padding: 0;
     display: flex;
     align-items: center;
-    width: 100%;
+    justify-content: center;
 }
+
+.view-list-btn {
+    border-radius: 6px;
+    padding: 6px 12px;
+    font-size: 0.875rem;
+}
+
+/* Animation for Header Buttons */
+.header-action-toggle {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: width 0.3s ease, padding 0.3s ease;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.header-action-toggle.compact {
+    width: 32px;
+    padding: 0.25rem;
+}
+
+.header-action-toggle .action-text {
+    transition: opacity 0.3s ease;
+}
+
+.header-action-toggle.compact .action-text {
+    opacity: 0;
+    width: 0;
+}
+
+.header-action-icon {
+    flex-shrink: 0;
+}
+
 
 /* Clear button */
 .btn-clear-custom {
@@ -972,10 +955,6 @@ th {
     display: none;
 }
 
-#dashboardSearchInput:not(:placeholder-shown) + .btn-clear-custom {
-    display: block;
-}
-
 .btn-clear-custom:hover {
     color: #495057;
 }
@@ -983,36 +962,94 @@ th {
 .navbar{
     position: sticky;
     top: 0; 
-    background-color: white; 
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(5px);
     z-index: 100;
+    margin: 0 auto;
+    width: 91.15%;
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
 }
+.navbar:hover{
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+.navbar ul{
+    list-style: none;
+    display: flex;
+    justify-content: space-around;
+    padding: 0;
+    margin: 0;
+}
+.navbar-dark .navbar-nav .nav-link.active {
+    font-weight: 600;
+    color: var(--color-primary); 
+}
+
+.navbar-light .navbar-nav .nav-link.active {
+    font-weight: 600;
+    color: var(--color-primary);
+}
+.container .px-0 .sticky-top{
+    top: 1.5rem !important;
+}
+
 #householdNameDisplay {
     display: inline-block;
     transition: opacity 0.5s ease-in-out;
 }
 
-.search-results-container {
-    border: 1px solid #dee2e6;
-    border-radius: 0.375rem;
-    overflow: hidden;
-}
-
-.search-results-header {
-    border-bottom: 1px solid #dee2e6;
-}
-
-#dashboardContent {
-    position: relative;
-}
-
-#dashboardSearchInput:not(:placeholder-shown) + .btn-clear-custom {
-    display: block;
-}
 
 /* Loading state */
 .btn-loading .spinner-border {
     display: inline-block !important;
     margin-right: 0.5rem;
+}
+
+#cta-card {
+    border-radius: 1.5rem;
+    box-shadow: 0px 4px 12px var(--your-card-shadow-color, rgba(0, 0, 0, 0.08)); 
+    transition: box-shadow 0.3s ease-in-out, transform 0.3s ease-in-out;
+}
+
+#cta-card:hover {
+    box-shadow: 0px 6px 16px var(--your-card-shadow-hover-color, rgba(0, 0, 0, 0.12)); 
+    transform: translateY(-3px);
+}
+
+/* Modals */
+#confirmModal {
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    border-radius: 1.5rem;
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(5px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* Flash Messages */
+#flashMessage {
+    border-radius: 1.5rem;
+
+}
+
+/* Footer */
+#foooter {
+    position: sticky;
+    top: 0; 
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(5px);
+    z-index: 100;
+    margin: 0 auto;
+    width: 91.15%;
+    border-radius: 1.5rem;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s, box-shadow 0.2s;
+
 }
 
 /* List Item Styles */
@@ -1293,16 +1330,6 @@ th {
     border-bottom-color: var(--bs-border-color);
 }
 
-/* Navigation */
-.navbar-dark .navbar-nav .nav-link.active {
-    font-weight: 600;
-    color: var(--color-primary); 
-}
-
-.navbar-light .navbar-nav .nav-link.active {
-    font-weight: 600;
-    color: var(--color-primary);
-}
 
 /* List Items */
 .item-purchased .item-name {

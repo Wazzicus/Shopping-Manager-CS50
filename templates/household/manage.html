@@ -90,7 +90,7 @@
                                 <tr>
                                     <td>
                                         <div class="user-details-in-table">
-                                            <img src="{{ current_user.get_avatar_url() }}" alt="{{ current_user.name }}" class="avatar-in-table">
+                                            <img src="{{ member.get_avatar_url() }}" alt="{{ member.name }}" class="avatar-in-table">
                                             <span>{{ member.name or 'User Name' }}</span>
                                             {% if member.id == current_user.id%}
                                             <span class="text-xs text-gray-500">(You)</span>

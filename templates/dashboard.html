@@ -10,7 +10,7 @@
         <div class="card-header"><h5 class="mb-0">Welcome, {{ current_user.name | default('User') }}!</h5></div>
         <div class="card-body">
             <div class="profile-header">
-                <img src="{{ current_user.avatar_url }}" alt="{{ current_user.name }}" class="profile-pic-actual">
+                <img src="{{ current_user.get_avatar_url() }}" alt="{{ current_user.name }}" class="profile-pic-actual">
 
                 <div class="profile-info me-auto">
                     <p class="card-text mb-1">@{{ current_user.username }}</p>

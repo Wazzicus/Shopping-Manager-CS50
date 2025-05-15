@@ -29,7 +29,7 @@ function renameHousehold() {
     .then(data => {
         showToast(data.message || 'Household renamed successfully', 'success');
         updateHouseholdNameDisplay(newName);
-        newNameInput.value = ''; // Clear the input field
+        newNameInput.value = '';
     })
     .catch(error => {
         showToast(error.error || 'Failed to rename household', 'error');
@@ -46,7 +46,6 @@ function updateHouseholdNameDisplay(newName) {
     const nameElements = document.querySelectorAll('.household-name, .household-name-display');
     
     nameElements.forEach(el => {
-        // Create fade animation
         el.style.transition = 'opacity 0.3s ease';
         el.style.opacity = '0';
         
@@ -125,7 +124,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // You can keep this button click handler if you want both form submit and button click to work
     const renameBtn = document.getElementById('newHouseholdNameBtn');
     if (renameBtn) {
         renameBtn.addEventListener('click', renameHousehold);

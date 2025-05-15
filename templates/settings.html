@@ -9,7 +9,7 @@
     <h2>Settings</h2>
     <div class="card sm-card">
         <div class="card-header">
-            <h3>Profile Information</h3>
+            <h3>Avatar</h3>
         </div>
         <div class="card-body">
             <form method="POST" enctype="multipart/form-data">
@@ -25,7 +25,6 @@
                                 class="selectable-avatar img-thumbnail {% if avatar_url == current_user.get_avatar_url() %}border-primary{% endif %}"
                                 onclick="selectAvatar('{{ avatar_url }}', this)"
                                 width="100">
-                            <div class="checkmark">✓</div>
                         </div>
                 {% endfor %}
                     </div>
@@ -45,17 +44,23 @@
                     class="rounded mb-3"
                     width="120">
 
-
-                {{ form.submit(class="btn btn-primary") }}
+                <div class="form-group mb-3">
+                    {{ form.submit(class="btn btn-primary") }}
+                </div>
             </form>
         </div>
     </div>
 
     <div class="card sm-card">
         <div class="card-header">
-            <h3>Change Display Name</h3>
+            <h3>Display Name</h3>
         </div>
         <div class="card-body">
+            <div class="form-group mb-3">
+                <div class="card-text">
+                    Change the name that is displayed to your fellow household members. Using your real name or nick name is recommended.
+                </div>
+            </div>
             <form method="post" autocomplete="off" action="{{ url_for('settings_bp.account_settings') }}">
                 <div class="form-group mb-3">
                     {{ name_change_form.hidden_tag() }}
@@ -64,10 +69,12 @@
                     {% if name_change_form.new_name.errors %}
                     <div class="invalid-feedback">
                         {% for error in name_change_form.new_name.errors %}
-                        <span>{{ error }}</span>
+                        <span>{{ error }}</span><br>
                         {% endfor %}
                     </div>
                     {% endif %}
+                </div>
+                <div class="form-group mb-3">
                     {{ name_change_form.submit(class="btn btn-primary")}}
                 </div>
             </form>
@@ -79,6 +86,11 @@
             <h3>Change Password</h3>
         </div>
         <div class="card-body">
+            <div class="form-group mb-3">
+                <div class="card-text">
+                    It is advised to change your password every so often to keep your account secure. Choose one that has a mix of symbols, letters and numbers. Avoid choosing easy-to-guess passwords like your birthday or pet's name.
+                </div>
+            </div>
             <form method="POST" action="{{ url_for('settings_bp.account_settings') }}">
                 {{ password_form.hidden_tag() if password_form else '' }}
                 <div class="form-group mb-3">
@@ -121,7 +133,7 @@
                     <button type="submit" 
                             name="action" 
                             value="change_password" 
-                            class="button button-secondary">
+                            class="btn btn-secondary">
                             Update Password
                     </button>
                 </div>
@@ -133,13 +145,21 @@
         <div class="card-header">
             <h3>Theme Settings</h3>
         </div>
-        <div class="card-body d-flex justify-content-between align-items-center">
-            <span class="fw-semibold">
-                <i class="bi bi-moon-stars me-2"></i>Dark Mode
-            </span>
-            <div class="form-check form-switch">
-                <input class="form-check-input" id="darkModeToggle" type="checkbox">
+        <div class="card-body ">
+            <div class="form-group mb-3">
+                <div class="card-text">
+                    Turn on dark mode to reduce eye strain, or because it just looks better!
+                </div>
             </div>
+            <div class="d-flex justify-content-between align-items-center">
+                <span class="fw-semibold">
+                    <i class="bi bi-moon-stars me-2"></i>Dark Mode
+                </span>
+                <div class="form-check form-switch">
+                    <input class="form-check-input" id="darkModeToggle" type="checkbox">
+                </div>
+            </div>
+            
         </div>
     </div>
 
