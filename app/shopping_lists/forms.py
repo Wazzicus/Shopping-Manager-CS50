@@ -1,5 +1,5 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, IntegerField
+from wtforms import StringField, SubmitField, IntegerField, SelectField
 from wtforms.validators import DataRequired,Length
 
 class ShoppingListForm(FlaskForm):
@@ -10,7 +10,18 @@ class ShoppingListForm(FlaskForm):
 class AddItemForm(FlaskForm):
     name = StringField('Item Name', validators=[DataRequired("You must choose a name"), Length(min=2, max=100)])
     quantity = IntegerField('Quantity', default=1)
-    measure = StringField('Measure', validators=[Length(min=1, max=5)])
+    measure = SelectField(
+        'Unit of Measurement:',
+        choices=[
+            ('', 'Select Unit'),  
+            ('kg', 'Kilogram (kg)'),
+            ('g', 'Gram (g)'),
+            ('l', 'Liter (l)'),
+            ('ml', 'Milliliter (ml)'),
+            ('Pcs', 'Piece'),  
+        ],
+        validators=[DataRequired()]
+    )
     submit = SubmitField('Add Item')
 
 class EditShoppingListForm(FlaskForm):
@@ -20,5 +31,16 @@ class EditShoppingListForm(FlaskForm):
 class EditItemForm(FlaskForm):
     name = StringField('Item Name', validators=[DataRequired("You must choose a name"), Length(min=2, max=100)])
     quantity = IntegerField('Quantity', validators=[DataRequired("You must choose a name")])
-    measure = StringField('Measure', validators=[DataRequired("You must choose a name"),Length(min=1, max=5)])
-    submit = SubmitField('Save Changes')    
+    measure = SelectField(
+        'Unit of Measurement:',
+        choices=[
+            ('', 'Select Unit'),  
+            ('kg', 'Kilogram (kg)'),
+            ('g', 'Gram (g)'),
+            ('l', 'Liter (l)'),
+            ('ml', 'Milliliter (ml)'),
+            ('Pcs', 'Piece'),  
+        ],
+        validators=[DataRequired()]
+    )
+    submit = SubmitField('Save Changes')

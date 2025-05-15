@@ -4,7 +4,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="container mt-4">
+<div class="container mt-2">
     <div class="row">
         <div class="col-md-12">
             <h1 class="mb-4">Manage Household</h1>
@@ -32,12 +32,12 @@
                         <input type="text" 
                                 name="household_name" 
                                 id="newHouseholdName"
-                                class="form-input mb-3"
+                                class="form-input mb-3 form-control"
                                 placeholder="New household name"
                                 required>
                         <button type="submit"
                                 id="newHouseholdNameBtn"
-                                class="btn btn-sm btn-outline-danger delete-item-btn">
+                                class="btn btn-sm btn-danger">
                                 Rename Household
                         </button>
                     </form>
@@ -113,9 +113,9 @@
                                         </span>
                                     </td>
                                     <td>
-                                        <form method="POST" action="{{ url_for('household_bp.remove_member', user_id_to_remove=member.id) }}" class="inline-form">
+                                        <form method="POST" action="{{ url_for('household_bp.remove_member', user_id_to_remove=member.id) }}" class="inline-form text-center">
                                             {% if current_user.id == household.admin_id and member.id != current_user.id %}
-                                                <button type="button" class="btn btn-sm btn-outline-danger remove-member-btn"
+                                                <button type="button" class="btn btn-sm btn-danger"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#confirmModal"
                                                         data-modal-title="Confirm Member Removal"
@@ -129,7 +129,7 @@
                                             {% endif %}
                                         </form>
                                         {% if member.id == current_user.id%}
-                                        <button type="button" class="btn btn-warning"
+                                        <button type="button" class="btn btn-warning text-center"
                                             data-bs-toggle="modal"
                                             data-bs-target="#confirmModal"
                                             data-modal-title="Confirm Leave Household"

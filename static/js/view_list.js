@@ -105,8 +105,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const iconClass = newStatus ? 'bi-arrow-counterclockwise' : 'bi-check-circle';
                 const buttonText = newStatus ? ' Undo' : ' Mark as Purchased';
                 button.innerHTML = `<i class="bi ${iconClass}"></i><span class="d-none d-md-inline">${buttonText}</span>`;
-                button.classList.remove('btn-success', 'btn-outline-secondary');
-                button.classList.add(newStatus ? 'btn-outline-secondary' : 'btn-success');
+                button.classList.remove('btn-success', 'btn-warning');
+                button.classList.add(newStatus ? 'btn-warning' : 'btn-success');
                 updateProgressBar();
                 showToast(result.message || 'Status updated!', 'success');
             } else {
@@ -121,118 +121,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // --- Add Item AJAX Function ---
-    async function addItem(itemName, quantity, measure, listId) {
-        try {
-            const url = `/shopping/list/${listId}`;
-            const response = await fetch(url, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrfToken, 'X-Requested-With': 'XMLHttpRequest' },
-                body: JSON.stringify({ name: itemName, quantity: quantity, measure: measure }),
-            });
-            const result = await response.json();
-            if (response.ok && result.success) {
-                const newItemData = result.item;
-                if (!newItemData || !newItemData.id || !newItemData.name) { showToast("Error processing server response.", "danger"); return; }
-                const ul = document.getElementById('itemList');
-                const placeholder = document.getElementById('emptyListPlaceholder');
-                if (placeholder) {
-                    if (placeholder.tagName === 'LI') { placeholder.remove(); }
-                    else { placeholder.classList.add('d-none'); }
-                }
-                if (!ul) { console.error("Could not find #itemList to append new item to."); return; }
-                const li = createListItemElement(newItemData, csrfToken);
-                ul.appendChild(li);
-                if (newItemInput) newItemInput.value = '';
-                if (newItemQuantityInput) newItemQuantityInput.value = '';
-                if (newItemMeasureInput) newItemMeasureInput.value = '';
-                updateProgressBar();
-                showToast(result.message || 'Item added!', 'success');
-            } else {
-                 showToast(result.message || "Failed to add item.", 'danger');
-            }
-        } catch (error) {
-            showToast("Network error adding item. Please try again.", 'danger');
-        }
-    }
-
-    // --- Function to create List Item HTML (Helper - Includes Profile Pic in Pill) ---
-    function createListItemElement(itemData, csrfTokenValue) {
-        const li = document.createElement('li');
-        li.className = 'list-group-item item-row';
-        if (itemData.purchased) li.classList.add('item-purchased');
-        li.setAttribute('data-item-id', itemData.id);
-
-
-        const safeName = (itemData.name || '').replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        const addedByName = itemData.added_by_name || 'N/A'; 
-        const safeAddedBy = addedByName.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        const profilePicUrl = itemData.profile_pic_url || "/static/images/default_avatar.png"; // Fallback
-
-        const safeQuantity = itemData.quantity !== null && itemData.quantity !== undefined ? String(itemData.quantity).replace(/</g, "&lt;").replace(/>/g, "&gt;") : '';
-        const safeMeasure = (itemData.measure || '').replace(/</g, "&lt;").replace(/>/g, "&gt;");
-
-        const editUrl = `/shopping/list/item/${itemData.id}/edit`;
-        const toggleUrl = `/shopping/list/item/${itemData.id}/toggle_purchase`;
-        const deleteUrl = `/shopping/list/item/${itemData.id}/delete`;
-
-        const toggleBtnClass = itemData.purchased ? 'btn-outline-secondary' : 'btn-success';
-        const toggleIconClass = itemData.purchased ? 'bi-arrow-counterclockwise' : 'bi-check-circle';
-        const toggleBtnText = itemData.purchased ? ' Undo' : ' Mark Purchased';
-        const nameClass = itemData.purchased ? 'item-name editable text-decoration-line-through' : 'item-name editable';
-
-        let quantityDisplayHTML = `<span class="item-quantity-measure text-muted">-</span>`;
-        if (itemData.quantity || itemData.measure) {
-            let qtyText = itemData.quantity !== null && itemData.quantity !== undefined ? safeQuantity : '1';
-            quantityDisplayHTML = `<span class="item-quantity-measure">(${qtyText} ${safeMeasure})</span>`;
-        }
-
-        li.innerHTML = `
-            <div class="row w-100 align-items-center gy-2">
-                <div class="col-md-5 col-12 item-name-column">
-                    <div class="item-name-line">
-                        <span class="${nameClass}" style="cursor: pointer;">${safeName}</span>
-                    </div>
-                    <input type="text" class="form-control item-edit-input d-none" value="${safeName}">
-                    <small class="item-details-text d-block mt-1">
-                        Added by:
-                        <span class="added-by-pill bg-secondary">
-                            <img src="${profilePicUrl}"
-                                 class="profile-pic-thumb"
-                                 alt="${safeAddedBy}'s profile picture"
-                                 onerror="this.style.display='none'; this.nextElementSibling.style.marginLeft='0';">
-                            <span class="added-by-name">${safeAddedBy}</span>
-                        </span>
-                    </small>
-                    <div class="edit-error text-danger mt-1 w-100" style="display: none;"></div>
-                </div>
-                <div class="col-md-3 col-6 item-quantity-column">
-                    ${quantityDisplayHTML}
-                </div>
-                <div class="col-md-4 col-6 item-actions-column">
-                    <a href="${editUrl}" class="btn btn-sm btn-outline-secondary me-1 mb-1 mb-md-0">
-                        <i class="bi bi-pencil-square"></i><span class="d-none d-md-inline"> Edit</span>
-                    </a>
-                    <form method="post" action="${toggleUrl}" style="display: inline-block;" class="me-1 mb-1 mb-md-0 toggle-purchase-form ajax-form">
-                        <input type="hidden" name="csrf_token" value="${csrfTokenValue}">
-                        <button type="submit" class="btn btn-sm ${toggleBtnClass} toggle-purchase-btn" data-item-id="${itemData.id}">
-                            <i class="bi ${toggleIconClass}"></i><span class="d-none d-md-inline">${toggleBtnText}</span>
-                        </button>
-                    </form>
-                    <button type="button" class="btn btn-sm btn-outline-danger delete-item-btn mb-1 mb-md-0"
-                            data-bs-toggle="modal" data-bs-target="#confirmModal"
-                            data-modal-title="Confirm Item Deletion"
-                            data-modal-body="Are you sure you want to delete the item '${safeName}'?"
-                            data-modal-confirm-text="Delete Item" data-modal-confirm-class="btn-danger"
-                            data-action-url="${deleteUrl}"
-                            data-target-element-selector="li[data-item-id='${itemData.id}']">
-                        <i class="bi bi-trash"></i><span class="d-none d-md-inline"> Delete</span>
-                    </button>
-                </div>
-            </div>
-        `;
-        return li;
-    }
+    
 
     // --- Inline Editing Helper Functions ---
     function enterItemEditMode(spanElement) {
