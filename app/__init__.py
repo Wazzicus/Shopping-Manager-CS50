@@ -19,7 +19,7 @@ def create_app():
 
     app.config.from_object(Config)
      # Configure upload folders
-    app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'uploads')
+    app.config['UPLOAD_FOLDER'] = os.path.join(app.root_path, 'static/images/uploads')
     app.config['AVATAR_FOLDER'] = os.path.join(app.config['UPLOAD_FOLDER'], 'avatars')
     
     # Create upload directories if they don't exist

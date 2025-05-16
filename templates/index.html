@@ -7,8 +7,8 @@ Shopping Manager - Simplify Your Shopping Experience
     <div class="hero bg-gradient rounded-3 mb-5 p-4 p-md-5">
         <div class="row align-items-center">
             <div class="col-lg-6 text-center text-lg-start mb-4 mb-lg-0">
-                <h1 class="display-4 fw-bold mb-3">Simplify Your Shopping Experience</h1>
-                <p class="lead mb-4">The all-in-one shopping manager that helps you track prices, manage shopping lists, and find the best deals - all in one place.</p>
+                <h1 class="display-4 fw-bold mb-3">Tired of shopping list chaos? Let's fix that.</h1>
+                <p class="lead mb-4">The all-in-one shopping manager, built for families, roommates, and anyone who shares a fridge!</p>
                 <div class="d-flex flex-wrap gap-2 justify-content-center justify-content-lg-start">
                     <a href="{{ url_for('auth.auth') + '#register' }}" class="btn btn-primary btn-lg">Get Started</a>
                     <a href="{{ url_for('auth.auth') + '#login' }}" class="btn btn-primary btn-lg">Log Back In</a>
@@ -23,7 +23,7 @@ Shopping Manager - Simplify Your Shopping Experience
     <div class="features mb-5">
         <div class="text-center mb-4">
             <h2 class="display-5 fw-bold">Smart Features for Smart Shoppers</h2>
-            <p class="lead">Our powerful shopping management tools help you save time and money with every purchase.</p>
+            <p class="lead">Our powerful list management tools help you save time with every trip to the supermarket.</p>
         </div>
 
         <div class="row row-cols-1 row-cols-md-3 g-4">
@@ -108,7 +108,7 @@ Shopping Manager - Simplify Your Shopping Experience
         </div>
     </div>
     
-    <div class="testimonials mb-5">
+    <div class="testimonials mb-5" data-aos="fade-up">
         <div class="text-center mb-4">
             <h2 class="display-5 fw-bold">What Our Users Say</h2>
             <p class="lead">Join thousands of satisfied users who have transformed their shopping experience with Shopping Manager.</p>
@@ -175,7 +175,7 @@ Shopping Manager - Simplify Your Shopping Experience
             </div>
     </div>
 
-    <div class="pricing bg-light rounded-3 mb-5 p-4 p-md-5">
+    <div class="pricing bg-light rounded-3 mb-5 p-4 p-md-5" data-aos="fade-up">
         <div class="text-center mb-4">
             <h2 class="display-5 fw-bold">Pricing? What Pricing?</h2>
             <p class="lead">There's no better price than Freeee!</p>
@@ -201,7 +201,7 @@ Shopping Manager - Simplify Your Shopping Experience
         </div>
     </div>
 
-    <div class="cta text-center bg-primary text-white  mb-5 p-5" id="cta-card">
+    <div class="cta text-center bg-primary text-white  mb-5 p-5" id="cta-card" data-aos="fade-up">
         <h2 class="display-5 fw-bold mb-3">Ready to Transform Your Shopping Experience?</h2>
         <p class="lead mb-4">Join thousands of happy users who save time and hassle with Shopping Manager. Start today, at no cost.</p>
         <a href="{{ url_for('auth.auth') + '#register' }}" class="btn btn-light btn-lg">Get Started</a>
@@ -257,5 +257,12 @@ Shopping Manager - Simplify Your Shopping Experience
 {% endblock %}
 {% block scripts %}
 {{ super() }}
-<script src="{{ url_for('static', filename='index.js')}}"></script>
+
+<script src="https://unpkg.com/a0s@2.3.1/dist/aos.js"></script>
+<script>
+    AOS.init({
+        duration: 800,
+        once: true
+    });
+</script>
 {% endblock %}

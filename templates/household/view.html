@@ -48,7 +48,7 @@
                                                 {% endif %}
                                                 {% else %}
                                                 
-                                                <img src="{{ url_for('static', filename='images/default_avatar.png') }}" alt="Default avatar" class="avatar-in-table">
+                                                <img src="https://api.dicebear.com/7.x/initials/svg?seed={{ current_user.name }}" alt="Default avatar" class="avatar-in-table">
                                                 {% endif %}
                                                 {% if member.id == current_user.id%}
                                                 <span class="text-xs text-gray-500">(You)</span>
