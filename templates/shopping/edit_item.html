@@ -1,8 +1,7 @@
-<!--shopping/edit_item.html-->
 {% extends "base.html" %}
 
 {% block title %}
-
+{{ title }}
 {% endblock %}
 
 {% block content %}
@@ -15,7 +14,7 @@
             <div class="card-body">
                 <div class="mb-3">
                     <form method="post"  autocomplete="off">
-                        {{ new_list_form.hidden_tag() }}
+                        {{ form.hidden_tag() }}
                         <div class="row g-2 mb-2">
                             <div class="col-md-6">
                                 {{ form.name(class_=['form-control', 'is-invalid' if form.name.errors else ''], placeholder="New Name") }}

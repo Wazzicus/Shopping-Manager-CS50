@@ -169,10 +169,13 @@ def view_list(list_id):
                         "id": new_item.id,
                         "name": new_item.name,
                         "purchased": new_item.purchased, 
-                        "added_by": new_item.added_by.name,
+                        "added_by": {
+                            "id": current_user.id,
+                            "name": current_user.name,
+                            "avatar_url": current_user.avatar_url
+                            },
                         "quantity": new_item.quantity, 
-                        "measure": new_item.measure
-                        
+                        "measure": new_item.measure 
                     }
                 }), 201 
 
@@ -281,30 +284,35 @@ def edit_item(item_id):
         return redirect(url_for('shoppinglist_bp.view_list',list_id=item.shoppinglist_id))
     return render_template('shopping/edit_item.html', form=form, item=item)
 
-@shoppinglist_bp.route('/list/item/<int:item_id>/delete', methods=['POST','GET'])
+@shoppinglist_bp.route('/list/item/<int:item_id>/delete', methods=['POST', 'GET'])
 @login_required
 def delete_item(item_id):
     item = ListItemModel.query.get_or_404(item_id)
+
     if item.shopping_list.household_id != current_user.household_id:
         return jsonify({"success": False, "message": "Forbidden"}), 403
 
+    item_name = item.name  
     try:
-        item_name = item.name
         db.session.delete(item)
         db.session.commit()
+
         try:
-            log_activity(user_id=current_user.id, household_id=current_user.household_id, action_type="Item Deletion")
+            log_activity(
+                user_id=current_user.id,
+                household_id=current_user.household_id,
+                action_type="Item Deletion"
+            )
         except Exception as e:
             logging.error(f"Failed to log activity: {e}")
 
-        return jsonify({
-            "success": True,
-            "message": f'"{item_name}" deleted.'
-        })
+        return jsonify({"success": True, "message": f'"{item_name}" deleted. Refresh to see changes'})
+
     except Exception as e:
         db.session.rollback()
-        logging.error(f"Error deleting item {item_name}: {e}")
+        logging.error(f"Error deleting item '{item_name}': {e}")
         return jsonify({"success": False, "message": "Error deleting item."}), 500
+
 
 
 @shoppinglist_bp.route('/list/item/<int:item_id>/toggle_purchase', methods=['POST'])

@@ -1467,3 +1467,10 @@ th {
     opacity: 0.6;
 }
 
+/* Toasts */
+.toast-container {
+    border-radius: 1.5rem;
+}
+#toastTemplate{
+    border-radius: 1.5rem;
+}

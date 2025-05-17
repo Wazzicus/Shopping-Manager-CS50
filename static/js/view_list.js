@@ -9,11 +9,8 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Ensure global showToast function exists
     if (typeof showToast !== 'function') {
-        console.error("showToast function is not defined. Make sure main.js is loaded first.");
-        // Define a fallback alert if showToast is missing
-        window.showToast = function(message, category = 'info') { // Fallback
+        window.showToast = function(message, category = 'info') { 
             alert(`${category.toUpperCase()}: ${message}`);
         };
     }
@@ -103,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 listItemElement.classList.toggle('item-purchased', newStatus);
                 itemNameElement.classList.toggle('text-decoration-line-through', newStatus);
                 const iconClass = newStatus ? 'bi-arrow-counterclockwise' : 'bi-check-circle';
-                const buttonText = newStatus ? ' Undo' : ' Mark as Purchased';
+                const buttonText = newStatus ? ' Undo' : ' Mark Purchased';
                 button.innerHTML = `<i class="bi ${iconClass}"></i><span class="d-none d-md-inline">${buttonText}</span>`;
                 button.classList.remove('btn-success', 'btn-warning');
                 button.classList.add(newStatus ? 'btn-warning' : 'btn-success');
@@ -121,7 +118,119 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    
+    // --- Add Item AJAX Function ---
+    async function addItem(itemName, quantity, measure, listId) {
+        try {
+            const url = `/shopping/list/${listId}`;
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-CSRFToken': csrfToken, 'X-Requested-With': 'XMLHttpRequest' },
+                body: JSON.stringify({ name: itemName, quantity: quantity, measure: measure }),
+            });
+            const result = await response.json();
+            if (response.ok && result.success) {
+                const newItemData = result.item;
+                if (!newItemData || !newItemData.id || !newItemData.name) { showToast("Error processing server response.", "danger"); return; }
+                const ul = document.getElementById('itemList');
+                const placeholder = document.getElementById('emptyListPlaceholder');
+                if (placeholder) {
+                    if (placeholder.tagName === 'LI') { placeholder.remove(); }
+                    else { placeholder.classList.add('d-none'); }
+                }
+                if (!ul) { console.error("Could not find #itemList to append new item to."); return; }
+                const li = createListItemElement(newItemData, csrfToken);
+                ul.appendChild(li);
+                if (newItemInput) newItemInput.value = '';
+                if (newItemQuantityInput) newItemQuantityInput.value = '';
+                if (newItemMeasureInput) newItemMeasureInput.value = '';
+                updateProgressBar();
+                showToast(result.message || 'Item added!', 'success');
+            } else {
+                 showToast(result.message || "Failed to add item.", 'danger');
+            }
+        } catch (error) {
+            showToast("Network error adding item. Please try again.", 'danger');
+        }
+    }
+
+    // --- Function to create List Item HTML (Helper - Includes Profile Pic in Pill) ---
+    function createListItemElement(itemData, csrfToken) {
+        const li = document.createElement('li');
+        li.className = 'list-group-item item-row';
+        if (itemData.purchased) li.classList.add('item-purchased');
+        li.setAttribute('data-item-id', itemData.id);
+
+
+        const safeName = (itemData.name || '').replace(/</g, "&lt;").replace(/>/g, "&gt;");
+       
+        const addedByName = itemData.added_by.name || 'You'; 
+        const safeAddedBy = addedByName.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        const avatarUrl = itemData.url || `https://api.dicebear.com/7.x/initials/svg?seed=${safeAddedBy}`; 
+
+        const safeQuantity = itemData.quantity !== null && itemData.quantity !== undefined ? String(itemData.quantity).replace(/</g, "&lt;").replace(/>/g, "&gt;") : '';
+        const safeMeasure = (itemData.measure || '').replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+        const editUrl = `/shopping/list/item/${itemData.id}/edit`;
+        const toggleUrl = `/shopping/list/item/${itemData.id}/toggle_purchase`;
+        const deleteUrl = `/shopping/list/item/${itemData.id}/delete`;
+
+        const toggleBtnClass = itemData.purchased ? 'btn-warning' : 'btn-success';
+        const toggleIconClass = itemData.purchased ? 'bi-arrow-counterclockwise' : 'bi-check-circle';
+        const toggleBtnText = itemData.purchased ? ' Undo' : ' Mark Purchased';
+        const nameClass = itemData.purchased ? 'item-name editable text-decoration-line-through' : 'item-name editable';
+
+        let quantityDisplayHTML = `<span class="item-quantity-measure text-muted">-</span>`;
+        if (itemData.quantity || itemData.measure) {
+            let qtyText = itemData.quantity !== null && itemData.quantity !== undefined ? safeQuantity : '1';
+            quantityDisplayHTML = `<span class="item-quantity-measure">(${qtyText} ${safeMeasure})</span>`;
+        }
+
+        li.innerHTML = `
+            <div class="row w-100 align-items-center gy-2">
+                <div class="col-md-5 col-12 item-name-column">
+                    <div class="item-name-line">
+                        <span class="${nameClass}" style="cursor: pointer;">${safeName}</span>
+                    </div>
+                    <input type="text" class="form-control item-edit-input d-none" value="${safeName}">
+                    <small class="item-details-text d-block mt-1">
+                        Added by:
+                        <span class="added-by-pill bg-secondary">
+                            <img src="${avatarUrl}"
+                                 class="profile-pic-thumb"
+                                 alt="${safeAddedBy}'s profile picture"
+                                 onerror="this.style.display='none'; this.nextElementSibling.style.marginLeft='0';">
+                            <span class="added-by-name">${safeAddedBy}</span>
+                        </span>
+                    </small>
+                    <div class="edit-error text-danger mt-1 w-100" style="display: none;"></div>
+                </div>
+                <div class="col-md-3 col-6 item-quantity-column">
+                    ${quantityDisplayHTML}
+                </div>
+                <div class="col-md-4 col-6 item-actions-column">
+                    <a href="${editUrl}" class="btn btn-sm btn-warning me-1 mb-1 mb-md-0">
+                        <i class="bi bi-pencil-square"></i><span class="d-none d-md-inline">Edit</span>
+                    </a>
+                    <form method="post" action="${toggleUrl}" style="display: inline-block;" class="me-1 mb-1 mb-md-0 toggle-purchase-form ajax-form">
+                        <input type="hidden" name="csrf_token" value="${csrfToken}">
+                        <button type="submit" class="btn btn-sm ${toggleBtnClass} toggle-purchase-btn" data-item-id="${itemData.id}">
+                            <i class="bi ${toggleIconClass}"></i><span class="d-none d-md-inline">${toggleBtnText}</span>
+                        </button>
+                    </form>
+                    <button type="button" class="btn btn-sm btn-outline-danger delete-item-btn mb-1 mb-md-0"
+                            data-bs-toggle="modal" data-bs-target="#confirmModal"
+                            data-modal-title="Confirm Item Deletion"
+                            data-modal-body="Are you sure you want to delete the item '${safeName}'?"
+                            data-modal-confirm-text="Delete Item" data-modal-confirm-class="btn-danger"
+                            data-action-url="${deleteUrl}"
+                            data-target-element-selector="li[data-item-id='${itemData.id}']">
+                        <i class="bi bi-trash"></i><span class="d-none d-md-inline"> Delete</span>
+                    </button>
+                </div>
+            </div>
+        `;
+        return li;
+    }
 
     // --- Inline Editing Helper Functions ---
     function enterItemEditMode(spanElement) {
@@ -218,24 +327,51 @@ document.addEventListener('DOMContentLoaded', () => {
                 event.preventDefault();
                 const itemId = toggleButton.dataset.itemId;
                 const listItemElement = toggleButton.closest('.list-group-item.item-row');
-                if (itemId && listItemElement) { await togglePurchaseStatus(toggleButton, itemId, listItemElement); }
+                if (itemId && listItemElement) { 
+                    await togglePurchaseStatus(toggleButton, itemId, listItemElement); 
+                }
                 return;
             }
-            const itemNameSpan = event.target.closest('.item-name-line .item-name.editable');
-            if (itemNameSpan && itemNameSpan.classList.contains('editable')) {
-                 if (!isSaving) { enterItemEditMode(itemNameSpan); }
-                 return;
+
+            // Edit item name
+            const itemNameSpan = event.target.closest('.item-name.editable');
+            if (itemNameSpan) {
+                if (!isSaving) { 
+                    enterItemEditMode(itemNameSpan); 
+                }
+                return;
             }
         });
-        listContainer.addEventListener('focusout', (event) => {
-             if (event.target.classList.contains('item-edit-input')) {
-                 setTimeout(async () => {
-                     if (document.activeElement !== event.target && !isSaving) {
-                         await saveItemName(event.target);
-                     }
-                 }, 150);
-             }
+
+        document.addEventListener('click', async (event) => {
+            const deleteButton = event.target.closest('.btn-danger[data-bs-toggle="modal"]');
+            if (deleteButton) {
+                event.preventDefault();
+                
+                const modal = document.getElementById('confirmModal');
+                const confirmBtn = modal.querySelector('.modal-confirm-btn');
+                
+                confirmBtn.dataset.itemId = deleteButton.dataset.itemId;
+                confirmBtn.dataset.itemName = deleteButton.dataset.itemName;
+                confirmBtn.dataset.targetSelector = `li[data-item-id="${deleteButton.dataset.itemId}"]`;
+                
+                // Show the modal
+                new bootstrap.Modal(modal).show();
+            }
         });
+
+        // Handle edit mode blur/save
+        listContainer.addEventListener('focusout', (event) => {
+            if (event.target.classList.contains('item-edit-input')) {
+                setTimeout(async () => {
+                    if (document.activeElement !== event.target && !isSaving) {
+                        await saveItemName(event.target);
+                    }
+                }, 150);
+            }
+        });
+
+        // Handle keyboard events in edit mode
         listContainer.addEventListener('keydown', async (event) => {
             if (event.target.classList.contains('item-edit-input')) {
                 if (event.key === 'Enter') {
@@ -246,44 +382,51 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         });
-    } else { console.warn('#itemList container not found for event listeners.'); }
+    }
 
-    if (addItemForm && newItemInput && addItemButton) {
-         addItemForm.addEventListener('submit', async function(event) {
-            event.preventDefault();
-            const itemName = newItemInput.value.trim();
-            const quantity = newItemQuantityInput?.value.trim() || null;
-            const measure = newItemMeasureInput?.value.trim() || null;
-            const listId = addItemForm.dataset.listId;
-            if (!itemName) {
-                showToast("Please enter an item name.", 'warning');
-                newItemInput.focus();
-                return;
-            }
-            const originalButtonHTML = addItemButton.innerHTML;
-            addItemButton.disabled = true;
-            addItemButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Adding...';
-            await addItem(itemName, quantity, measure, listId);
-            addItemButton.disabled = false;
-            addItemButton.innerHTML = originalButtonHTML;
-         });
-    } else { console.warn("Add item form elements not all found."); }
+        document.querySelector('.modal-confirm-btn')?.addEventListener('click', async function() {
+            const itemId = this.dataset.itemId;
+            const itemName = this.dataset.itemName;
+            const targetSelector = this.dataset.targetSelector;
+            const modal = bootstrap.Modal.getInstance(document.getElementById('confirmModal'));
+            
+            try {
+                const response = await fetch(`/list/item/${itemId}/delete`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': csrfToken
+                    }
+                });
 
-    document.body.addEventListener('modalActionSuccess', (event) => {
-        if (event.detail && event.detail.actionUrl && event.detail.actionUrl.includes('/delete')) {
-            if(event.detail.targetElementSelector) {
-                const elementToRemove = document.querySelector(event.detail.targetElementSelector);
-                if (elementToRemove && elementToRemove.closest('#itemList')) {
-                    elementToRemove.remove();
-                    updateProgressBar();
+                const data = await response.json();
+                
+                if (data.success) {
+                    // Remove the item from DOM
+                    const itemElement = document.querySelector(targetSelector);
+                    if (itemElement) {
+                        itemElement.remove();
+                        
+                        // Show empty message if no items left
+                        const itemList = document.getElementById('itemList');
+                        if (itemList && itemList.querySelectorAll('.item-row').length === 0) {
+                            const emptyPlaceholder = document.getElementById('emptyListPlaceholder');
+                            if (emptyPlaceholder) emptyPlaceholder.style.display = 'block';
+                        }
+                        
+                        showToast(`"${itemName}" deleted successfully`, 'success');
+                    }
+                } else {
+                    showToast(data.message || 'Error deleting item', 'error');
                 }
-            } else {
-                updateProgressBar();
+            } catch (error) {
+                console.error('Delete error:', error);
+                showToast('Failed to delete item', 'error');
+            } finally {
+                modal.hide();
             }
-        }
     });
 
-    // --- Initial Progress Bar Calculation ---
     updateProgressBar();
 
-}); // End DOMContentLoaded
+}); 

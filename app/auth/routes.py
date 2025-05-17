@@ -37,10 +37,15 @@ def auth():
         user = User(
             username=register_form.username.data,
             name=register_form.name.data,
-            password=hashed_password
+            password=hashed_password,
+            
         )
         db.session.add(user)
         db.session.commit()
+        
+        user.avatar_url = f'https://api.dicebear.com/7.x/initials/svg?seed={user.name}'
+        db.session.commit()
+
         login_user(user)
 
         flash("Your account has been created successfully!", "success")  

@@ -19,8 +19,7 @@ class AddItemForm(FlaskForm):
             ('l', 'Liter (l)'),
             ('ml', 'Milliliter (ml)'),
             ('Pcs', 'Piece'),  
-        ],
-        validators=[DataRequired()]
+        ]
     )
     submit = SubmitField('Add Item')
 
@@ -30,7 +29,7 @@ class EditShoppingListForm(FlaskForm):
 
 class EditItemForm(FlaskForm):
     name = StringField('Item Name', validators=[DataRequired("You must choose a name"), Length(min=2, max=100)])
-    quantity = IntegerField('Quantity', validators=[DataRequired("You must choose a name")])
+    quantity = IntegerField('Quantity', default=1)
     measure = SelectField(
         'Unit of Measurement:',
         choices=[
@@ -40,7 +39,6 @@ class EditItemForm(FlaskForm):
             ('l', 'Liter (l)'),
             ('ml', 'Milliliter (ml)'),
             ('Pcs', 'Piece'),  
-        ],
-        validators=[DataRequired()]
+        ]
     )
     submit = SubmitField('Save Changes')
