@@ -4,6 +4,9 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="csrf-token" content="{{ csrf_token() }}">
+        <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='images/cart-icon.svg') }}">
+        <link rel="alternate icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
+
         <title>
             {% block title %}
             {{ title | default('Shopping Manager') }}
@@ -29,7 +32,7 @@
         <div class="container px-0 sticky-top" style="margin: 0 auto; margin-top: 0.5rem;">
             <div class="row">
                 <div class="col-12 px-0">
-                    <nav class="navbar navbar-expand-lg ">
+                    <nav class="navbar navbar-expand-lg " role="navigation" aria-label="Main navigation">
                         <div class="container">
                             <div class="logo">
                                 <a class="nav-link" href="{{ url_for('main.index' )}}">
@@ -95,7 +98,6 @@
                     {% endfor %}
                 {% endif %}
             {% endwith %}
-        </div>
         </div>
 
         <main class="container py-4">

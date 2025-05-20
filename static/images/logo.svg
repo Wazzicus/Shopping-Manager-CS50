@@ -1,0 +1,7 @@
+<!-- static/images/logo.svg -->
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+     xmlns="http://www.w3.org/2000/svg">
+  <path d="M7 18C8.10457 18 9 17.1046 9 16C9 14.8954 8.10457 14 7 14C5.89543 14 5 14.8954 5 16C5 17.1046 5.89543 18 7 18Z" fill="#0dcaf0"/>
+  <path d="M17 18C18.1046 18 19 17.1046 19 16C19 14.8954 18.1046 14 17 14C15.8954 14 15 14.8954 15 16C15 17.1046 15.8954 18 17 18Z" fill="#0dcaf0"/>
+  <path d="M3 4H5L5.6 7M5.6 7L7 14H17L19 7H5.6Z" stroke="#0dcaf0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block title %}
-    {{ shopping_list.name }} - Shopping List
+{{ title | default('Shopping Manager') }}
 {% endblock %}
 
 {% block content %}
