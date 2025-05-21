@@ -561,6 +561,21 @@ table td ul {
     color: #92400e; /* Dark yellow/brown */
 }
 
+/* Coming Soon Pill */
+.coming-soon-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.6em 0.6em 0.6em 0.6em;
+    font-size: 0.75em;
+    font-weight: 500;
+    line-height: 1;
+    color: black;
+    margin-left: 0.5em;
+    background-color: var(--warning); 
+    border-radius: 50px; 
+    vertical-align: middle;
+}
+
 
 /* ==========================================================================
    Profile Section (Dashboard)
