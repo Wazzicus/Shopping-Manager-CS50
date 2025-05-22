@@ -56,13 +56,6 @@ function updateHouseholdNameDisplay(newName) {
     });
 };
 
-
-// Helper function to get CSRF token
-function getCSRFToken() {
-    const metaTag = document.querySelector('meta[name="csrf-token"]');
-    return metaTag ? metaTag.content : '';
-}
-
 // Function to regenerate join code
 function regenerateJoinCode() {
     const btn = document.getElementById('regenerateJoinCodeBtn');

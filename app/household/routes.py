@@ -79,9 +79,13 @@ def setup():
             
     return render_template('household/setup.html', join_form=join_form, create_form=create_form, initial_active_tab=initial_active_tab)
      
-@household_bp.route('/manage')
+@household_bp.route('/manage/<int:household_id>')
 @login_required
-def manage_household():
+def manage_household(household_id):
+    if not household_id:
+        flash("Access denied!", "danger")
+        return redirect(url_for("main.index"))
+
     household = current_user.household
     if not household or not current_user.id == household.admin_id:
         flash("Access denied!", "danger")
@@ -140,9 +144,11 @@ def remove_member(user_id_to_remove):
         "removed_user_id": user_id_to_remove 
     }), 200
 
-@household_bp.route('/rename', methods=["POST"])
+@household_bp.route('/rename/<int:household_id>', methods=["POST"])
 @login_required
-def rename():
+def rename(household_id):
+    if not household_id:
+        return jsonify ({'error': "Unauthorised!"}), 403
     household = current_user.household
     data = request.get_json()
     if not household or not current_user.id == household.admin_id:
@@ -152,19 +158,25 @@ def rename():
         household.name = new_name
         db.session.commit()
         try:
-            log_activity(user_id=current_user.id, household_id=current_user.household.admin_id, action_type="Household Renaming")
+            log_activity(user_id=current_user.id,
+                         household_id=current_user.household.admin_id,
+                         action_type="Household Renaming",
+                         new_name=new_name)
         except Exception as e:
             logging.exception(f"Failed to log activity: {e}")
         return jsonify({ 'success': True, 'message': 'Household renamed successfully', 'new_name': new_name}), 200
     else:
         return jsonify ({'error': "New name is required!"}), 400
 
-@household_bp.route('/delete', methods=["POST"])
+@household_bp.route('/delete/<int:household_id>', methods=["POST"])
 @login_required
-def delete():
+def delete(household_id):
     household = current_user.household
 
     if not household:
+        return jsonify({'error': "You are not part of any household to delete."}), 404 
+    
+    if not household_id:
         return jsonify({'error': "You are not part of any household to delete."}), 404 
 
     if not current_user.id == household.admin_id:
@@ -223,16 +235,16 @@ def regenerate_code():
         return jsonify({'error': "Server error occurred"}), 500
 
 
-@household_bp.route('/leave', methods=["POST"])
+@household_bp.route('/leave/<int:household_id>', methods=["POST"])
 @login_required
-def leave():
+def leave(household_id):
     user_to_leave = current_user
     household_to_be_left = user_to_leave.household
 
     if not household_to_be_left:
         return jsonify({'success': False, 'error': "You are not in a household!"}), 400
 
-    household_id_for_log = household_to_be_left.id
+    household_id_for_log = household_id
     household_name_for_log = household_to_be_left.name
 
     if household_to_be_left.admin_id == user_to_leave.id:  
@@ -273,7 +285,8 @@ def leave():
                 log_activity(
                     user_id=user_to_leave.id,
                     household_id=household_id_for_log,
-                    action_type=f"Admin Left Household '{household_name_for_log}', Transferred to {new_admin.username}"
+                    action_type= "Admin Leaving",
+                    new_name=new_admin.username
                 )
             except Exception as e:
                 logging.exception(f"Failed to log admin leave and transfer activity: {e}")

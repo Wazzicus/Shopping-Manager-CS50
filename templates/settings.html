@@ -45,7 +45,7 @@
                     width="120">
 
                 <div class="form-group mb-3">
-                    {{ form.submit(class="btn btn-secondary") }}
+                    {{ form.submit(class="btn btn-secondary w-100") }}
                 </div>
             </form>
         </div>
@@ -58,99 +58,89 @@
         <div class="card-body">
             <div class="form-group mb-3">
                 <div class="card-text">
-                    Change the name that is displayed to your fellow household members. Using your real name or nick name is recommended.
+                    Change the name that is displayed to your fellow household members. Using your real name or nickname is recommended.
                 </div>
             </div>
-            <form method="post" autocomplete="off" action="{{ url_for('settings_bp.account_settings') }}">
+            <form id="nameChangeForm" method="post" autocomplete="off">
+                <div class="form-group mb-3">
+                    <label class="form-label">Current Display Name:</label>
+                    <span id="currentDisplayName" class="current-display-name">{{ current_user.name }}</span>
+                </div>
+
                 <div class="form-group mb-3">
                     {{ name_change_form.hidden_tag() }}
+                    <input type="hidden" id="initialDisplayName" value="{{ current_user.name }}">
                     {{ name_change_form.new_name.label(class="form-label") }}
-                    {{ name_change_form.new_name(class=['form-control', 'is-invalid' if name_change_form.new_name.errors else ''], placeholder="Enter New name") }}                    
+                    {{ name_change_form.new_name(class=['form-control', 'is-invalid' if name_change_form.new_name.errors else ''], placeholder="Enter New Name") }}
                     {% if name_change_form.new_name.errors %}
                     <div class="invalid-feedback">
                         {% for error in name_change_form.new_name.errors %}
-                        <span>{{ error }}</span><br>
-                        {% endfor %}
-                    </div>
-                    {% endif %}
-                </div>
-                <div class="form-group mb-3">
-                    {{ name_change_form.submit(class="btn btn-secondary")}}
-                </div>
-            </form>
-        </div>
-    </div>
-    
-    <div class="card sm-card">
-        <div class="card-header">
-            <h3>Change Password</h3>
-        </div>
-        <div class="card-body">
-            <div class="form-group mb-3">
-                <div class="card-text">
-                    It is advised to change your password every so often to keep your account secure. Choose one that has a mix of symbols, letters and numbers. Avoid choosing easy-to-guess passwords like your birthday or pet's name.
-                </div>
-            </div>
-            <form method="POST" action="{{ url_for('settings_bp.account_settings') }}">
-                {{ password_form.hidden_tag() if password_form else '' }}
-                <div class="form-group mb-3">
-                    {{ password_change_form.current_password.label(class="form-label") }}
-                    {{ password_change_form.current_password(class=['form-control', 'is-invalid' if password_change_form.current_password.errors else ''], placeholder="Enter Old Password") }}
-                    {% if password_change_form.current_password.errors %}
-                    <div class="invalid-feedback">
-                        {% for error in password_change_form.current_password.errors %}
-                        <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                    {% endif %}
-                </div>
-
-                <div class="form-group  mb-3">
-                {{ password_change_form.new_password.label(class="form-label") }}
-                {{ password_change_form.new_password(class=['form-control', 'is-invalid' if password_change_form.new_password.errors else ''], placeholder="Enter New password") }}
-                {% if password_change_form.new_password.errors %}
-                    <div class="invalid-feedback">
-                        {% for error in password_change_form.new_password.errors %}
-                        <span>{{ error }}</span>
+                            <span>{{ error }}</span><br>
                         {% endfor %}
                     </div>
                     {% endif %}
                 </div>
 
                 <div class="form-group mb-3">
-                    {{ password_change_form.confirm_new_password.label(class="form-label") }}
-                    {{ password_change_form.confirm_new_password(class=['form-control', 'is-invalid' if password_change_form.new_password.errors else ''], placeholder="Confirm New password") }}
-                    {% if password_change_form.confirm_new_password.errors %}
-                    <div class="invalid-feedback">
-                        {% for error in password_change_form.confirm_new_password.errors %}
-                        <span>{{ error }}</span>
-                        {% endfor %}
-                    </div>
-                    {% endif %}
-                </div>
-                
-                <div class="form-group mb-3">
-                    <button type="submit" 
-                            name="action" 
-                            value="change_password" 
-                            class="btn btn-secondary">
-                            Update Password
+                    <button type="button" class="btn btn-secondary w-100" id="changeNameBtn">
+                        <span class="button-text">Change Display Name</span>
+                        <span class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
                     </button>
                 </div>
             </form>
         </div>
     </div>
 
+    <div class="card sm-card">
+        <div class="card-header">
+            <h3>Change Password</h3>
+        </div>
+        <div class="card-body">
+            <form method="POST" autocomplete="off" id="passwordChangeForm">
+                {{ password_change_form.hidden_tag() }}
+
+                <div class="form-group mb-3">
+                    {{ password_change_form.old_password.label(class="form-label") }}
+                    {{ password_change_form.old_password(class=['form-control', 'is-invalid' if password_change_form.old_password.errors else '']) }}
+                    {% for error in password_change_form.old_password.errors %}
+                        <div class="invalid-feedback">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="form-group mb-3">
+                    {{ password_change_form.new_password.label(class="form-label", autocomplete="new-password") }}
+                    {{ password_change_form.new_password(class=['form-control', 'is-invalid' if password_change_form.new_password.errors else ''], id='newPassword') }}
+                    <div id="strengthFeedback" class="form-text mt-1"></div>
+                    {% for error in password_change_form.new_password.errors %}
+                        <div class="invalid-feedback">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="form-group mb-3">
+                    {{ password_change_form.confirm_password.label(class="form-label", autocomplete="new-password") }}
+                    {{ password_change_form.confirm_password(class=['form-control', 'is-invalid' if password_change_form.confirm_password.errors else ''], id='confirmPassword') }}
+                    <div id="matchFeedback" class="form-text mt-1"></div>
+                    {% for error in password_change_form.confirm_password.errors %}
+                        <div class="invalid-feedback">{{ error }}</div>
+                    {% endfor %}
+                </div>
+
+                <div class="form-group mb-3">
+                    {{ password_change_form.submit(class="btn btn-secondary w-100", id="PasswordBtn") }}
+                </div>
+            </form>
+        </div>
+    </div>
 
     <div class="card sm-card">
         <button type="button" class="btn btn-warning"
             data-bs-toggle="modal"
             data-bs-target="#confirmModal"
-            data-modal-title="Confirm Leave Household"
+            data-modal-title="Leave Household ?"
             data-modal-body="Are you sure you want to leave this household? If you are the admin and other members exist, admin rights will be transferred."
             data-modal-confirm-text="Yes, Leave"
             data-modal-confirm-class="btn-warning"
-            data-action-url="{{ url_for('household_bp.leave') }}"
+            data-action-url="{{ url_for('household_bp.leave', household_id=current_user.household_id) }}"
             data-redirect-url="{{ url_for('household_bp.setup') }}"> 
             Leave Household
         </button>
@@ -159,7 +149,10 @@
 {% endblock %}
 {% block scripts %}
 {{ super() }}
+<script src="https://cdn.jsdelivr.net/npm/zxcvbn@4.4.2/dist/zxcvbn.js"></script>
 <script src="{{ url_for('static', filename='js/avatar_preview.js') }}"></script>
+<script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+<script src="{{ url_for('static', filename='js/strength_meter.js') }}"></script>
 <script>
     function selectAvatar(url, element) {
     const preview = document.getElementById("avatar-preview");

@@ -26,7 +26,7 @@
                 </div>
                 <div class="card-body">
                     <div class="table-container">
-                        <table>
+                        <table class="table align-middle rounded-table" id="memberMembersTable">
                             <thead>
                                 <tr>
                                     <th>Name</th>
@@ -39,18 +39,11 @@
                                 <tr>
                                     <td>
                                         <div class="user-details-in-table">
-                                                {% if current_user.avatar_url %}
-                                                {% if current_user.avatar_url.startswith('http') %}
-
-                                                    <img src="{{ member.avatar_url }}" alt="{{ member.name }}'s avatar" class="avatar-in-table">
-                                                {% else %}
-                                                    <img src="{{ member.avatar_url }}" alt="{{ member.name }}'s avatar" class="avatar-in-table">
-                                                {% endif %}
-                                                {% else %}
-                                                
-                                                <img src="https://api.dicebear.com/7.x/initials/svg?seed={{ current_user.name }}" alt="Default avatar" class="avatar-in-table">
-                                                {% endif %}
-                                                {% if member.id == current_user.id%}
+                                               <img src="{{ member.avatar_url }}" 
+                                                    alt="{{ member.name }}'s avatar" 
+                                                    class="avatar-in-table"
+                                                    onerror="this.onerror=null; this.src='https://api.dicebear.com/7.x/initials/svg?seed={{ member.name }}'">
+                                                {% if member.id == member.id%}
                                                 <span class="text-xs text-gray-500">(You)</span>
                                                 {% endif %}
                                         </div>

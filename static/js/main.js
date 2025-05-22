@@ -15,7 +15,7 @@
  * @param {string} title - Optional title for the toast header. Default is 'Notification'.
  */
 function showToast(message, category = 'info', delay = 5000, title = 'Notification') {
-    // console.log(`DEBUG: showToast function started. Msg: "${message}", Cat: "${category}"`);
+    
     const toastTemplate = document.getElementById('toastTemplate');
     const toastContainer = document.querySelector('.toast-container');
 
@@ -79,31 +79,14 @@ function showToast(message, category = 'info', delay = 5000, title = 'Notificati
     }
 }
 
-/**
- * Toggles the data-bs-theme attribute on the body element.
- */
-function toggleTheme() {
-    const currentTheme = document.body.getAttribute('data-bs-theme');
-    if (currentTheme === 'dark') {
-        document.body.setAttribute('data-bs-theme', 'light');
-        localStorage.setItem('theme', 'light');
-    } else {
-        document.body.setAttribute('data-bs-theme', 'dark');
-        localStorage.setItem('theme', 'dark');
-    }
+// Helper function to get CSRF token
+function getCSRFToken() {
+    const metaTag = document.querySelector('meta[name="csrf-token"]');
+    return metaTag ? metaTag.content : '';
 }
-
 
 // --- Initialization code runs after DOM is loaded ---
 document.addEventListener('DOMContentLoaded', () => {
-
-    // --- Theme Initialization ---
-    const themeToggleButton = document.getElementById('darkModeToggle');
-    if (themeToggleButton) {
-        themeToggleButton.addEventListener('click', toggleTheme);
-    }
-
-
     // --- Confirmation Modal Logic ---
     const confirmationModalElement = document.getElementById('confirmModal');
     const confirmBtn = document.getElementById('confirmBtn');
@@ -124,7 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
             modalBodyElement.textContent = button.getAttribute('data-modal-body') || 'Are you sure?';
             confirmBtn.textContent = button.getAttribute('data-modal-confirm-text') || originalConfirmBtnText;
             confirmBtn.className = 'btn';
-            confirmBtn.classList.add(button.getAttribute('data-modal-confirm-class') || 'btn-primary');
+            confirmBtn.classList.add(button.getAttribute('data-modal-confirm-class') || 'btn-danger', 'w-100');
             actionUrl = button.getAttribute('data-action-url');
             redirectUrl = button.getAttribute('data-redirect-url');
             confirmBtn.setAttribute('data-original-text', confirmBtn.textContent);
@@ -168,7 +151,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     // --- CORRECTED: Retrieve selector from modal's dataset ---
                     const targetSelector = confirmationModalElement.dataset.targetElementSelector;
-                    console.log("Dispatching modalActionSuccess. Selector:", targetSelector); // DEBUG
 
                     document.body.dispatchEvent(new CustomEvent('modalActionSuccess', {
                         detail: {

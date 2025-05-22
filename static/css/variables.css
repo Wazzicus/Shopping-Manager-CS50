@@ -44,19 +44,4 @@
   --spacing-lg: 2rem;    /* 32px */
 }
 
-/* Dark Theme Overrides */
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text-primary: #ffffff; /* White - for main text in dark mode */
-    --text-secondary: #adb5bd; /* Light gray - for secondary text in dark mode */
-    --text-light: #000000;
-    --background: #212529; /* Very dark gray - for main background in dark mode */
-    --background-variant: #2c3034; /* Slightly lighter dark gray */
-    --surface: #343a40; /* Dark gray for cards, dialogs in dark mode */
-    --surface-variant: #3e4448;
-    --border: #495057; /* Darker border color */
-    --border-light: #424950;
-    --shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.4); /* Stronger shadow in dark mode */
-  }
-}
  

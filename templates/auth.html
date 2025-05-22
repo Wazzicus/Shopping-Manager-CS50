@@ -49,7 +49,7 @@
                             </div>
                         {% endif %}
                         <input type="hidden" name="action" value="login">
-                        {{ login_form.submit(class="btn btn-primary mt-3") }}
+                        {{ login_form.submit(class="btn btn-primary mt-3 w-100") }}
                     </form>
                 </div>
             </div>
@@ -86,8 +86,9 @@
                             </div>
                             {% endif %}
 
-                            {{ register_form.password.label(class="form-label" , autocomplete="new-password" ) }}
-                            {{ register_form.password(class="form-control") }}
+                            {{ register_form.password.label(class="form-label", autocomplete="new-password") }}
+                            {{ register_form.password(class='form-control', id='newPassword') }}
+                            <div id="strengthFeedback" class="form-text mt-1"></div>
                             {% if register_form.password.errors %}
                             <div class="invalid-feedback">
                             {% for error in register_form.password.errors %}
@@ -96,8 +97,9 @@
                             </div>
                             {% endif %}
 
-                            {{ register_form.confirm_password.label(class="form-label" , autocomplete="new-password" ) }}
-                            {{ register_form.confirm_password(class="form-control") }}
+                            {{ register_form.confirm_password.label(class="form-label", autocomplete="new-password") }}
+                            {{ register_form.confirm_password(class='form-control', id='confirmPassword') }}
+                            <div id="matchFeedback" class="form-text mt-1"></div>
                             {% if register_form.confirm_password.errors %}
                                 <div class="invalid-feedback">
                                 {% for error in register_form.confirm_password.errors %}
@@ -107,8 +109,8 @@
                             {% endif %}
                             <input type="hidden" name="action" value="register">
                         </div>
-                        {{ register_form.submit(class="btn btn-primary mt-3") }}
-                    </form>
+                        {{ register_form.submit(class="btn btn-primary mt-3 w-100", id="PasswordBtn") }}
+                    </form> 
                 </div>
             </div>
         </div>
@@ -117,6 +119,8 @@
 {% endblock %}
 {% block scripts %}
 {{ super() }}
-        <script src="{{ url_for('static', filename='js/tabswitch.js') }}"></script>
-        <script src="{{ url_for('static', filename='js/auth.js') }}"></script>            
+<script src="https://cdn.jsdelivr.net/npm/zxcvbn@4.4.2/dist/zxcvbn.js"></script>
+<script src="{{ url_for('static', filename='js/tabswitch.js') }}"></script>
+<script src="{{ url_for('static', filename='js/auth.js') }}"></script>
+<script src="{{ url_for('static', filename='js/strength_meter.js') }}"></script>          
 {% endblock %}

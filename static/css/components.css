@@ -187,7 +187,7 @@
 .btn-warning {
     background-color: var(--warning);
     border-color: var(--warning);
-    color: var(--text-primary);
+    color: #000000;
 }
 
 .btn-warning:hover,
@@ -1488,4 +1488,23 @@ th {
 }
 #toastTemplate{
     border-radius: 1.5rem;
+}
+
+/* Images on Landing Page */
+.roundy{
+    border-radius: 1.5rem;
+}
+
+/* For the current display name fade effect */
+.current-display-name {
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.current-display-name.fade-out {
+    opacity: 0;
+}
+
+.current-display-name.fade-in {
+    opacity: 1;
 }

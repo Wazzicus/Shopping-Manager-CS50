@@ -83,7 +83,8 @@ def create_list():
                 log_activity(
                     user_id=current_user.id,
                     household_id=current_user.household_id,
-                    action_type="List Creation"  
+                    action_type="List Creation",
+                    list_name=new_list.name  
                 )
             except Exception as e:
                 logging.error(f"Failed to log activity: {e}")
@@ -159,7 +160,10 @@ def view_list(list_id):
                 db.session.add(new_item)
                 db.session.commit()
                 try:
-                    log_activity(user_id=current_user.id, household_id=current_user.household_id, action_type="Item Addition")
+                    log_activity(user_id=current_user.id,
+                                 household_id=current_user.household_id,
+                                 action_type="Item Addition",
+                                 item_name=new_item)
                 except Exception as e:
                     logging.error(f"Failed to log activity: {e}")
                 return jsonify({
@@ -196,7 +200,10 @@ def view_list(list_id):
                     db.session.add(new_item)
                     db.session.commit()
                     try:
-                        log_activity(user_id=current_user.id, household_id=current_user.household_id, action_type="Item Addition")
+                        log_activity(user_id=current_user.id,
+                                     household_id=current_user.household_id,
+                                     action_type="Item Addition",
+                                     item_name=new_item.name)
                     except Exception as e:
                         logging.error(f"Failed to log activity: {e}")
                     return redirect(url_for('shoppinglist_bp.view_list', list_id=list_id))
@@ -230,7 +237,10 @@ def edit_list(list_id):
         db.session.commit()
         flash(f'List "{shopping_list.name}" updated.', 'success')
         try:
-            log_activity(user_id=current_user.id, household_id=current_user.household_id, action_type="List Renaming")
+            log_activity(user_id=current_user.id, 
+                         household_id=current_user.household_id,
+                         action_type="List Renaming",
+                         new_name=form.name.data)
         except Exception as e:
             logging.error(f"Failed to log activity: {e}")
         return redirect(url_for('shoppinglist_bp.view_list',list_id=list_id))
@@ -249,7 +259,10 @@ def delete_list(list_id):
         db.session.delete(shopping_list)
         db.session.commit()
         try:
-            log_activity(user_id=current_user.id, household_id=current_user.household_id, action_type="List Deletion")
+            log_activity(user_id=current_user.id,
+                         household_id=current_user.household_id,
+                         action_type="List Deletion",
+                         list_name=list_name)
         except Exception as e:
             logging.error(f"Failed to log activity: {e}")
 
@@ -278,7 +291,11 @@ def edit_item(item_id):
         db.session.commit()
         flash(f'Item "{item.name}" updated.', 'success') 
         try:
-            log_activity(user_id=current_user.id, household_id=current_user.household_id, action_type="Item Renaming")
+            log_activity(user_id=current_user.id,
+                        household_id=current_user.household_id, 
+                        action_type="Item Editing",
+                        new_name=form.name.data
+                        )
         except Exception as e:
             logging.error(f"Failed to log activity: {e}")
         return redirect(url_for('shoppinglist_bp.view_list',list_id=item.shoppinglist_id))
@@ -301,7 +318,8 @@ def delete_item(item_id):
             log_activity(
                 user_id=current_user.id,
                 household_id=current_user.household_id,
-                action_type="Item Deletion"
+                action_type="Item Deletion",
+                item_name=item_name
             )
         except Exception as e:
             logging.error(f"Failed to log activity: {e}")
@@ -363,7 +381,10 @@ def update_item_name(item_id):
         item.name = new_name
         db.session.commit()
         try:
-            log_activity(user_id=current_user.id, household_id=current_user.household_id, action_type="Item Renaming")
+            log_activity(user_id=current_user.id,
+                         household_id=current_user.household_id,
+                         action_type="Item Renaming",
+                         new_name=new_name)
         except Exception as e:
             logging.error(f"Failed to log activity: {e}")
         return jsonify({

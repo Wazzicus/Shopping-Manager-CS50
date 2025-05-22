@@ -9,31 +9,29 @@
     <div class="card sm-card mb-4">
         <div class="card-header"><h5 class="mb-0">Welcome, {{ current_user.name | default('User') }}!</h5></div>
         <div class="card-body">
-            <div class="profile-header">
-                {% if current_user.avatar_url %}
-                    {% if current_user.avatar_url.startswith('http') %}
-                        <img src="{{ current_user.avatar_url }}" alt="{{ current_user.name }}'s avatar" class="profile-pic-actual">
-                    {% else %}
-                        <img src="{{ current_user.avatar_url }}" alt="{{ current_user.name }}'s avatar" class="profile-pic-actual">
-                    {% endif %}
-                {% else %}
-                    <img src="https://api.dicebear.com/7.x/initials/svg?seed={{ current_user.name }}" alt="Default avatar" class="profile-pic-actual">
-                {% endif %}
+            <div class="profile-header d-flex flex-column flex-md-row align-items-center align-items-md-start">
+                <div class="text-center text-md-start mb-3 mb-md-0 me-md-3">
+                    <img src="{{ current_user.avatar_url }}"
+                        alt="{{ current_user.name }}'s avatar" 
+                        class="profile-pic-actual"
+                        onerror="this.onerror=null; this.src='https://api.dicebear.com/7.x/initials/svg?seed={{ current_user.name }}'">
+                </div>
 
-                <div class="profile-info me-auto">
+                <div class="profile-info w-100 w-md-auto me-md-auto mb-3 mb-md-0 text-center text-md-start">
                     <p class="card-text mb-1">@{{ current_user.username }}</p>
                     {% if current_user.household %}
-                        <small class="text-muted">Household: {{ current_user.household.name }}</small>
+                    <small class="text-muted">Household: {{ current_user.household.name }}</small>
                     {% else %}
-                        <small class="text-muted">Not currently in a household. <a href="{{ url_for('household_bp.setup')}}">Join or Create One!</a></small>
+                    <small class="text-muted">Not currently in a household. <a href="{{ url_for('household_bp.setup')}}">Join or Create One!</a></small>
                     {% endif %}
                 </div>
-                <div class="profile-actions d-flex flex-column flex-sm-row align-items-sm-center">
+
+                <div class="profile-actions d-flex flex-column flex-sm-row align-items-sm-center w-100 w-md-auto justify-content-center">
                     <a href="{{ url_for('settings_bp.account_settings') }}" class="btn btn-sm btn-outline-secondary mb-2 mb-sm-0 me-sm-2">
                         <i class="bi bi-gear-fill"></i> Settings
                     </a>
                     {% if current_user.household and (is_admin or current_user.is_admin_of_household) %}
-                    <a href="{{ url_for('household_bp.manage_household') }}" class="btn btn-sm btn-outline-info">
+                    <a href="{{ url_for('household_bp.manage_household', household_id=current_user.household_id) }}" class="btn btn-sm btn-outline-info">
                         <i class="bi bi-people-fill"></i> Manage Household
                     </a>
                     {% endif %}
@@ -86,7 +84,6 @@
                             <thead>
                                 <tr>
                                     <th scope="col">List Name</th>
-                                    <th scope="col">Items</th>
                                     <th scope="col" class="text-end">Actions</th>
                                 </tr>
                             </thead>
@@ -95,9 +92,6 @@
                                 <tr id="list-row-{{ list.id }}">
                                     <td>
                                         <strong>{{ list.name }}</strong>
-                                    </td>
-                                    <td>
-                                        {{ list.items_count | default(0) }}
                                     </td>
                                     <td class="text-end">
                                         <div class="d-flex flex-wrap justify-content-end gap-2">
@@ -113,7 +107,6 @@
                                                 data-modal-title="Confirm List Deletion"
                                                 data-modal-body="Are you sure you want to delete the list '{{ list.name | escape }}' and all its items? This cannot be undone."
                                                 data-modal-confirm-text="Delete List"
-                                                data-modal-confirm-class="btn-danger"
                                                 data-action-url="{{ url_for('shoppinglist_bp.delete_list', list_id=list.id) }}"
                                                 data-target-element-selector="#list-row-{{ list.id }}"
                                                 data-redirect-url="{{ url_for('main.dashboard') }}">
@@ -171,5 +164,4 @@
 {% block scripts %}
 {{ super() }}
 <script src="{{ url_for('static', filename='js/dashboard.js') }}"></script>
-<script src="{{ url_for('static', filename='js/dashboard_search.js') }}"></script>
 {% endblock %}

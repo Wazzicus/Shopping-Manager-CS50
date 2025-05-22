@@ -128,15 +128,11 @@
                         <small class="item-details-text d-block mt-1">
                             Added by:
                             <span class="added-by-pill bg-secondary">
-                                {% if item.added_by.avatar_url %}
-                                {% if item.added_by.avatar_url.startswith('http') %}
-                               <img src="{{ item.added_by.avatar_url }}" alt="{{ item.added_by.name }}'s avatar" class="profile-pic-thumb">
-                                {% else %}
-                               <img src="{{ item.added_by.avatar_url }}" alt="{{ item.added_by.name }}'s avatar" class="profile-pic-thumb">
-                                {% endif %}
-                                {% else %}
-                                <img src="https://api.dicebear.com/7.x/initials/svg?seed={{ item.added_by.name }}" alt="Default avatar" class="profile-pic-thumb">
-                                {% endif %}
+                                <img src="{{ item.added_by.avatar_url }}" 
+                                    alt="{{ item.added_by.name }}'s avatar" 
+                                    class="profile-pic-thumb"
+                                    onerror="this.onerror=null; this.src='https://api.dicebear.com/7.x/initials/svg?seed={{ item.added_by.name }}'">
+
                                 <span class="added-by-name">{{ item.added_by.name | default('You') }}</span>
                             </span>
                         </small>

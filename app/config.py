@@ -1,4 +1,5 @@
 import os
+from flask import url_for
 
 class Config:
     SECRET_KEY = os.environ.get('SECRET_KEY', 'jDf#8PzL3rQ!2vXs@5TkW9^mNzH7aEY%UbV0oCMp&RgIqA1dFbJxG$ZKi^lueS')

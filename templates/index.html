@@ -3,7 +3,7 @@
 Shopping Manager - Simplify Your Shopping Experience
 {% endblock %}
 {% block content %}
- <div class="container mt-2">
+ <div class="container">
     <div class="hero bg-gradient rounded-3 mb-5 p-4 p-md-5">
         <div class="row align-items-center">
             <div class="col-lg-6 text-center text-lg-start mb-4 mb-lg-0">
@@ -15,7 +15,7 @@ Shopping Manager - Simplify Your Shopping Experience
                 </div>
             </div>
             <div class="col-lg-6">
-                <img src="{{ url_for('static', filename='images/Clipboard.jpg') }}" alt="ShopSmart Dashboard" class="img-fluid rounded shadow-lg" onerror="this.src='https://placehold.co/800x450?text=Dashboard+Preview'">
+                <img src="{{ url_for('static', filename='images/Clipboard.jpg') }}" alt="ShopSmart Dashboard" class="img-fluid roundy shadow-lg" onerror="this.src='https://placehold.co/800x450?text=Dashboard+Preview'">
             </div>
         </div>
     </div>
@@ -30,23 +30,11 @@ Shopping Manager - Simplify Your Shopping Experience
             <div class="col">
                 <div class="card h-100 border-0 shadow-sm hover-card sm-card">
                     <div class="card-body text-center">
-                    <div class="feature-icon bg-primary bg-opacity-10 text-primary rounded-circle p-3 mx-auto mb-3" style="width: 70px; height: 70px;">
-                        <i class="bi bi-list-check fs-2"></i>
-                    </div>
-                    <h3 class="card-title">Smart Shopping Lists</h3>
-                    <p class="card-text">Create, organize, and share shopping lists that sync across all your devices.</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="card h-100 border-0 shadow-sm hover-card sm-card">
-                    <div class="card-body text-center">
-                    <div class="feature-icon bg-primary bg-opacity-10 text-primary rounded-circle p-3 mx-auto mb-3" style="width: 70px; height: 70px;">
-                        <i class="bi bi-arrow-repeat fs-2"></i>
-                    </div>
-                    <h3 class="card-title">Real-time Sync</h3>
-                    <p class="card-text">All your lists are automatically synced across all your devices and are available for anyone in your household.</p>
+                        <div class="feature-icon bg-opacity-10 rounded-circle p-3 mx-auto mb-3" style="width: 70px; height: 70px; background-color: rgba(13, 202, 240, 0.1); color: #08a7c2;">
+                            <i class="bi bi-list-check fs-2"></i>
+                        </div>
+                        <h3 class="card-title">Smart Shopping Lists</h3>
+                        <p class="card-text">Create, organize, and share shopping lists that sync across all your devices.</p>
                     </div>
                 </div>
             </div>
@@ -54,7 +42,19 @@ Shopping Manager - Simplify Your Shopping Experience
             <div class="col">
                 <div class="card h-100 border-0 shadow-sm hover-card sm-card">
                     <div class="card-body text-center">
-                        <div class="feature-icon bg-primary bg-opacity-10 text-primary rounded-circle p-3 mx-auto mb-3" style="width: 70px; height: 70px;">
+                        <div class="feature-icon bg-opacity-10 rounded-circle p-3 mx-auto mb-3" style="width: 70px; height: 70px; background-color: rgba(13, 202, 240, 0.1); color: #08a7c2;">
+                            <i class="bi bi-arrow-repeat fs-2"></i>
+                        </div>
+                        <h3 class="card-title">Real-time Sync</h3>
+                        <p class="card-text">All your lists are automatically synced across all your devices and are available for anyone in your household.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col">
+                <div class="card h-100 border-0 shadow-sm hover-card sm-card">
+                    <div class="card-body text-center">
+                        <div class="feature-icon bg-opacity-10 rounded-circle p-3 mx-auto mb-3" style="width: 70px; height: 70px; background-color: rgba(13, 202, 240, 0.1); color: #08a7c2;">
                             <i class="bi bi-people fs-2"></i>
                         </div>
                         <h3 class="card-title">Collaboration</h3>
@@ -72,11 +72,11 @@ Shopping Manager - Simplify Your Shopping Experience
         </div>
         <div class="row mb-5">
             <div class="col-lg-6 order-lg-2 mb-4 mb-lg-0">
-                <img src="{{ url_for('static', filename='images/Create_account.jpg') }}" alt="Create Account" class="img-fluid rounded shadow" onerror="this.src='https://placehold.co/600x400?text=Create+Account'">
+                <img src="{{ url_for('static', filename='images/Create_account.jpg') }}" alt="Create Account" class="img-fluid shadow roundy" onerror="this.src='https://placehold.co/600x400?text=Create+Account'">
             </div>
             <div class="col-lg-6 order-lg-1 d-flex align-items-center">
                 <div>
-                    <div class="step-number bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 40px; height: 40px;">1</div>
+                    <div class="step-number text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 40px; height: 40px; background-color: rgba(13, 202, 240, 1);">1</div>
                     <h3>Create Your Account</h3>
                     <p class="lead">Sign up in less than a minute. Pick a username, create a password, and you're ready to go. No credit card required.</p>
                 </div>
@@ -84,11 +84,11 @@ Shopping Manager - Simplify Your Shopping Experience
         </div>
         <div class="row mb-5">
             <div class="col-lg-6 mb-4 mb-lg-0">
-                <img src="{{ url_for('static', filename='images/Computer_Screen_With_ShoppingList.jpg') }}" alt="Create Lists" class="img-fluid rounded shadow" onerror="this.src='https://placehold.co/600x400?text=Create+Lists'">
+                <img src="{{ url_for('static', filename='images/Computer_Screen_With_ShoppingList.jpg') }}" alt="Create Lists" class="img-fluid shadow roundy" onerror="this.src='https://placehold.co/600x400?text=Create+Lists'">
             </div>
             <div class="col-lg-6 d-flex align-items-center">
                 <div>
-                    <div class="step-number bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 40px; height: 40px;">2</div>
+                    <div class="step-number text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 40px; height: 40px; background-color: rgba(13, 202, 240, 1);">2</div>
                     <h3>Create Shopping Lists</h3>
                     <p class="lead">Start adding items to your shopping lists or create custom lists. Add quantities and units of measurement as needed.</p>
                 </div>
@@ -96,11 +96,11 @@ Shopping Manager - Simplify Your Shopping Experience
         </div>
         <div class="row">
             <div class="col-lg-6 order-lg-2 mb-4 mb-lg-0">
-                <img src="{{ url_for('static', filename='images/Trolley_with_Groceries.jpg') }}" alt="Trolley_with_Groceries" class="img-fluid rounded shadow" onerror="this.src='https://placehold.co/600x400?text=Shop+Smarter'">
+                <img src="{{ url_for('static', filename='images/Trolley_with_Groceries.jpg') }}" alt="Trolley_with_Groceries" class="img-fluid shadow roundy" onerror="this.src='https://placehold.co/600x400?text=Shop+Smarter'">
             </div>
             <div class="col-lg-6 order-lg-1 d-flex align-items-center">
                 <div>
-                    <div class="step-number bg-primary text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 40px; height: 40px;">3</div>
+                    <div class="step-number text-white rounded-circle d-inline-flex align-items-center justify-content-center mb-3" style="width: 40px; height: 40px; background-color: rgba(13, 202, 240, 1);">3</div>
                     <h3>Shop Smarter</h3>
                     <p class="lead">Add-as-you-go! Add items to your list as soon as you need to, and get back to them when it's time to shop, no more last-minute rush.</p>
                 </div>
@@ -204,7 +204,7 @@ Shopping Manager - Simplify Your Shopping Experience
     <div class="cta text-center bg-primary text-white  mb-5 p-5" id="cta-card" data-aos="fade-up">
         <h2 class="display-5 fw-bold mb-3">Ready to Transform Your Shopping Experience?</h2>
         <p class="lead mb-4">Join thousands of happy users who save time and hassle with Shopping Manager. Start today, at no cost.</p>
-        <a href="{{ url_for('auth.auth') + '#register' }}" class="btn btn-light btn-lg">Get Started</a>
+        <a href="{{ url_for('auth.auth') + '#register' }}" class="btn btn-warning w-100">Get Started</a>
     </div>
 
     <div class="faq mb-5">
@@ -252,6 +252,10 @@ Shopping Manager - Simplify Your Shopping Experience
                 </div>
             </div>
         </div>
+    </div>
+    <div class="cta text-center text-black  mb-5 p-5"  style="background-color: #08a7c2; border-radius: 1.5rem;" data-aos="fade-up">
+        <h2 class="display-5 fw-bold mb-3">Disclaimer</h2>
+        <p class="lead mb-4">This website is for demonstration purposes only and does not represent a real product or service. All testimonials, reviews and user feedback displayed are fictional and created for illustrative purposes.</p>
     </div>
  </div>
 {% endblock %}
