@@ -8,19 +8,18 @@
 
 /**
  * Displays a Bootstrap Toast notification.
- * Assumes specific HTML template exists (#toastTemplate) and a .toast-container.
- * @param {string} message - The main message content for the toast body.
- * @param {string} category - Type of toast ('success', 'danger', 'warning', 'info', 'primary', 'secondary', 'light', 'dark'). Default is 'info'.
- * @param {number} delay - How long the toast stays visible in milliseconds. Default 5000. Set to 0 for non-autohiding.
- * @param {string} title - Optional title for the toast header. Default is 'Notification'.
+ * @param {string} message - Toast message body.
+ * @param {string} category - Toast category for styling.
+ * @param {number} delay - Duration toast is visible in ms.
+ * @param {string} title - Optional toast title.
  */
+
+// Show Toast Function
 function showToast(message, category = 'info', delay = 5000, title = 'Notification') {
-    
     const toastTemplate = document.getElementById('toastTemplate');
     const toastContainer = document.querySelector('.toast-container');
 
     if (!toastTemplate || !toastContainer) {
-        console.error('Toast template (#toastTemplate) or container (.toast-container) not found.');
         alert(`${title} (${category}): ${message}`);
         return;
     }
@@ -32,10 +31,7 @@ function showToast(message, category = 'info', delay = 5000, title = 'Notificati
         const toastBodyElement = toastClone.querySelector('.toast-body');
         const toastTimestampElement = toastClone.querySelector('.toast-timestamp');
 
-        if (!toastElement || !toastTitleElement || !toastBodyElement) {
-             console.error('Toast template is missing required elements (.toast, .toast-title, .toast-body).');
-             return;
-        }
+        if (!toastElement || !toastTitleElement || !toastBodyElement) return;
 
         toastTitleElement.textContent = title;
         toastBodyElement.textContent = message;
@@ -46,9 +42,7 @@ function showToast(message, category = 'info', delay = 5000, title = 'Notificati
 
         const bgClasses = ['bg-success', 'bg-danger', 'bg-warning', 'bg-info', 'bg-primary', 'bg-secondary', 'bg-light', 'bg-dark'];
         toastElement.classList.remove(...bgClasses, 'text-white', 'text-dark');
-
-        const categoryClass = `bg-${category}`;
-        toastElement.classList.add(categoryClass);
+        toastElement.classList.add(`bg-${category}`);
 
         if (category !== 'light' && category !== 'warning' && category !== 'info') {
             toastElement.classList.add('text-white');
@@ -74,20 +68,17 @@ function showToast(message, category = 'info', delay = 5000, title = 'Notificati
         bsToast.show();
 
     } catch (error) {
-        console.error("Error creating or showing toast:", error);
         alert(`${title} (${category}): ${message}`);
     }
 }
 
-// Helper function to get CSRF token
+// Gets CSRF token
 function getCSRFToken() {
     const metaTag = document.querySelector('meta[name="csrf-token"]');
     return metaTag ? metaTag.content : '';
 }
 
-// --- Initialization code runs after DOM is loaded ---
 document.addEventListener('DOMContentLoaded', () => {
-    // --- Confirmation Modal Logic ---
     const confirmationModalElement = document.getElementById('confirmModal');
     const confirmBtn = document.getElementById('confirmBtn');
     const modalTitleElement = document.getElementById('confirmModalLabel');
@@ -115,22 +106,21 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         confirmationModalElement.addEventListener('hidden.bs.modal', () => {
-            actionUrl = null; redirectUrl = null; confirmBtn.disabled = false;
+            actionUrl = null;
+            redirectUrl = null;
+            confirmBtn.disabled = false;
             confirmBtn.innerHTML = confirmBtn.getAttribute('data-original-text') || originalConfirmBtnText;
             delete confirmationModalElement.dataset.targetElementSelector;
         });
 
         confirmBtn.addEventListener('click', async () => {
-            if (!actionUrl) {
-                console.error("Action URL not set for confirmation modal.");
-                return;
-            }
+            if (!actionUrl) return;
 
             confirmBtn.disabled = true;
             confirmBtn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...`;
 
             try {
-                const csrfTokenVal = document.querySelector('meta[name="csrf-token"]')?.content;
+                const csrfTokenVal = getCSRFToken();
                 if (!csrfTokenVal) throw new Error("CSRF token missing");
 
                 const response = await fetch(actionUrl, {
@@ -140,8 +130,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const modalInstance = bootstrap.Modal.getInstance(confirmationModalElement);
                 let result = {};
-                try { result = await response.json(); }
-                catch (e) {
+                try {
+                    result = await response.json();
+                } catch {
                     result = { success: response.ok, message: response.ok ? 'Action completed (no JSON).' : `Request failed: ${response.status}` };
                 }
 
@@ -149,22 +140,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (modalInstance) modalInstance.hide();
                     showToast(result.message || 'Action completed successfully.', 'success');
 
-                    // --- CORRECTED: Retrieve selector from modal's dataset ---
                     const targetSelector = confirmationModalElement.dataset.targetElementSelector;
 
                     document.body.dispatchEvent(new CustomEvent('modalActionSuccess', {
                         detail: {
-                            actionUrl: actionUrl,
+                            actionUrl,
                             response: result,
-                            targetElementSelector: targetSelector // Use the directly stored selector
+                            targetElementSelector: targetSelector
                         }
                     }));
-                    // --- End custom event dispatch ---
 
-                    const finalRedirectUrl = result.redirect_url || redirectUrl; 
-
+                    const finalRedirectUrl = result.redirect_url || redirectUrl;
                     if (finalRedirectUrl) {
-                        setTimeout(() => { window.location.href = finalRedirectUrl; }, 1000); 
+                        setTimeout(() => { window.location.href = finalRedirectUrl; }, 1000);
                     }
                 } else {
                     showToast(result.message || `Action failed (Status: ${response.status})`, 'danger');
@@ -172,7 +160,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     confirmBtn.innerHTML = confirmBtn.getAttribute('data-original-text') || originalConfirmBtnText;
                 }
             } catch (error) {
-                console.error("Error performing modal action:", error);
                 showToast(`Error: ${error.message || 'Network error or issue processing request.'}`, 'danger');
                 confirmBtn.disabled = false;
                 confirmBtn.innerHTML = confirmBtn.getAttribute('data-original-text') || originalConfirmBtnText;
@@ -180,45 +167,40 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- Page Loader Logic ---
+    // Page Loader Logic
     const pageLoader = document.querySelector('#pageLoader');
     if (pageLoader) {
-        // console.log("Page loader element found, attaching navigation listeners.");
         function showLoader() {
             pageLoader.classList.remove('hidden');
-            // console.log("Loader shown.");
         }
         const navLinksSelector = 'a[href]:not([href^="#"]):not([target="_blank"]):not([download]):not([rel="external"]):not([href^="javascript:"]):not([href^="mailto:"]):not([href^="tel:"])';
         const navLinks = document.querySelectorAll(navLinksSelector);
         navLinks.forEach(link => {
-            link.addEventListener('click', (event) => {
-                 if (!link.hasAttribute('data-bs-toggle') && !link.closest('.no-loader')) {
-                    // console.log("Navigation link clicked:", link.href);
+            link.addEventListener('click', () => {
+                if (!link.hasAttribute('data-bs-toggle') && !link.closest('.no-loader')) {
                     showLoader();
-                 }
+                }
             });
         });
         const navFormsSelector = 'form:not(.ajax-form)';
         const navForms = document.querySelectorAll(navFormsSelector);
         navForms.forEach(form => {
-             form.addEventListener('submit', () => {
-                // console.log("Non-AJAX Form submitted, showing loader:", form.action);
+            form.addEventListener('submit', () => {
                 showLoader();
-             });
+            });
         });
-        window.addEventListener('pageshow', function(event) {
+        window.addEventListener('pageshow', (event) => {
             if (event.persisted) {
-                // console.log("Page shown from bfcache, ensuring loader is hidden.");
                 pageLoader.classList.add('hidden');
             }
         });
     }
 
-    // --- Footer Year ---
+    // Footer Year
     const yearSpan = document.getElementById('year');
     if (yearSpan) {
         yearSpan.textContent = new Date().getFullYear();
     }
-}); // End DOMContentLoaded
+});
 
 const navFormsSelector = 'form:not(#addItemForm):not(.ajax-form)';

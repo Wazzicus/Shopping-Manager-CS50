@@ -5,7 +5,6 @@
  * - AJAX for adding items (with quantity and measure)
  * - Inline editing of item names
  * - Updating the custom segmented progress bar with flex-basis animation
- * Relies on global showToast() defined in main.js
  */
 
 document.addEventListener('DOMContentLoaded', () => {

@@ -1,4 +1,4 @@
-// js/auth.js
+// auth.js
 
 document.addEventListener('DOMContentLoaded', () => {
     setupToggleSlider('toggleTab', 'tabSlider');

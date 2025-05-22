@@ -1,4 +1,5 @@
 // settings.js
+
 // Handle display name change
 function changeDisplayName() {
     const input = document.getElementById('nameChangeForm').querySelector('#new_name');

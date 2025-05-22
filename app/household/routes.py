@@ -1,4 +1,14 @@
-# household/routes.py
+"""
+household/routes.py
+
+Blueprint for household management functionality.
+
+Routes include:
+- Creating and joining households
+- Viewing, renaming, deleting, and leaving households
+- Admin-specific member management (remove, transfer, regenerate join code)
+"""
+
 from flask import Blueprint, render_template, url_for, flash, redirect, request,jsonify
 from flask_login import login_required, current_user
 from app.extensions import db
@@ -12,6 +22,14 @@ household_bp = Blueprint('household_bp', __name__)
 @household_bp.route('/setup', methods=['GET', 'POST'])
 @login_required
 def setup():
+    """
+    Displays the setup page where users can either:
+    - Create a new household (if not already in one)
+    - Join an existing household using a join code
+
+    Handles form validation, flash messaging, and logging.
+    """
+
     create_form = HouseholdCreationForm(prefix='create')
     join_form = HouseholdJoinForm(prefix='join')
 
@@ -47,18 +65,23 @@ def setup():
             return redirect(url_for("main.dashboard"))
 
         elif action == "join" and join_form.validate():
+            
             household_to_join = HouseholdModel.query.filter_by(join_code=join_form.join_code.data).first() 
             if household_to_join:
                 current_user.household_id = household_to_join.id
                 current_user.role = 'member'
                 db.session.flush()
                 db.session.commit()
+
                 try:
                     log_activity(user_id=current_user.id, household_id=household_to_join.id, action_type="Household Joining")
                 except Exception as e:
+
                     logging.exception(f"Failed to log household joining activity: {e}")
                 flash(f'Welcome to {household_to_join.name}!', 'success')
+
                 return redirect(url_for('main.dashboard'))
+            
             else:
                 flash('Invalid join code.', 'danger')
 
@@ -82,6 +105,12 @@ def setup():
 @household_bp.route('/manage/<int:household_id>')
 @login_required
 def manage_household(household_id):
+    """
+    Displays the admin-only management page for a household.
+
+    Only accessible to the admin of the household.
+    """
+
     if not household_id:
         flash("Access denied!", "danger")
         return redirect(url_for("main.index"))
@@ -90,17 +119,26 @@ def manage_household(household_id):
     if not household or not current_user.id == household.admin_id:
         flash("Access denied!", "danger")
         return redirect(url_for("main.index"))
+    
     members =household.members 
     return render_template('household/manage.html', household=household, members=members)
 
 @household_bp.route('/remove_member/<int:user_id_to_remove>', methods=["POST"]) 
 @login_required
 def remove_member(user_id_to_remove):
+    """
+    Allows the household admin to remove a member from the household.
+
+    Returns:
+        JSON response with success or error messages.
+    """
+
     admin = current_user
     household = admin.household
 
     if not household:
         return jsonify({'success': False, 'error': "You are not in a household."}), 400
+    
     if not admin.id == household.admin_id:
         return jsonify({'success': False, 'error': "Unauthorized: Only the household admin can remove members."}), 403
 
@@ -108,14 +146,15 @@ def remove_member(user_id_to_remove):
 
     if not member_to_remove:
         return jsonify({'success': False, 'error': "User to remove not found."}), 404
+    
     if member_to_remove.household_id != household.id:
-        return jsonify({'success': False, 'error': "This user is not a member of your current household."}), 400 # Or 404
+        return jsonify({'success': False, 'error': "This user is not a member of your current household."}), 400
+    
     if member_to_remove.id == admin.id:
         return jsonify({'success': False, 'error': "You cannot remove yourself using this function. Use 'Leave Household' instead."}), 400
 
     removed_member_username = member_to_remove.username 
     household_id_for_log = household.id
-    household_name_for_log = household.name
 
     member_to_remove.household_id = None
     if hasattr(member_to_remove, 'role'):
@@ -147,12 +186,22 @@ def remove_member(user_id_to_remove):
 @household_bp.route('/rename/<int:household_id>', methods=["POST"])
 @login_required
 def rename(household_id):
+    """
+    Renames the household. Only accessible by the admin.
+
+    Expects:
+        JSON payload with key `new_name`.
+    """
+
     if not household_id:
         return jsonify ({'error': "Unauthorised!"}), 403
+    
     household = current_user.household
     data = request.get_json()
+
     if not household or not current_user.id == household.admin_id:
         return jsonify ({'error': "Unauthorised!"}), 403
+    
     new_name = data.get('new_name')
     if new_name:
         household.name = new_name
@@ -163,7 +212,9 @@ def rename(household_id):
                          action_type="Household Renaming",
                          new_name=new_name)
         except Exception as e:
+
             logging.exception(f"Failed to log activity: {e}")
+
         return jsonify({ 'success': True, 'message': 'Household renamed successfully', 'new_name': new_name}), 200
     else:
         return jsonify ({'error': "New name is required!"}), 400
@@ -171,6 +222,12 @@ def rename(household_id):
 @household_bp.route('/delete/<int:household_id>', methods=["POST"])
 @login_required
 def delete(household_id):
+    """
+    Deletes a household along with detaching its members.
+
+    Only the admin can perform this action.
+    """
+
     household = current_user.household
 
     if not household:
@@ -196,6 +253,7 @@ def delete(household_id):
     try:
         db.session.commit() 
     except Exception as e:
+
         db.session.rollback()
         logging.exception(f"Error committing household deletion for household ID {household_id_for_log}: {e}")
         return jsonify({'error': "A server error occurred while trying to delete the household."}), 500
@@ -222,6 +280,12 @@ def delete(household_id):
 @household_bp.route('/regenerate_code', methods=["POST"])
 @login_required
 def regenerate_code():
+    """
+    Regenerates the household join code.
+
+    Admin-only.
+    """
+  
     try:
         household = current_user.household
         if not household or not current_user.id == household.admin_id:
@@ -230,21 +294,30 @@ def regenerate_code():
         household.join_code = secrets.token_hex(4).upper()
         db.session.commit()
         return jsonify({"success": True, "new_code": household.join_code}), 200
+    
     except Exception as e:
         logging.exception(f"Error in regenerating join code: {e}")
         return jsonify({'error': "Server error occurred"}), 500
 
 
-@household_bp.route('/leave/<int:household_id>', methods=["POST"])
+@household_bp.route('/leave', methods=["POST"])
 @login_required
-def leave(household_id):
+def leave():
+    """
+    Allows a user to leave a household.
+
+    If the user is an admin, ownership is transferred to another member (if any).
+    Otherwise, the user is removed from the household.
+    Does not allow the last member to leave.
+    """
+
     user_to_leave = current_user
     household_to_be_left = user_to_leave.household
 
     if not household_to_be_left:
         return jsonify({'success': False, 'error': "You are not in a household!"}), 400
 
-    household_id_for_log = household_id
+    household_id_for_log = current_user.household_id
     household_name_for_log = household_to_be_left.name
 
     if household_to_be_left.admin_id == user_to_leave.id:  
@@ -254,12 +327,8 @@ def leave(household_id):
         ).order_by(UsersModel.id).all()
 
         if not other_members:
-
-            return jsonify({
-                'success': False,
-                'error': "You are the only member in this household. To disband it, please use the 'Delete Household' option.",
-                'action_required': 'delete_household'  
-            }), 400 
+            flash("You are the only member in this household. To disband it, please use the 'Delete Household' option.")
+            return redirect('main.dashboard')
         else:
             new_admin = other_members[0]
             household_to_be_left.admin_id = new_admin.id
@@ -328,14 +397,23 @@ def leave(household_id):
 @household_bp.route('/view/<int:household_id>', methods=["GET"])
 @login_required
 def view(household_id):
+    """
+    Displays household details based on user's role.
+
+    Admin: Sees the manage page.
+    Member: Sees the member view page.
+    """
+
     if not current_user.household_id:
         flash('You must be in a household.')
         return redirect(url_for('household_bp.setup'))
+    
     household =HouseholdModel.query.get_or_404(household_id)
     
     if not current_user.household_id == household_id:
         flash('Access Denied')
         return jsonify({"success": False, "message": "You do not belong to this household."}), 403
+    
     members = household.members 
     
     if current_user.id == household.admin_id:

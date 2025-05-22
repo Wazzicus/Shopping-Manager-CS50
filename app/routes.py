@@ -1,5 +1,16 @@
 # routes.py
-from flask import Blueprint, render_template, url_for, flash, redirect,request, jsonify
+"""
+routes.py
+
+This module defines the main blueprint routes for the application, including
+the homepage, dashboard, and AJAX-based list search functionality.
+
+Routes:
+- /: Home page
+- /dashboard: Main user dashboard (requires login)
+"""
+
+from flask import Blueprint, render_template, url_for, flash, redirect, request, jsonify
 from flask_login import login_required, current_user
 from app.models import Household as HouseholdModel, ShoppingList as ShoppingListModel, ActivityLog, ListItem as ListItemModel
 from app.utils import format_action
@@ -9,63 +20,62 @@ main = Blueprint('main', __name__, template_folder="templates")
 
 @main.route('/')
 def index():
+    """
+    Public landing page.
+    """
     return render_template('index.html')
+
 
 @main.route('/dashboard')
 @login_required
 def dashboard():
-    new_list_form = ShoppingListForm() 
+    """
+    Authenticated user's dashboard. Displays:
+    - All shopping lists for the user's household
+    - Recent household activity (latest 5 logs)
+    - Household name and admin status
+    - New shopping list form
+
+    If the user doesn't belong to a household, they're redirected to household setup.
+    """
+    new_list_form = ShoppingListForm()
     household_id = current_user.household_id
+
+    # Redirect if user is not in a household
     if not household_id:
         flash("You must join or create a household first.", "warning")
-        return redirect(url_for('household_bp.setup')) 
+        return redirect(url_for('household_bp.setup'))
 
-    household = HouseholdModel.query.get(household_id) 
+    household = HouseholdModel.query.get(household_id)
+
+    # Redirect if household no longer exists
     if not household:
         flash("Household not found.", "danger")
-        return redirect(url_for('main.dashboard')) 
-    
+        return redirect(url_for('main.dashboard'))
+
     is_admin = (current_user.id == household.admin_id)
 
-    
-    all_household_lists = ShoppingListModel.query.filter_by(household_id=household_id)\
-                                               .order_by(ShoppingListModel.created_at.desc())\
-                                               .all()
-
-
-    recent_activity = ActivityLog.query.filter_by(household_id=household_id)\
-                                     .order_by(ActivityLog.timestamp.desc())\
-                                     .limit(5)\
-                                     .all()
-
-    return render_template('dashboard.html',
-                           title=f"Dashboard - {household.name}",
-                           household=household, 
-                           lists=all_household_lists, 
-                           is_admin=is_admin,
-                           recent_activity=recent_activity,
-                           format_action=format_action ,
-                           new_list_form=new_list_form
-                           )
-
-@main.route('/search_lists', methods=['GET'])
-@login_required
-def search_lists():
-    query = request.args.get('q', '').strip()
-    is_ajax = request.headers.get('X-Requested-With') == 'XMLHttpRequest'
-
-    if not current_user.is_authenticated:
-        return jsonify({'error': 'Unauthorized'}), 403
-
-    # Adjust field name to match your actual model
-    lists = ShoppingListModel.query.filter(
-        ShoppingListModel.created_by_user_id == current_user.id,
-        ShoppingListModel.name.ilike(f'%{query}%')
+    # Fetch all shopping lists for the household, newest first
+    all_household_lists = ShoppingListModel.query.filter_by(
+        household_id=household_id
+    ).order_by(
+        ShoppingListModel.created_at.desc()
     ).all()
 
-    if is_ajax:
-        html = render_template('shopping/search_results.html', lists=lists)
-        return jsonify({'html': html})
+    # Fetch 5 most recent activities
+    recent_activity = ActivityLog.query.filter_by(
+        household_id=household_id
+    ).order_by(
+        ActivityLog.timestamp.desc()
+    ).limit(5).all()
 
-    # If it's a full GET (form submit), show them inside dashboard
-    return render_template('dashboard.html', lists=lists, search_query=query)
+    return render_template(
+        'dashboard.html',
+        title=f"Dashboard - {household.name}",
+        household=household,
+        lists=all_household_lists,
+        is_admin=is_admin,
+        recent_activity=recent_activity,
+        format_action=format_action,
+        new_list_form=new_list_form
+    )

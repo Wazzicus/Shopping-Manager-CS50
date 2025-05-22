@@ -11,12 +11,12 @@
         <span class="sliding-indicator" id="tabSlider"></span>
         <li class="nav-item" role="presentation">
             <button class="nav-link {% if initial_active_tab == 'join' %} active{% endif %}" id="join-tab" data-bs-toggle="tab" data-bs-target="#join-tab-pane" type="button" role="tab" aria-controls="join-tab-pane" aria-selected="true">
-                Join Household
+                Join
             </button>
         </li>
         <li class="nav-item" role="presentation">
             <button class="nav-link {% if initial_active_tab == 'create' %} active{% endif %}" id="create-tab" data-bs-toggle="tab" data-bs-target="#create-tab-pane" type="button" role="tab" aria-controls="create-tab-pane" aria-selected="false">
-                Create Household
+                Create
             </button>
         </li>
     </ul>
@@ -35,7 +35,7 @@
                         {{ join_form.join_code(class="form-control") }}
                         <input type="hidden" name="action" value="join">
                         </div>
-                        <button type="submit" class="btn btn-primary mt-3">Join</button>
+                        <button type="submit" class="btn btn-primary mt-3 w-100">Join</button>
                     </form>
                 </div>
             </div>
@@ -54,7 +54,7 @@
                         {{ create_form.household_name(class="form-control") }}
                         <input type="hidden" name="action" value="create">
                         </div>
-                        <button type="submit" class="btn btn-primary mt-3">Create Household</button>
+                        <button type="submit" class="btn btn-primary mt-3 w-100">Create Household</button>
                     </form>
                 </div>
             </div>

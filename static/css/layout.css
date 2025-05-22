@@ -1,140 +1,136 @@
 /* css/layout.css */
 
-
 /* ==========================================================================
    ITEM LIST STYLES (e.g., for Shopping List Items)
    ========================================================================== */
-/* Comment: These styles are highly specific to a list item component.
-            They would be ideal for a 'shopping-list.css', 'list-item.css',
-            or a general 'components.css' under a list item section. */
 
-/* --- General Text Styles within Items --- */
+/* General text styles within item details */
 .item-details-text {
     font-size: 0.85em;
-    color: #6c757d; /* Consider var(--bs-secondary-color) or similar variable */
+    color: #6c757d; /* Secondary text color */
 }
-[data-bs-theme="dark"] .item-details-text { /* Dark mode specific */
-    color: #adb5bd; /* Consider var(--bs-body-color-dark) with opacity or specific dark mode variable */
+[data-bs-theme="dark"] .item-details-text {
+    color: #adb5bd; /* Text color for dark mode */
 }
 
 .item-quantity-measure {
     font-size: 0.9em;
-    color: #495057; /* Consider var(--bs-body-color) or similar */
-    display: block; /* Ensures it takes its column space if used in flex/grid */
+    color: #495057; /* Primary body text color */
+    display: block; /* Occupies full column width */
 }
-[data-bs-theme="dark"] .item-quantity-measure { /* Dark mode specific */
-    color: #ced4da;
+[data-bs-theme="dark"] .item-quantity-measure {
+    color: #ced4da; /* Quantity text color in dark mode */
 }
 
-/* --- Item Row Structure & Columns --- */
-/* Assuming .item-row is applied to a .list-group-item or similar */
+/* Item row styling */
 .list-group-item.item-row {
     padding-top: 0.75rem;
     padding-bottom: 0.75rem;
-    /* Comment: This modifies Bootstrap's .list-group-item.
-                Ensure this is the intended scope. */
 }
 
-.item-name-column .item-name-line { /* Container for item name and potentially quantity on same line */
+/* Container for item name and quantity on the same line */
+.item-name-column .item-name-line {
     display: flex;
     align-items: baseline;
 }
 
-.item-name-column .item-name { /* Styling for the item name itself */
-    font-weight: 500; /* Make item name slightly bolder */
+/* Styling for the item name */
+.item-name-column .item-name {
+    font-weight: 500;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    display: inline-block; /* Or block, depending on layout needs with other elements */
-    max-width: 90%; /* Adjust as needed, leaves space for quantity if on same line */
+    display: inline-block;
+    max-width: 90%;
 }
 
-.item-name-column .item-edit-input { /* Input field when editing item name */
-    display: block; /* Or width: 100% if it's not already */
+/* Input field styling when editing item name */
+.item-name-column .item-edit-input {
+    display: block;
     width: 100%;
 }
 
-/* --- Item Actions Column & Buttons --- */
+/* Item actions column layout */
 .item-actions-column {
     display: flex;
     align-items: center;
-    justify-content: flex-start; /* Default for small screens: left align */
-    flex-wrap: nowrap;           /* Prevent wrapping by default */
+    justify-content: flex-start;
+    flex-wrap: nowrap;
 }
 
+/* Buttons and purchase toggle styling within actions column */
 .item-actions-column .btn,
-.item-actions-column .toggle-purchase-form { /* Assuming .toggle-purchase-form might wrap a button or be styled like one */
-    margin-left: 0.25rem; /* Space between buttons */
-    flex-shrink: 0;       /* Prevent buttons from shrinking too much initially */
-    display: inline-flex; /* For better icon centering within buttons */
+.item-actions-column .toggle-purchase-form {
+    margin-left: 0.25rem;
+    flex-shrink: 0;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    transition: width 0.2s ease-out, padding 0.2s ease-out; /* For responsive button text hiding */
-    /* Comment: This transition could be in 'animations.css' if it's a common pattern. */
+    transition: width 0.2s ease-out, padding 0.2s ease-out;
 }
 
 .item-actions-column .btn:first-child,
 .item-actions-column .toggle-purchase-form:first-child {
-    margin-left: 0; /* No margin for the first button in the group */
+    margin-left: 0;
 }
-
 
 /* ==========================================================================
    RESPONSIVE STYLES for Item List
    ========================================================================== */
-/* Comment: These media queries are specific to the item list component.
-            Keeping them grouped with the component's base styles is good practice. */
 
-/* Styles for when action buttons become icon-only on small screens */
-@media (max-width: 767.98px) { /* Bootstrap's 'md' breakpoint (below medium) */
+/* On small screens, action buttons become icon-only */
+@media (max-width: 767.98px) {
     .item-actions-column {
-        justify-content: flex-start; /* Or space-between if preferred and space allows */
+        justify-content: flex-start;
     }
 
     .item-actions-column .btn,
-    .item-actions-column .toggle-purchase-form .btn { /* Target button inside form too */
-        width: 34px;    /* Fixed width for a square/round shape */
-        height: 34px;   /* Fixed height */
-        padding: 0;     /* Remove padding to center icon */
-        font-size: 0.9rem; /* Adjust icon size if needed */
-        border-radius: 50px; /* Make it very round / pill-like */
+    .item-actions-column .toggle-purchase-form .btn {
+        width: 34px;
+        height: 34px;
+        padding: 0;
+        font-size: 0.9rem;
+        border-radius: 50px;
     }
 
-    .item-actions-column .btn .button-text, /* Span containing text, if you add one */
+    /* Hide button text on small screens */
+    .item-actions-column .btn .button-text,
     .item-actions-column .toggle-purchase-form .btn .button-text {
-        display: none; /* Hide text on small screens */
+        display: none;
     }
 
-    .item-actions-column .btn i, /* Assuming icons are direct children or within a span */
+    /* Remove icon margin when text is hidden */
+    .item-actions-column .btn i,
     .item-actions-column .toggle-purchase-form .btn i {
-        margin-right: 0 !important; /* Remove margin from icon when text is hidden */
+        margin-right: 0 !important;
     }
 
-    .item-quantity-column { /* This specific column for quantity */
-        /* display: none; */ /* Original had this, but below stacks it under name. Re-evaluate if it should be hidden or stacked. */
+    /* Quantity column styling when stacked under item name */
+    .item-quantity-column {
         text-align: left;
-        margin-top: 0.25rem; /* Spacing if stacked under name */
+        margin-top: 0.25rem;
     }
 
-    .item-name-column .item-name-line { /* Container for name and quantity */
-        flex-direction: column; /* Stack name and quantity */
+    /* Stack item name and quantity vertically */
+    .item-name-column .item-name-line {
+        flex-direction: column;
         align-items: flex-start;
     }
 
-    .item-name-column .item-quantity-measure { /* Quantity shown under name on small screens */
-        margin-left: 0; /* Reset margin if it had one */
-        margin-top: 0.15rem; /* Space below the item name */
+    /* Spacing below item name for quantity text */
+    .item-name-column .item-quantity-measure {
+        margin-left: 0;
+        margin-top: 0.15rem;
     }
 }
 
-/* Styles for medium screens and up */
-@media (min-width: 768px) { /* Bootstrap's 'md' breakpoint and up */
+/* On medium screens and above, align actions and quantity */
+@media (min-width: 768px) {
     .item-actions-column {
-        justify-content: flex-end; /* Align buttons to the right on larger screens */
+        justify-content: flex-end;
     }
 
     .item-quantity-column {
-        text-align: left; /* Or 'center' if you prefer quantity centered in its column */
+        text-align: left;
     }
-    /* Text for buttons would be visible by default here, as .button-text is not 'display: none' */
 }

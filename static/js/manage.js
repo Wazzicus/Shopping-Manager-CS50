@@ -1,3 +1,5 @@
+// manage.js
+
 // Function to handle household renaming
 function renameHousehold() {
     const newNameInput = document.getElementById('newHouseholdName');

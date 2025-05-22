@@ -96,6 +96,11 @@
             <h3>Change Password</h3>
         </div>
         <div class="card-body">
+            <div class="form-group mb-3">
+                <div class="card-text">
+                    It is advised to change your password every so often to keep your account secure. Choose one that has a mix of symbols, letters and numbers. Avoid choosing easy-to-guess passwords like your birthday or pet's name.
+                </div>
+            </div>
             <form method="POST" autocomplete="off" id="passwordChangeForm">
                 {{ password_change_form.hidden_tag() }}
 
@@ -140,7 +145,7 @@
             data-modal-body="Are you sure you want to leave this household? If you are the admin and other members exist, admin rights will be transferred."
             data-modal-confirm-text="Yes, Leave"
             data-modal-confirm-class="btn-warning"
-            data-action-url="{{ url_for('household_bp.leave', household_id=current_user.household_id) }}"
+            data-action-url="{{ url_for('household_bp.leave') }}"
             data-redirect-url="{{ url_for('household_bp.setup') }}"> 
             Leave Household
         </button>

@@ -57,10 +57,9 @@
                                 id="DeleteHouseholdBtn" 
                                 data-bs-toggle="modal"
                                 data-bs-target="#confirmModal"
-                                data-modal-title="Confirm Household Deletion"
+                                data-modal-title="Delete Household ?"
                                 data-modal-body="Are you absolutely sure you want to delete this household? This will remove all members and all associated data. This action cannot be undone."
                                 data-modal-confirm-text="Yes, Delete Permanently"
-                                data-modal-confirm-class="btn-danger w-100"
                                 data-action-url="{{ url_for('household_bp.delete', household_id=current_user.household_id) }}" 
                                 data-redirect-url="{{ url_for('household_bp.setup') }}">
                                 Delete Household
@@ -112,7 +111,7 @@
                                                 <button type="button" class="btn btn-danger"
                                                         data-bs-toggle="modal"
                                                         data-bs-target="#confirmModal"
-                                                        data-modal-title="Remove {{ member.name }}?"
+                                                        data-modal-title="Remove {{ member.name }} ?"
                                                         data-modal-body="Are you sure you want to remove {{ member.name }} from the household?"
                                                         data-modal-confirm-text="Yes, Remove {{ member.name }}"
                                                         data-action-url="{{ url_for('household_bp.remove_member', user_id_to_remove=member.id) }}"
@@ -128,8 +127,7 @@
                                             data-modal-title="Leave Household ?"
                                             data-modal-body="Are you sure you want to leave this household? If you are the admin and other members exist, admin rights will be transferred."
                                             data-modal-confirm-text="Yes, Leave"
-                                            data-modal-confirm-class="btn-warning w-100"
-                                            data-action-url="{{ url_for('household_bp.leave', household_id=current_user.household_id) }}"
+                                            data-action-url="{{ url_for('household_bp.leave') }}"
                                             data-redirect-url="{{ url_for('household_bp.setup') }}"> 
                                             Leave
                                         </button>
