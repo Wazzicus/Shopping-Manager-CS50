@@ -10,7 +10,7 @@ from app.extensions import db
 from app.models import ActivityLog
 
 
-def log_activity(user_id, household_id, action_type, item_name=None, list_name=None, new_name=None, old_name=None):
+def log_activity(user_id, household_id, action_type, timestamp, item_name=None, list_name=None, new_name=None, old_name=None):
     """
     Logs an action performed by a user into the ActivityLog table.
 
@@ -18,7 +18,8 @@ def log_activity(user_id, household_id, action_type, item_name=None, list_name=N
     activity = ActivityLog(
         user_id=user_id,
         household_id=household_id,
-        action_type=action_type
+        action_type=action_type,
+        timestamp = timestamp
     )
     db.session.add(activity)
     db.session.commit()

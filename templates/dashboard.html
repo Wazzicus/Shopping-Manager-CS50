@@ -145,7 +145,7 @@
                             <strong>{{ activity.user.name }}</strong>
                             <small class="text-muted d-block">{{ format_action(activity.action_type) }}</small>
                             </div>
-                            <small class="text-muted text-nowrap">{{ activity.timestamp.strftime('%b %d, %H:%M')}}</small>
+                            <small class="text-muted text-nowrap utc-time" data-utc="{{ activity.timestamp.isoformat() }}">{{ activity.timestamp }}</small>
                         </li>
                         {% endfor %}
                     </ul>

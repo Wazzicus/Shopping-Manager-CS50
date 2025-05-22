@@ -12,9 +12,13 @@ from flask import Blueprint, render_template, url_for, flash, redirect, abort, j
 from flask_login import login_required, current_user
 from app.extensions import db
 from app.models import ShoppingList as ShoppingListModel, ListItem as ListItemModel
-from app.shopping_lists.forms import AddItemForm, EditShoppingListForm, EditItemForm, ShoppingListForm
+from app.shopping_lists.forms import AddItemForm, EditShoppingListForm, EditItemForm
 from app.utils import log_activity
 import logging
+from datetime import datetime
+from tzlocal import get_localzone
+
+tz = get_localzone
 
 shoppinglist_bp = Blueprint('shoppinglist_bp', __name__)
 
@@ -62,7 +66,7 @@ def create_list():
         )
         db.session.add(new_list)
         db.session.commit()
-        log_activity(current_user.id, current_user.household_id, "List Creation", list_name=new_list.name)
+        log_activity(user_id=current_user.id, household_id=current_user.household_id, action_type="List Creation", timestamp=datetime.now(tz), list_name=new_list.name)
 
         if is_ajax:
             return jsonify({
@@ -120,7 +124,7 @@ def view_list(list_id):
                 )
                 db.session.add(new_item)
                 db.session.commit()
-                log_activity(current_user.id, current_user.household_id, "Item Addition", item_name=new_item.name)
+                log_activity(user_id=current_user.id, household_id=current_user.household_id, action_type="Item Addition", timestamp=datetime.now(tz) ,item_name=new_item.name)
 
                 return jsonify({
                     "success": True,
@@ -156,7 +160,7 @@ def view_list(list_id):
                 )
                 db.session.add(new_item)
                 db.session.commit()
-                log_activity(current_user.id, current_user.household_id, "Item Addition", item_name=new_item.name)
+                log_activity(user_id=current_user.id, household_id=current_user.household_id, action_type="Item Addition",timestamp= datetime.now(tz) ,item_name=new_item.name)
                 return redirect(url_for('shoppinglist_bp.view_list', list_id=list_id))
             except Exception as e:
                 db.session.rollback()
@@ -194,7 +198,7 @@ def edit_list(list_id):
         shopping_list.name = form.name.data
         db.session.commit()
         flash(f'List "{shopping_list.name}" updated.', 'success')
-        log_activity(current_user.id, current_user.household_id, "List Renaming", new_name=form.name.data)
+        log_activity(user_id=current_user.id, household_id=current_user.household_id, action_type="List Renaming", timestamp=datetime.now(tz), new_name=form.name.data)
         return redirect(url_for('shoppinglist_bp.view_list', list_id=list_id))
 
     return render_template('shopping/edit_list.html', title=f'Edit List: {shopping_list.name}', form=form, shopping_list=shopping_list)
@@ -215,9 +219,11 @@ def delete_list(list_id):
         list_name = shopping_list.name
         db.session.delete(shopping_list)
         db.session.commit()
-        log_activity(current_user.id, current_user.household_id, "List Deletion", list_name=list_name)
+
+        log_activity(user_id=current_user.id, household_id=current_user.household_id, action_type="List Deletion", timestamp=datetime.now(tz), list_name=list_name)
         return jsonify({"success": True, "message": f'"{list_name}" deleted.'})
     except Exception as e:
+
         db.session.rollback()
         logging.error(f"Error deleting list: {e}")
         return jsonify({"success": False, "message": "Error deleting list."}), 500
@@ -239,8 +245,9 @@ def edit_item(item_id):
         item.quantity = form.quantity.data
         item.measure = form.measure.data
         db.session.commit()
+
         flash(f'Item "{item.name}" updated.', 'success')
-        log_activity(current_user.id, current_user.household_id, "Item Editing", new_name=form.name.data)
+        log_activity(user_id=current_user.id, household_id=current_user.household_id, action_type="Item Editing", timestamp=datetime.now(tz), new_name=form.name.data)
         return redirect(url_for('shoppinglist_bp.view_list', list_id=item.shoppinglist_id))
 
     return render_template('shopping/edit_item.html', form=form, item=item)
@@ -260,9 +267,11 @@ def delete_item(item_id):
         item_name = item.name
         db.session.delete(item)
         db.session.commit()
-        log_activity(current_user.id, current_user.household_id, "Item Deletion", item_name=item_name)
+
+        log_activity(user_id=current_user.id, household_id=current_user.household_id, action_type="Item Deletion", timestamp=datetime.now(tz), item_name=item_name)
         return jsonify({"success": True, "message": f'"{item_name}" deleted. Refresh to see changes'})
     except Exception as e:
+
         db.session.rollback()
         logging.error(f"Error deleting item '{item_name}': {e}")
         return jsonify({"success": False, "message": "Error deleting item."}), 500
@@ -281,7 +290,7 @@ def toggle_purchase(item_id):
     try:
         item.purchased = not item.purchased
         db.session.commit()
-        log_activity(current_user.id, current_user.household_id, "Mark as Purchased")
+        log_activity(user_id=current_user.id, household_id=current_user.household_id, action_type="Mark as Purchased", timestamp=datetime.now(tz))
         return jsonify({
             "success": True,
             "item_id": item.id,
@@ -318,7 +327,7 @@ def update_item_name(item_id):
     try:
         item.name = new_name
         db.session.commit()
-        log_activity(current_user.id, current_user.household_id, "Item Renaming", new_name=new_name)
+        log_activity(user_id=current_user.id, household_id=current_user.household_id, action_type="Item Renaming",timestamp=datetime.now(tz), new_name=new_name)
         return jsonify({"success": True, "new_name": item.name, "message": "Item name updated successfully."})
     except Exception as e:
         db.session.rollback()

@@ -14,9 +14,11 @@ Models:
 from flask import url_for
 from app.extensions import db
 from flask_login import UserMixin
-from datetime import datetime, timezone
+from datetime import datetime
+from tzlocal import get_localzone
 import secrets
 
+tz = get_localzone()
 
 class User(db.Model, UserMixin):
     """
@@ -70,7 +72,10 @@ class Household(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     join_code = db.Column(db.String(36), unique=True, nullable=False, default=lambda: secrets.token_hex(4).upper())
     name = db.Column(db.String(100), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+    created_at = db.Column(
+    db.DateTime(timezone=True),
+    default=lambda: datetime.now(tz)
+    )
 
     admin_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     admin = db.relationship('User', back_populates='administered_household', foreign_keys=[admin_id])
@@ -93,7 +98,10 @@ class ShoppingList(db.Model):
     name = db.Column(db.String(100), nullable=False)
     household_id = db.Column(db.Integer, db.ForeignKey('households.id'), nullable=False)
     created_by_user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+    created_at = db.Column(
+    db.DateTime(timezone=True),
+    default=lambda: datetime.now(tz)
+    )
 
     items_count = db.Column(db.Integer, default=0)
     purchased_items_count = db.Column(db.Integer, default=0)
@@ -119,7 +127,10 @@ class ListItem(db.Model):
     shoppinglist_id = db.Column(db.Integer, db.ForeignKey('shoppinglists.id'), nullable=False)
     added_by_user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
 
-    added_at = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+    added_at = db.Column(
+    db.DateTime(timezone=True),
+    default=lambda: datetime.now(tz)
+    )
     purchased = db.Column(db.Boolean, default=False)
 
     def __repr__(self):
@@ -137,4 +148,7 @@ class ActivityLog(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     household_id = db.Column(db.Integer, db.ForeignKey('households.id'), nullable=False)
     action_type = db.Column(db.String(50), nullable=False)
-    timestamp = db.Column(db.DateTime, default=datetime.now(timezone.utc))
+    timestamp = db.Column(
+    db.DateTime(timezone=True),
+    default=lambda: datetime.now(tz)
+    )

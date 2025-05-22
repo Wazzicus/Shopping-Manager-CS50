@@ -79,6 +79,25 @@ function getCSRFToken() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+    const utcElements = document.querySelectorAll(".utc-time");
+
+    utcElements.forEach(el => {
+        const utcTimeStr = el.dataset.utc;
+        if (!utcTimeStr) return;
+
+        const localTime = new Date(utcTimeStr);
+        const formatted = localTime.toLocaleString([], {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+        });
+
+        el.textContent = formatted;
+    });
+    
     const confirmationModalElement = document.getElementById('confirmModal');
     const confirmBtn = document.getElementById('confirmBtn');
     const modalTitleElement = document.getElementById('confirmModalLabel');

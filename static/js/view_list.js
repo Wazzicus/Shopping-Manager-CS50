@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 listItemElement.classList.toggle('item-purchased', newStatus);
                 itemNameElement.classList.toggle('text-decoration-line-through', newStatus);
                 const iconClass = newStatus ? 'bi-arrow-counterclockwise' : 'bi-check-circle';
-                const buttonText = newStatus ? ' Undo' : ' Mark Purchased';
+                const buttonText = newStatus ? ' Undo' : ' Done';
                 button.innerHTML = `<i class="bi ${iconClass}"></i><span class="d-none d-md-inline">${buttonText}</span>`;
                 button.classList.remove('btn-success', 'btn-warning');
                 button.classList.add(newStatus ? 'btn-warning' : 'btn-success');
@@ -175,7 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const toggleBtnClass = itemData.purchased ? 'btn-warning' : 'btn-success';
         const toggleIconClass = itemData.purchased ? 'bi-arrow-counterclockwise' : 'bi-check-circle';
-        const toggleBtnText = itemData.purchased ? ' Undo' : ' Mark Purchased';
+        const toggleBtnText = itemData.purchased ? ' Undo' : ' Done';
         const nameClass = itemData.purchased ? 'item-name editable text-decoration-line-through' : 'item-name editable';
 
         let quantityDisplayHTML = `<span class="item-quantity-measure text-muted">-</span>`;

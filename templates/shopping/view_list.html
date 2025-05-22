@@ -155,7 +155,7 @@
                         <form method="post" action="{{ url_for('shoppinglist_bp.toggle_purchase', item_id=item.id) }}" style="display: inline-block;" class="toggle-purchase-form ajax-form">
                             {{ item_form.csrf_token() }}
                             <button type="submit" class="btn btn-sm {% if item.purchased %} btn-warning {% else %} btn-success {% endif %} toggle-purchase-btn" data-item-id="{{ item.id }}">
-                                {% if item.purchased %}<i class="bi bi-arrow-counterclockwise"></i><span class="button-text"> Undo</span> {% else %} <i class="bi bi-check-circle"></i><span class="button-text"> Mark Purchased</span> {% endif %}
+                                {% if item.purchased %}<i class="bi bi-arrow-counterclockwise"></i><span class="button-text"> Undo</span> {% else %} <i class="bi bi-check-circle"></i><span class="button-text">Done</span> {% endif %}
                             </button>
                         </form>
                         <button type="button" class="btn btn-sm btn-danger"

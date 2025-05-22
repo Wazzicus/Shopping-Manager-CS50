@@ -16,6 +16,10 @@ from app.models import Household as HouseholdModel, User as UsersModel
 from app.household.forms import HouseholdCreationForm, HouseholdJoinForm
 from app.utils import log_activity
 import secrets, logging
+from tzlocal import get_localzone
+from datetime import datetime
+
+tz = get_localzone()
 
 household_bp = Blueprint('household_bp', __name__)
 
@@ -52,7 +56,7 @@ def setup():
 
             log_successful = True
             try:
-                log_activity(user_id=current_user.id, household_id=household.id, action_type="Household Creation")
+                log_activity(user_id=current_user.id, household_id=household.id, action_type="Household Creation", timestamp=datetime.now(tz))
             except Exception as e:
                 logging.exception(f"Failed to log household creation activity: {e}")
                 log_successful = False
@@ -74,7 +78,7 @@ def setup():
                 db.session.commit()
 
                 try:
-                    log_activity(user_id=current_user.id, household_id=household_to_join.id, action_type="Household Joining")
+                    log_activity(user_id=current_user.id, household_id=household_to_join.id, action_type="Household Joining", timestamp=datetime.now(tz))
                 except Exception as e:
 
                     logging.exception(f"Failed to log household joining activity: {e}")
@@ -172,7 +176,8 @@ def remove_member(user_id_to_remove):
         log_activity(
             user_id=admin.id,
             household_id=household_id_for_log,
-            action_type="Member Removal"
+            action_type="Member Removal",
+            timestamp=datetime.now(tz)
         )
     except Exception as e:
         logging.exception(f"Failed to log member removal activity: {e}")
@@ -210,6 +215,7 @@ def rename(household_id):
             log_activity(user_id=current_user.id,
                          household_id=current_user.household.admin_id,
                          action_type="Household Renaming",
+                         timestamp=datetime.now(tz),
                          new_name=new_name)
         except Exception as e:
 
@@ -240,7 +246,6 @@ def delete(household_id):
         return jsonify({'error': "Unauthorized. Only the household admin can delete the household."}), 403
 
     household_id_for_log = household.id
-    household_name_for_log = household.name
 
     members_to_remove = list(household.members)
     for member in members_to_remove:
@@ -258,13 +263,12 @@ def delete(household_id):
         logging.exception(f"Error committing household deletion for household ID {household_id_for_log}: {e}")
         return jsonify({'error': "A server error occurred while trying to delete the household."}), 500
 
-    log_action_message = f"Household: '{household_name_for_log}' deleted."
     try:
         log_activity(
             user_id=current_user.id,
             household_id=household_id_for_log, 
-            action_type="Household Deletion")
-        log_action_message += " Activity logged."
+            action_type="Household Deletion",
+            timestamp=datetime.now(tz))
     except Exception as e:
 
         logging.exception(f"CRITICAL: Failed to log household deletion activity for household ID {household_id_for_log} (user: {current_user.id}), but household was deleted. Error: {e}")
@@ -355,6 +359,7 @@ def leave():
                     user_id=user_to_leave.id,
                     household_id=household_id_for_log,
                     action_type= "Admin Leaving",
+                    timestamp=datetime.now(tz),
                     new_name=new_admin.username
                 )
             except Exception as e:
@@ -383,7 +388,8 @@ def leave():
             log_activity(
                 user_id=user_to_leave.id,
                 household_id=household_id_for_log,
-                action_type=f"Member Left Household '{household_name_for_log}'"
+                action_type="Household Leaving",
+                timestamp=datetime.now(tz)
             )
         except Exception as e:
             logging.exception(f"Failed to log member leave activity: {e}")
