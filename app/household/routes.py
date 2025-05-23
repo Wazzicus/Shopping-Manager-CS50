@@ -56,7 +56,10 @@ def setup():
 
             log_successful = True
             try:
-                log_activity(user_id=current_user.id, household_id=household.id, action_type="Household Creation", timestamp=datetime.now(tz))
+                log_activity(user_id=current_user.id, 
+                             household_id=household.id, 
+                             action_type="Household Creation", 
+                             timestamp=datetime.now(tz))
             except Exception as e:
                 logging.exception(f"Failed to log household creation activity: {e}")
                 log_successful = False
@@ -78,7 +81,10 @@ def setup():
                 db.session.commit()
 
                 try:
-                    log_activity(user_id=current_user.id, household_id=household_to_join.id, action_type="Household Joining", timestamp=datetime.now(tz))
+                    log_activity(user_id=current_user.id, 
+                                 household_id=household_to_join.id, 
+                                 action_type="Household Joining", 
+                                 timestamp=datetime.now(tz))
                 except Exception as e:
 
                     logging.exception(f"Failed to log household joining activity: {e}")
@@ -317,6 +323,7 @@ def leave():
 
     user_to_leave = current_user
     household_to_be_left = user_to_leave.household
+
 
     if not household_to_be_left:
         return jsonify({'success': False, 'error': "You are not in a household!"}), 400
