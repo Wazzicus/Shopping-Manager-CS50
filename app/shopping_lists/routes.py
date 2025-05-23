@@ -18,7 +18,7 @@ import logging
 from datetime import datetime
 from tzlocal import get_localzone
 
-tz = get_localzone
+tz = get_localzone()
 
 shoppinglist_bp = Blueprint('shoppinglist_bp', __name__)
 
@@ -160,6 +160,7 @@ def view_list(list_id):
                 )
                 db.session.add(new_item)
                 db.session.commit()
+                
                 log_activity(user_id=current_user.id, household_id=current_user.household_id, action_type="Item Addition",timestamp= datetime.now(tz) ,item_name=new_item.name)
                 return redirect(url_for('shoppinglist_bp.view_list', list_id=list_id))
             except Exception as e:
@@ -195,11 +196,19 @@ def edit_list(list_id):
 
     form = EditShoppingListForm(obj=shopping_list)
     if form.validate_on_submit():
-        shopping_list.name = form.name.data
-        db.session.commit()
-        flash(f'List "{shopping_list.name}" updated.', 'success')
-        log_activity(user_id=current_user.id, household_id=current_user.household_id, action_type="List Renaming", timestamp=datetime.now(tz), new_name=form.name.data)
-        return redirect(url_for('shoppinglist_bp.view_list', list_id=list_id))
+        try:
+
+            shopping_list.name = form.name.data
+            db.session.commit()
+            flash(f'List "{shopping_list.name}" updated.', 'success')
+            log_activity(user_id=current_user.id, household_id=current_user.household_id, action_type="List Renaming", timestamp=datetime.now(tz), new_name=form.name.data)
+            return redirect(url_for('shoppinglist_bp.view_list', list_id=list_id))
+        
+        except Exception as e:
+            db.session.rollback()
+            flash("Error adding item to database.", "danger")
+            logging.error(f"Error adding item via form: {e}")
+
 
     return render_template('shopping/edit_list.html', title=f'Edit List: {shopping_list.name}', form=form, shopping_list=shopping_list)
 

@@ -1,5 +1,3 @@
-// dashboard.js
-
 document.addEventListener('DOMContentLoaded', () => {
     const dashboardNewListInput = document.getElementById('dashboardNewListInput');
     const dashboardClearBtn2 = document.getElementById('dashboardClearBtn2');
@@ -9,8 +7,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let dashboardClearTimeoutId = null;
 
     if (dashboardNewListInput && dashboardClearBtn2 && dashboardNewListBtn && dashboardListAddForm) {
-
-        // Toggle visibility of clear button based on input content and focus
+        // Update clear button visibility
         function updateDashboardClearButtonVisibility(delayAppearance = false) {
             if (dashboardClearTimeoutId) {
                 clearTimeout(dashboardClearTimeoutId);
@@ -33,10 +30,11 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
 
-        // Update clear button and submit button style on input change
+        // Input event handler
         dashboardNewListInput.addEventListener('input', () => {
             updateDashboardClearButtonVisibility(false);
-
+            
+            // Toggle expanded class based on input value
             if (dashboardNewListInput.value.trim().length > 0) {
                 dashboardNewListBtn.classList.remove('expanded');
             } else {
@@ -44,16 +42,16 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
 
-        // On focus, remove expanded style and show clear button with delay
+        // Focus event handler
         dashboardNewListInput.addEventListener('focus', () => {
             dashboardNewListBtn.classList.remove('expanded');
             updateDashboardClearButtonVisibility(true);
         });
 
-        // On blur, hide clear button and possibly restore expanded style
+        // Blur event handler
         dashboardNewListInput.addEventListener('blur', () => {
             dashboardClearBtn2.classList.remove('visible');
-
+            
             if (dashboardClearTimeoutId) {
                 clearTimeout(dashboardClearTimeoutId);
                 dashboardClearTimeoutId = null;
@@ -68,24 +66,22 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 150);
         });
 
-        // Clear input and reset styles on clear button click
+        // Clear button click handler
         dashboardClearBtn2.addEventListener('click', () => {
             dashboardNewListInput.value = '';
             dashboardClearBtn2.classList.remove('visible');
-
+            
             if (dashboardClearTimeoutId) {
                 clearTimeout(dashboardClearTimeoutId);
                 dashboardClearTimeoutId = null;
             }
-
+            
             dashboardNewListInput.focus();
             dashboardNewListBtn.classList.add('expanded');
         });
 
-        // Handle form submission to create a new list
-        dashboardListAddForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            
+        // Form submission handler
+        dashboardListAddForm.addEventListener('submit', async (e) => {            
             const listName = dashboardNewListInput.value.trim();
             const validation = validateListName(listName);
             
@@ -96,25 +92,31 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
             try {
+                // Show loading state
                 dashboardNewListBtn.disabled = true;
                 dashboardNewListSpinner.classList.remove('d-none');
                 dashboardNewListBtn.querySelector('i').classList.add('d-none');
-
-                // Add list creation logic here
                 
-                dashboardNewListInput.value = '';
-                dashboardNewListBtn.classList.add('expanded');
+                
+                    // Reset form
+                    dashboardNewListInput.value = '';
+                    dashboardNewListBtn.classList.add('expanded');
+                    
             } catch (error) {
+                console.error('Error:', error);
                 showToast(error.message || 'An error occurred while creating the list', 'error');
             } finally {
+                // Reset loading state
                 dashboardNewListBtn.disabled = false;
                 dashboardNewListSpinner.classList.add('d-none');
                 dashboardNewListBtn.querySelector('i').classList.remove('d-none');
+                
+                // Return focus to input
                 dashboardNewListInput.focus();
             }
         });
 
-        // Initialize submit button style based on input focus state
+        // Initialize state
         if (document.activeElement !== dashboardNewListInput) {
             dashboardNewListBtn.classList.add('expanded');
         } else {
@@ -122,4 +124,5 @@ document.addEventListener('DOMContentLoaded', () => {
             updateDashboardClearButtonVisibility(true);
         }
     }
+
 });

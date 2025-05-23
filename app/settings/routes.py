@@ -21,6 +21,10 @@ from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
 import logging
+from datetime import datetime
+from tzlocal import get_localzone
+
+tz = get_localzone()
 
 settings_bp = Blueprint('settings_bp', __name__)
 
@@ -106,14 +110,21 @@ def change_name():
     Returns:
         JSON response with success or error message.
     """
+    old_name = current_user.name
     data = request.get_json()
     new_name = data.get('new_name', '').strip()
 
     if not new_name:
         return jsonify({'error': 'Name cannot be empty'}), 400
+    
+    try:
+        current_user.name = new_name
+        db.session.commit()
 
-    current_user.name = new_name
-    db.session.commit()
+        log_activity(user_id=current_user.id, household_id=current_user.household_id, action_type="Name Change", timestamp=datetime.now(tz), old_name=old_name, new_name=new_name)
+    except Exception as e:
+        db.session.rollback()
+        logging.error(f"Error creating list: {e}")
 
     return jsonify({'message': 'Name updated successfully'})
 
