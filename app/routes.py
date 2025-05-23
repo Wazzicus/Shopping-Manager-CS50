@@ -10,7 +10,7 @@ Routes:
 - /dashboard: Main user dashboard (requires login)
 """
 
-from flask import Blueprint, render_template, url_for, flash, redirect, request, jsonify
+from flask import Blueprint, render_template, url_for, flash, redirect
 from flask_login import login_required, current_user
 from app.models import Household as HouseholdModel, ShoppingList as ShoppingListModel, ActivityLog, ListItem as ListItemModel
 from app.utils import format_action

@@ -15,9 +15,9 @@
                 <div class="mb-3">
                     <form method="post"  autocomplete="off">
                         {{ form.hidden_tag() }}
-                        <div class="row g-2 mb-2">
-                            <div class="col-md-6">
-                                {{ form.name(class_=['form-control', 'is-invalid' if form.name.errors else ''], placeholder="New Name") }}
+                        {{ form.name.label(class="form-label" , autocomplete="off" ) }}
+                        
+                                {{ form.name(class_= 'form-control', placeholder="New Name") }}
                                 {% if form.name.errors %}
                                 <div class="invalid-feedback">
                                     {% for error in form.name.errors %}
@@ -25,9 +25,9 @@
                                     {% endfor %}
                                 </div>
                                 {% endif %}
-                            </div>
-                            <div class="col-md-3 col-6">
-                                {{ form.quantity(class_=['form-control', 'is-invalid' if form.quantity.errors else ''] ,placeholder="Quantity") }}
+                           
+                                {{ form.quantity.label(class="form-label" , autocomplete="off" ) }}
+                                {{ form.quantity(class_= 'form-control',placeholder="Quantity") }}
                                 {% if form.quantity.errors %}
                                 <div class="invalid-feedback">
                                     {% for error in form.quantity.errors %}
@@ -35,9 +35,10 @@
                                     {% endfor %}
                                 </div>
                                 {% endif %}
-                            </div>
-                            <div class="col-md-3 col-6">
-                                {{ form.measure(class_=['form-control', 'is-invalid' if form.measure.errors else ''] ,placeholder="Unit (e.g kg, pcs)") }}
+
+                          
+                                {{ form.measure.label(class="form-label" , autocomplete="off" ) }}
+                                {{ form.measure(class_= 'form-control', placeholder="Unit (e.g kg, pcs)") }}
                                 {% if form.measure.errors %}
                                 <div class="invalid-feedback">
                                     {% for error in form.measure.errors %}
@@ -48,7 +49,7 @@
                             </div>
                         </div>
                         <div>
-                            {{ form.submit(class="btn btn-outline-primary w-100") }}
+                            {{ form.submit(class="btn btn-primary w-100") }}
                         </div>
                     </form>
                 </div>
