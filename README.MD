@@ -1,5 +1,5 @@
 # Shopping Manager
-#### Video Demo: [text](https://youtu.be/5e0DhAMTcL0)
+#### Video Demo: [Click/Tap this text.](https://youtu.be/5e0DhAMTcL0)
 #### Description:
 
 **Shopping Manager** is a collaborative shopping list web application designed to streamline the way households manage their shopping tasks. Built with Python, Flask, and SQLite, this application enables multiple users within a household to create, update, and share shopping lists in real-time, promoting better coordination and time-saving during grocery or general shopping activities.
