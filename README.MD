@@ -205,3 +205,7 @@ shopping_manager/
     flask run
 
 4. Visit http://localhost:5000 in your browser.
+
+## Note
+
+This repository was created as part of my **CS50x Final Project** and has already been submitted. The active development version is now at: [Shopping-Manager-App](https://github.com/Wazzicus/Shopping-Manager-App)
