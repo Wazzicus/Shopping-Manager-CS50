@@ -59,102 +59,6 @@ This project was built as the final submission for CS50x, and showcases a range 
 
 ---
 
-## File Structure Overview
-shopping_manager/
-│
-├── app/                         # Main Flask application package
-│   ├── auth/                    # Handles authentication (login, register, logout)
-│   │   ├── __init__.py          # Initializes auth blueprint
-│   │   ├── forms.py             # Flask-WTF forms for login and register
-│   │   └── routes.py            # Routes and logic for auth
-│   │
-│   ├── files/                   # File upload feature(for profile pictures)
-│   │   ├── __init__.py          # Initializes file blueprint
-│   │   └── routes.py            # File-related routes
-│   │
-│   ├── household/               # Household creation and management
-│   │   ├── __init__.py          # Initializes household blueprint
-│   │   ├── forms.py             # Forms for managing household members
-│   │   └── routes.py            # Household management routes
-│   │
-│   ├── settings/                # User settings
-│   │   ├── __init__.py          # Initializes settings blueprint
-│   │   ├── forms.py             # Settings update forms(PasswordChange, NameChange, Avatar)
-│   │   └── routes.py            # Routes to update settings
-│   │
-│   ├── shopping_lists/          # Manage shopping lists and items
-│   │   ├── __init__.py          # Initializes shopping list blueprint
-│   │   ├── forms.py             # Forms for list/item creation and editing
-│   │   └── routes.py            # Routes for list/item CRUD operations
-│   │
-│   ├── __init__.py              # Initializes Flask app and registers blueprints
-│   ├── config.py                # App configuration (env vars, database URI, etc.)
-│   ├── utils.py                 # Global helper functions(log_activity and format_action)
-│   ├── extensions.py            # Initializes Flask extensions (e.g., DB, login)
-│   ├── models.py                # SQLAlchemy models for DB schema
-│   ├── Procfile                 # Railway process file (I used for deploying to Railway)
-│   └── routes.py                # Main routes
-│
-├── instance/
-│   └── shopping_manager.db      # SQLite database (for local dev only)
-│
-├── migrations/                  # Alembic database migrations
-│   ├── versions/                # Auto-generated migration scripts
-│   ├── alembic.ini              # Alembic config file
-│   ├── env.py                   # Alembic environment setup
-│   ├── README                   
-│   └── script.py.mako           # Template for new migration scripts
-│
-├── static/                      # Static files (CSS, JS, images)
-│   ├── css/
-│   │   ├── animations.css       # Animations (keyframes, transitions)
-│   │   ├── base.css             # Base styles
-│   │   ├── components.css       # Reusable UI components
-│   │   ├── index.css            # Styles for landing page specifically
-│   │   ├── layout.css           
-│   │   └── variables.css        # Mostly Colour Pallete
-│   │
-│   ├── images/                  # Images(Landing Page)
-│   ├── js/
-│   │   ├── auth.js              # Login/register script logic
-│   │   ├── avatar_preview.js    # JS for avatar image preview before upload
-│   │   ├── dashboard.js         # Scripts for dashboard interactivity
-│   │   ├── main.js              # General JS functions
-│   │   ├── manage.js            # JS for managing households
-│   │   ├── settings.js          # JS for settings update interactions
-│   │   ├── setup.js             # Initial household setup logic
-│   │   ├── strength_meter.js    # Password strength indicator
-│   │   ├── tabswitch.js         # Tab switching UI logic
-│   │   └── view_list.js         # Shopping list viewing interactions(Inline editing, Progress Bar)
-│   │
-│   └── favicon.ico              # Website icon
-│
-├── templates/                   # HTML templates (Jinja2)
-│   ├── household/
-│   │   ├── manage.html          # Manage household members and roles(for admins)
-│   │   ├── setup.html           # Household setup and invitation flow
-│   │   └── view.html            # View household details(for regular members)
-│   │
-│   ├── shopping/
-│   │   ├── edit_item.html       # Edit a shopping list item
-│   │   ├── edit_list.html       # Edit shopping list name
-│   │   └── view_list.html       # Display a shopping list
-│   │
-│   ├── auth.html                # Auth page (login and register)
-│   ├── base.html                # Base template (navbar, footer, blocks, toasts, flash messages, modals)
-│   ├── dashboard.html           # User dashboard
-│   ├── index.html               # Landing page
-│   └── settings.html            # Update account info
-│
-├── README.md                    # THIS FILE
-├── requirements.txt             # Python package dependencies
-├── run.py                       # App entry point for local development
-└── wsgi.py                      # WSGI entry point for production servers
-
-
-
----
-
 ## Design Decisions
 
 - **Backend**
@@ -189,7 +93,7 @@ shopping_manager/
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/wazzicus/shopping-manager.git
+   git clone https://github.com/wazzicus/Shopping-Manager-CS50.git
    cd shopping-manager
 
 2. Create a virtual environment and install dependencies:
@@ -208,4 +112,4 @@ shopping_manager/
 
 ## Note
 
-This repository was created as part of my **CS50x Final Project** and has already been submitted. The active development version is now at: [Shopping-Manager-App](https://github.com/Wazzicus/Shopping-Manager-App)
+This repository was created as part of my **CS50x Final Project** and has already been submitted. The active development version is now at: [Shopping Manager](https://github.com/Wazzicus/Shopping-Manager)
